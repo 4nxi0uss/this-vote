@@ -15,6 +15,7 @@
 /build
 
 /back-end/server.js
+/back-end
 
 # misc
 .DS_Store

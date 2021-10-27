@@ -5,7 +5,12 @@ import './Header.scss'
 const Header = () => {
     return (
         <header className='header'>
-            <h1>This Vote!!</h1>
+            <h1 className='title'>ThisVote!!</h1>
+            <div>
+                <button className='loginBtn'>
+                    login/registry
+                </button>
+            </div>
         </header>
     )
 }

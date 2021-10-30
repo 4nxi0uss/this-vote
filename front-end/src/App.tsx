@@ -2,14 +2,18 @@
 
 // import type { dataTypes } from './Types/Types';
 
+import { HashRouter as Router } from 'react-router-dom';
+
 import './App.scss';
 import Header from './Components/Header/Header';
-import MainContent from './Components/Header/MainContent/MainContent';
+import MainContent from './Components/MainContent/MainContent';
 function App() {
   return (
     <div className="App">
-      <Header />
-      <MainContent />
+      <Router>
+        <Header />
+        <MainContent />
+      </Router>
     </div>
   );
 }

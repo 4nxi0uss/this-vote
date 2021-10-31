@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { /*MouseEvent,*/ ChangeEvent, FormEvent } from 'react';
 
 import './Login.scss'
@@ -18,14 +18,18 @@ const Login = () => {
         return (atCheck && dotCheck)
     }
     const validatePassword = (toVerified: string) => {
-        let isTrueLetter = false;
-        let isTrueNumber = false;
-
-        toVerified.split('').forEach((letter) => { if (letter === letter.toUpperCase() && letter !== '0') isTrueLetter = Boolean(toVerified.includes(letter)) });
-        toVerified.split('').forEach((letter) => { (Boolean(Number(letter)) === true || Number(letter) === 0) ? (isTrueNumber = true) : (isTrueNumber = false) });
-
-        return (isTrueLetter && isTrueNumber)
+        // let isTrueLetter = false;
+        // let isTrueNumber = false;
+        // const regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
+        const regularExpression = /^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{4,16}$/;
+        // toVerified.split('').forEach((letter) => { if (letter === letter.toUpperCase() && letter !== '0') isTrueLetter = Boolean(toVerified.includes(letter)) });
+        // toVerified.split('').forEach((letter) => { (Boolean(Number(letter)) === true || Number(letter) === 0) ? (isTrueNumber = true) : (isTrueNumber = false) });
+        // console.log(isTrueLetter)
+        // console.log(isTrueNumber)
+        // return (isTrueLetter && isTrueNumber)
+        return (Boolean(toVerified.match(regularExpression)))
     }
+
     const handleToggleRegistry = () => {
         setToggleRegistry(!toggleRegistry)
     }
@@ -41,11 +45,29 @@ const Login = () => {
 
     const handleRegistry = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        validatedEmail(email)
-
+        console.log(validatedEmail(email))
+        console.log(validatePassword(password))
+        console.log(password === secondPassword)
+        if (validatedEmail(email) && validatePassword(password) && (password === secondPassword)) {
+            console.log('zarejestrowano')
+        } else {
+            console.log('nie zarejestrowano')
+        }
     }
 
-
+    useEffect(() => {
+        fetch('http://localhost:3022/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                usersEmail: "qwe@ewq.pl",
+                pass: "1qaz@WSX",
+                dateOfBirth: '2021-10-12'
+            })
+        }).then(res => res.json()).then(data => console.log(data))
+    }, [])
 
     const handleEmail = (e: ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value.trim())

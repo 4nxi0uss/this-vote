@@ -3,7 +3,7 @@ module.exports = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'world',
+  database: 'this_vote',
   // debug: false,
 })
 

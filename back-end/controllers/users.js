@@ -1,48 +1,48 @@
 const db = require('../Database/Database');
 db.connect()
 
-exports.postUser = (req, res, next) => {
+//checking email in database
+const checkEmail = (rows, usersEmail) => {
+    return Boolean(rows.find((em) => em.email === usersEmail))
+}
+
+const ScrapOfEmail = (email) => {
+    return email.slice(String(email).indexOf('@')+1, email.indexOf("."))
+}
+
+// register user in database
+exports.postRegisterUser = (req, res, next) => {
     try {
-        const { usersEmail, pass, dateOfBirth } = req.body;
+        const { usersEmail: email, pass, dateOfBirth } = req.body;
 
-        console.log(usersEmail, pass, dateOfBirth)
+        console.log(email, pass, dateOfBirth)
 
-        db.query("SELECT `email`,`password` FROM `users`", (err, rows, fields) => {
+        db.query("SELECT `email`,`password` FROM `login`", (err, rows, fields) => {
             if (err) throw err;
-            const userEmail = rows.find(em => em.email === usersEmail);
-            console.log(Boolean(userEmail))
+            // const userEmail = rows.find(em => em.email === email);
+            // console.log(Boolean(userEmail));
+            console.log(checkEmail(rows, email));
 
-            if (Boolean(userEmail)) {
+            if (checkEmail(rows, email)) {
                 res.status(406).json({
                     message: "Uzytkownik o podanym E-mailu istnieje."
                 })
             } else {
-                db.query('INSERT INTO `users` (`id`, `email`, `password`, `dateOfBirth`) VALUES (NULL, "' + usersEmail + '", "' + pass + '", "' + dateOfBirth + '");', () => {
+                db.query('INSERT INTO `login` (`id`, `email`, `password`, `dateOfBirth`) VALUES (NULL, "' + email + '", "' + pass + '", "' + dateOfBirth + '");', () => {
                     try {
                         res.status(201).json({
                             message: "Pomyślnie zarejestrowano nowego użytkownika."
                         })
 
-                    } catch (err){
+                    } catch (err) {
                         res.status(402).json({
                             err,
                             message: "Problem z zarejestrowaniem nowego użytkownika."
                         })
                     }
                 });
-
             }
-
-            // res.status(200).json({
-            //     rows,
-            //     message: "udało się postawić pierwszy krok"
-            // })
-
-            // return;
         })
-
-
-
     } catch (error) {
         res.status(500).json({
             error,
@@ -51,6 +51,31 @@ exports.postUser = (req, res, next) => {
         })
     }
 }
-exports.postUserr = (req, res, next) => {
 
+// login user 
+exports.postLoginUser = (req, res, next) => {
+    try {
+        const { password, email } = req.body;
+        // console.log('fists',  password, email);
+        //     console.log('sec  ',ScrapOfEmail(email))
+        // serch user from scratch of email
+        db.query("SELECT * FROM `login` WHERE `email` LIKE  " + `'%${ScrapOfEmail(email)}%'`, (err, rows, fields) => {
+            if (err) throw err;
+            // const userEmail = rows.find(em => em.email === usersEmail);
+            if (!(checkEmail(rows, email))) {
+                res.status(406).json({
+                    message:"Login lub hasło jest nie poprawne, sprobój ponownie",
+                    active: false
+                })
+            }else {
+                res.status(201).json({
+                    message: 'zostałeś zalogowany',
+                    active: true
+                })
+                
+            }
+        })
+    } catch (err) {
+
+    }
 }

@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import type { /*MouseEvent,*/ ChangeEvent, FormEvent } from 'react';
+import { useState } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
 
 import './Login.scss'
 
@@ -18,15 +18,7 @@ const Login = () => {
         return (atCheck && dotCheck)
     }
     const validatePassword = (toVerified: string) => {
-        // let isTrueLetter = false;
-        // let isTrueNumber = false;
-        // const regularExpression = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/;
         const regularExpression = /^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{4,16}$/;
-        // toVerified.split('').forEach((letter) => { if (letter === letter.toUpperCase() && letter !== '0') isTrueLetter = Boolean(toVerified.includes(letter)) });
-        // toVerified.split('').forEach((letter) => { (Boolean(Number(letter)) === true || Number(letter) === 0) ? (isTrueNumber = true) : (isTrueNumber = false) });
-        // console.log(isTrueLetter)
-        // console.log(isTrueNumber)
-        // return (isTrueLetter && isTrueNumber)
         return (Boolean(toVerified.match(regularExpression)))
     }
 
@@ -37,7 +29,19 @@ const Login = () => {
     const handleLogin = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (validatedEmail(email) && validatePassword(password)) {
+            fetch('http://localhost:3022/users/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: `${email}`,
+                    password: `${password}`
+                })
+            }).then(res => res.json()).then(data => console.log(data))
             console.log('zalogowany')
+            setEmail('');
+            setPassword('');
         } else {
             console.log('nie zalogowany')
         }
@@ -45,29 +49,32 @@ const Login = () => {
 
     const handleRegistry = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(validatedEmail(email))
-        console.log(validatePassword(password))
-        console.log(password === secondPassword)
+
+        // console.log('email ', validatedEmail(email))
+        // console.log('pass ', validatePassword(password))
+        // console.log('pass 2 ', password === secondPassword)
+
         if (validatedEmail(email) && validatePassword(password) && (password === secondPassword)) {
-            console.log('zarejestrowano')
+            fetch('http://localhost:3022/users/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    usersEmail: `${email}`,
+                    pass: `${password}`,
+                    dateOfBirth: `${date}`
+                })
+            }).then(res => res.json()).then(data => console.log(data))
+            console.log('zarejestrowano');
+            setDate('');
+            setEmail('');
+            setPassword('');
+            setSecondPassword('');
         } else {
             console.log('nie zarejestrowano')
         }
     }
-
-    useEffect(() => {
-        fetch('http://localhost:3022/users', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                usersEmail: "qwe@ewq.pl",
-                pass: "1qaz@WSX",
-                dateOfBirth: '2021-10-12'
-            })
-        }).then(res => res.json()).then(data => console.log(data))
-    }, [])
 
     const handleEmail = (e: ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value.trim())

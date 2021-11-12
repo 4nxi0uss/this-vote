@@ -1,4 +1,5 @@
 const db = require('../Database/Database');
+const { v4: uid } = require('uuid');
 db.connect()
 
 //checking email in database
@@ -28,7 +29,7 @@ exports.postRegisterUser = (req, res, next) => {
                     message: "Uzytkownik o podanym E-mailu istnieje."
                 })
             } else {
-                db.query('INSERT INTO `login` (`id`, `email`, `password`, `dateOfBirth`) VALUES (NULL, "' + email + '", "' + pass + '", "' + dateOfBirth + '");', () => {
+                db.query('INSERT INTO `login` (`id`, `user_id`,`email`, `password`, `dateOfBirth`) VALUES (NULL,"' + uid() + '", "' + email + '", "' + pass + '", "' + dateOfBirth + '");', () => {
                     try {
                         res.status(201).json({
                             message: "Pomyślnie zarejestrowano nowego użytkownika."

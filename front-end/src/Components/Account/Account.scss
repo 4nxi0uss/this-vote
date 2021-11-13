@@ -1,5 +1,83 @@
 @media screen and (min-width: 1440px) {
-    .AccountSection{
-        
+    .AccountSection {
+        margin-top: 2vw;
+        display: grid;
+        grid-template-columns: 50vw 50vw;
+        grid-template-rows: 2;
+
+        .AcountTitle {
+            position: relative;
+            font-size: 2vw;
+            padding: 0.3vw;
+            grid-row: 1;
+            grid-column: 1/3;
+            text-align: center;
+        }
+
+        .AccountActivateBtn {
+            position: relative;
+            background: greenyellow;
+            font-size: 2vw;
+            border-radius: 20px;
+            width: 20vw;
+            height: 5vw;
+            align-self: center;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+            box-shadow: .2vw .2vw .5vw black;
+        }
+
+        .AccountActivateBtn:hover {
+            background: greenyellow;
+            box-shadow: inset .2vw .2vw .5vw black;
+        }
+
+        .AccountForm {
+            margin-top: 0.5vw;
+            position: relative;
+            grid-row: 2;
+            grid-column: 2;
+            display: flex;
+            flex-direction: column;
+            width: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0.5vw;
+            height: 50vh;
+
+        }
+
+        input {
+            padding: 0.5vw;
+            margin-bottom: 0.5vw;
+        }
+
+        label {
+            font-weight: 800;
+        }
+
+        .labelBefore::before {
+            content: "* ";
+            color: red;
+        }
+
+        .AccountSubmitBtn {
+            margin-top: 1vw;
+            padding: 0.2vw;
+            width: 5vw;
+            align-self: flex-end;
+            background: lightcyan;
+            border: 1px solid black;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .AccountSubmitBtn:hover {
+            background: rgb(35, 255, 255);
+            border: 1px solid black;
+            border-radius: 20px;
+        }
+
     }
 }

@@ -29,10 +29,12 @@ exports.postRegisterUser = (req, res, next) => {
                     message: "Uzytkownik o podanym E-mailu istnieje."
                 })
             } else {
-                db.query('INSERT INTO `login` (`id`, `user_id`,`email`, `password`, `dateOfBirth`) VALUES (NULL,"' + uid() + '", "' + email + '", "' + pass + '", "' + dateOfBirth + '");', () => {
+                db.query('INSERT INTO `login` (`user_id`,`email`, `password`, `dateOfBirth`) VALUES ("' + uid() + '", "' + email + '", "' + pass + '", "' + dateOfBirth + '");', (err, rows, fields) => {
                     try {
                         res.status(201).json({
-                            message: "Pomyślnie zarejestrowano nowego użytkownika."
+                            message: "Pomyślnie zarejestrowano nowego użytkownika.",
+                            error : err,
+                            data: rows
                         })
 
                     } catch (err) {

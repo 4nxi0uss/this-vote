@@ -9,7 +9,7 @@ const Login = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [secondPassword, setSecondPassword] = useState<string>("");
-    const [date, setDate] = useState<string>("");
+    // const [date, setDate] = useState<string>("");
 
 
     const validatedEmail = (toVerified: string) => {
@@ -50,9 +50,9 @@ const Login = () => {
     const handleRegistry = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // console.log('email ', validatedEmail(email))
-        // console.log('pass ', validatePassword(password))
-        // console.log('pass 2 ', password === secondPassword)
+        console.log('email ', validatedEmail(email))
+        console.log('pass ', validatePassword(password))
+        console.log('pass 2 ', password === secondPassword)
 
         if (validatedEmail(email) && validatePassword(password) && (password === secondPassword)) {
             fetch('http://localhost:3022/users/register', {
@@ -63,11 +63,11 @@ const Login = () => {
                 body: JSON.stringify({
                     usersEmail: `${email}`,
                     pass: `${password}`,
-                    dateOfBirth: `${date}`
+                    // dateOfBirth: `${date}`
                 })
-            }).then(res => res.json()).then(data => console.log(data))
+            }).then(res => res.json()).then(data => console.table(data))
             console.log('zarejestrowano');
-            setDate('');
+            // setDate('');
             setEmail('');
             setPassword('');
             setSecondPassword('');
@@ -88,11 +88,11 @@ const Login = () => {
         setSecondPassword(e.target.value.trim())
     }
 
-    const handleDate = (e: ChangeEvent<HTMLInputElement>) => {
-        setDate(e.target.value.trim())
-    }
+    // const handleDate = (e: ChangeEvent<HTMLInputElement>) => {
+    //     setDate(e.target.value.trim())
+    // }
 
-    const TodayDate = new Date();
+    // const TodayDate = new Date();
 
     return (
         <section className='loginSection'>
@@ -101,8 +101,8 @@ const Login = () => {
                 <input required type="email" placeholder='e-mail' onChange={handleEmail} value={email} />
                 <input required type="password" placeholder='password' onChange={handlePassword} value={password} />
                 {!toggleRegistry ? null : <input type='password' placeholder='repeat password' onChange={handleSecondPassword} value={secondPassword} />}
-                {!toggleRegistry ? null : <label>Date of birth</label>}
-                {!toggleRegistry ? null : <input type="date" max={`${TodayDate.getFullYear()}-${TodayDate.getMonth() + 1}-${TodayDate.getDate()}`} onChange={handleDate} value={date} />}
+                {/* {!toggleRegistry ? null : <label>Date of birth</label>} */}
+                {/* {!toggleRegistry ? null : <input type="date" max={`${TodayDate.getFullYear()}-${TodayDate.getMonth() + 1}-${TodayDate.getDate()}`} onChange={handleDate} value={date} />} */}
                 <button className='loginBtn' type='submit'>{toggleRegistry ? "Register" : "Log in"}</button>
             </form>
             <p className="toRegistryParagraph">{toggleRegistry ? "If you have account, please " : "If you don't have account, please"} <button className='toRegistryBtn' onClick={handleToggleRegistry}> {!toggleRegistry ? "register now." : "log into it here."} </button></p>

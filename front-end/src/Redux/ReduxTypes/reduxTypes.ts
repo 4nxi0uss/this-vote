@@ -9,6 +9,24 @@ export interface userDataType {
 }
 
 export interface userLoginStatus {
-    status: string,
-    info: any
+    statusLogin: string
+    statusUpdateInfo: string
+}
+
+export interface userLoginInfo {
+    info: {
+        message: string,
+        login: boolean
+        rows: any
+    }
+    infoUpdate: {
+        message: string,
+        rows: any
+    }
+}
+export interface infoUpdate {
+    userId: string,
+    name: string,
+    surname: string,
+    dateOfBirth: string
 }

@@ -8,20 +8,19 @@ const checkEmail = (rows, usersEmail) => {
 }
 
 const ScrapOfEmail = (email) => {
-    return email.slice(String(email).indexOf('@')+1, email.indexOf("."))
+    return email.slice(String(email).indexOf('@') + 1, email.indexOf("."))
 }
 
 // register user in database
 exports.postRegisterUser = (req, res, next) => {
     try {
-        const { usersEmail: email, pass, dateOfBirth } = req.body;
+        const { usersEmail: email, pass } = req.body;
 
-        console.log(email, pass, dateOfBirth)
+        console.log(email, pass)
 
         db.query("SELECT `email`,`password` FROM `login`", (err, rows, fields) => {
             if (err) throw err;
-            // const userEmail = rows.find(em => em.email === email);
-            // console.log(Boolean(userEmail));
+
             console.log(checkEmail(rows, email));
 
             if (checkEmail(rows, email)) {
@@ -29,11 +28,11 @@ exports.postRegisterUser = (req, res, next) => {
                     message: "Uzytkownik o podanym E-mailu istnieje."
                 })
             } else {
-                db.query('INSERT INTO `login` (`user_id`,`email`, `password`, `dateOfBirth`) VALUES ("' + uid() + '", "' + email + '", "' + pass + '", "' + dateOfBirth + '");', (err, rows, fields) => {
+                db.query('INSERT INTO `login` (`user_id`,`email`, `password`) VALUES ("' + uid() + '", "' + email + '", "' + pass + '");', (err, rows, fields) => {
                     try {
                         res.status(201).json({
                             message: "Pomyślnie zarejestrowano nowego użytkownika.",
-                            error : err,
+                            error: err,
                             data: rows
                         })
 
@@ -59,26 +58,67 @@ exports.postRegisterUser = (req, res, next) => {
 exports.postLoginUser = (req, res, next) => {
     try {
         const { password, email } = req.body;
-        // console.log('fists',  password, email);
-        //     console.log('sec  ',ScrapOfEmail(email))
-        // serch user from scratch of email
+
         db.query("SELECT * FROM `login` WHERE `email` LIKE  " + `'%${ScrapOfEmail(email)}%'`, (err, rows, fields) => {
             if (err) throw err;
             // const userEmail = rows.find(em => em.email === usersEmail);
             if (!(checkEmail(rows, email))) {
                 res.status(406).json({
-                    message:"Login lub hasło jest nie poprawne, sprobój ponownie",
-                    active: false
+                    message: "Login lub hasło jest nie poprawne, sprobój ponownie",
+                    login: false,
                 })
-            }else {
+            } else {
                 res.status(201).json({
                     message: 'zostałeś zalogowany',
-                    active: true
+                    login: true,
+                    rows: rows,
                 })
-                
+
             }
         })
     } catch (err) {
 
+    }
+}
+
+exports.patchUserInfo = (req, res, next) => {
+    try {
+        const { userId, name, surname, dateOfBirth } = req.body
+
+        console.log(userId, name, surname, dateOfBirth)
+
+        db.query("SELECT user_id FROM `users_data`", (err, rows, fields) => {
+            if (err) throw err;
+
+            const userIdFinder = rows.some(id => id.userId === userId);
+
+
+            if (!Boolean(`${userIdFinder}`)) {
+                db.query("INSERT INTO `users_data` (`user_id`, `Name`, `Surname`, `date_of_birth`, `type_of_account`, `active`, `polls`) VALUES ('" + userId + "', '" + name + "', '" + surname + "', '" + dateOfBirth + "', '0', '0', '[]')", (err, rows, fields) => {
+                    if (err) throw err;
+                    res.status(200).json({
+                        message: 'pomyślnie zakutalizowano dane',
+                        data: rows,
+                    })
+                })
+            } else {
+                db.query("UPDATE `users_data` SET `Name` = '" + name + "', `Surname` = '" + surname + "', `date_of_birth` = '" + dateOfBirth + "' WHERE `users_data`.`user_id` ='" + userId + "'", (err, rows, fields) => {
+                    // if (err) throw err;
+                    console.log(err)
+                    res.status(200).json({
+                        rows: err
+                        // error: err
+                    })
+
+                })
+            }
+        })
+    } catch (err) {
+
+        res.status(500).json({
+            error: err,
+            message: "Coś nie tak z aktalizacją danych "
+
+        })
     }
 }

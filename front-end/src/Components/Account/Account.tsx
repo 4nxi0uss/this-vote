@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
-import type { ChangeEvent } from 'react';
+import { useState } from 'react';
+import type { ChangeEvent, FormEvent, MouseEvent } from 'react';
 import './Account.scss'
+import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
+import { fetchUpdateInfo } from '../../Redux/Slice/accountSlice';
 
 
 const Account = () => {
     const [name, setName] = useState<string>('');
     const [surname, setSurname] = useState<string>('');
     const [date, setDate] = useState<string>("");
+
+    const dispatch = useAppDispatch();
+    const { info, infoUpdate } = useAppSelector(state => state.users)
 
     const TodayDate = new Date();
 
@@ -22,11 +27,33 @@ const Account = () => {
         setDate(e.target.value.trim())
     }
 
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+
+        const infoUpdates = { userId: info.rows[0].user_id, name, surname, dateOfBirth: date };
+
+        dispatch(fetchUpdateInfo(infoUpdates));
+
+        console.log("udalo sie");
+        console.log(infoUpdate);
+    }
+
+    const handleActive = (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+
+
+
+        console.log("udalo sie");
+    }
+
     return (
         <section className="AccountSection">
+
             <h2 className='AcountTitle'> Hello name </h2>
-            <button className="AccountActivateBtn">Activate</button>
-            <form className='AccountForm'>
+
+            <button className="AccountActivateBtn" onClick={handleActive} >Activate</button>
+
+            <form className='AccountForm' onSubmit={handleSubmit} method="submit">
 
                 <label className="labelBefore">Name:</label>
                 <input type="text" required placeholder="Name" onChange={handleName} value={name} />

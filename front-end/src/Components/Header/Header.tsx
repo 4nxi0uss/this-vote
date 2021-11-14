@@ -1,8 +1,21 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
+import { clearInfo, clearStatus } from '../../Redux/Slice/accountSlice';
 
 import './Header.scss'
 const Header = () => {
+    const dispatch = useAppDispatch();
+    const { info } = useAppSelector(state => state.users)
+
+    const handleLogout = () => {
+        window.localStorage.clear();
+        window.location.reload();
+        window.location.replace('/');
+        dispatch(clearStatus);
+        dispatch(clearInfo);
+    }
+
     return (
         <header className='header'>
             <h1 className='title'>ThisVote!!</h1>
@@ -10,12 +23,12 @@ const Header = () => {
                 <Link to='/' className='NavLink'>
                     Home
                 </Link>
-                <Link to='/Account' className='NavLink'>
+                {info.login ? <Link to='/Account' className='NavLink'>
                     Account
-                </Link>
-                <Link to='/login' className='NavLink'>
+                </Link> : null}
+                {!info.login ? <Link to='/login' className='NavLink'>
                     Login/Registry
-                </Link>
+                </Link> : <button className='NavLink' onClick={handleLogout}>Logout</button>}
             </nav>
         </header>
     )

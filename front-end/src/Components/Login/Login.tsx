@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 
 import './Login.scss'
-
+import { fetchUsersLogin } from '../../Redux/Slice/accountSlice';
+import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
 const Login = () => {
 
     const [toggleRegistry, setToggleRegistry] = useState<boolean>(false);
@@ -11,6 +12,9 @@ const Login = () => {
     const [secondPassword, setSecondPassword] = useState<string>("");
     // const [date, setDate] = useState<string>("");
 
+    const { info, status } = useAppSelector((state) => state.users);
+
+    const dispatch = useAppDispatch();
 
     const validatedEmail = (toVerified: string) => {
         const atCheck = toVerified.includes("@");
@@ -28,24 +32,41 @@ const Login = () => {
 
     const handleLogin = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
+
+        console.log('email ', validatedEmail(email))
+        console.log('pass ', validatePassword(password))
+
         if (validatedEmail(email) && validatePassword(password)) {
-            fetch('http://localhost:3022/users/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    email: `${email}`,
-                    password: `${password}`
-                })
-            }).then(res => res.json()).then(data => console.log(data))
+            // fetch('http://localhost:3022/users/login', {
+            //     method: 'POST',
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify({
+            //         email: `${email}`,
+            //         password: `${password}`
+            //     })
+            // }).then(res => res.json()).then(data => console.log(data))
+            const userData = {
+                email,
+                password
+            }
+            dispatch(fetchUsersLogin(userData))
+
             console.log('zalogowany')
             setEmail('');
             setPassword('');
+
         } else {
             console.log('nie zalogowany')
         }
     }
+    useEffect(() => {
+        console.log(info)
+        console.log(status)
+    }, [status, info])
+
 
     const handleRegistry = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();

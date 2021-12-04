@@ -10,14 +10,14 @@ import { useAppSelector } from '../../Redux/Hooks/hooks';
 
 const MainContent = () => {
 
-    const { info } = useAppSelector(state => state.users)
+    const { infoLogin } = useAppSelector(state => state.users)
 
     return (
         <main className='mainContent'>
             <Switch>
                 <Route exact path='/' render={() => (<Introduction />)} />
                 <Route exact path='/Login' render={() => (<Login />)} />
-                {info.login ? <Route exact path='/Account' render={() => (<Account />)} /> : <Redirect to='/' />}
+                {infoLogin.login ? <Route exact path='/Account' render={() => (<Account />)} /> : <Redirect to='/' />}
             </Switch>
 
         </main>

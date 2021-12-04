@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ChangeEvent, FormEvent, MouseEvent } from 'react';
+
 import './Account.scss'
+
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
-import { fetchUpdateInfo } from '../../Redux/Slice/accountSlice';
+import { fetchUpdateInfo, fetchGetUserData } from '../../Redux/Slice/accountSlice';
 
 
 const Account = () => {
@@ -11,7 +13,7 @@ const Account = () => {
     const [date, setDate] = useState<string>("");
 
     const dispatch = useAppDispatch();
-    const { info, infoUpdate } = useAppSelector(state => state.users)
+    const { infoLogin, infoUpdate, userData, statusUpdateInfo, statusUserData } = useAppSelector(state => state.users)
 
     const TodayDate = new Date();
 
@@ -30,21 +32,32 @@ const Account = () => {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const infoUpdates = { userId: info.rows[0].user_id, name, surname, dateOfBirth: date };
+        const infoUpdates = { userId: infoLogin.rows[0].user_id, name, surname, dateOfBirth: date };
 
         dispatch(fetchUpdateInfo(infoUpdates));
 
         console.log("udalo sie");
         console.log(infoUpdate);
+        console.log('status: ', statusUpdateInfo);
     }
 
     const handleActive = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
-
-
         console.log("udalo sie");
     }
+
+    // const userDataF = () => {
+    //     console.log(infoLogin.rows[0].user_id);
+    //     dispatch(fetchGetUserData(infoLogin.rows[0].user_id));
+    //     console.log(statusUserData, userData)
+    // }
+
+    useEffect(() => {
+        console.log(infoLogin.rows[0].user_id);
+        dispatch(fetchGetUserData(infoLogin.rows[0].user_id));
+        console.log(statusUserData, userData)
+    }, [])
 
     return (
         <section className="AccountSection">

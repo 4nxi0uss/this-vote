@@ -3,7 +3,7 @@ export const SUCCESS = 'SUCCESS'
 export const FAILED = 'FAILED'
 
 
-export interface userDataType {
+export interface infoLoginType {
     email: string,
     password: string
 }
@@ -11,17 +11,24 @@ export interface userDataType {
 export interface userLoginStatus {
     statusLogin: string
     statusUpdateInfo: string
+    statusUserData: string
 }
 
 export interface userLoginInfo {
-    info: {
+    infoLogin: {
         message: string,
         login: boolean
         rows: any
     }
     infoUpdate: {
         message: string,
-        rows: any
+        rows: any,
+        error: any,
+    }
+    userData: {
+        message: string,
+        data: any,
+        error: any
     }
 }
 export interface infoUpdate {

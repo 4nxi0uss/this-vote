@@ -81,32 +81,34 @@ exports.postLoginUser = (req, res, next) => {
     }
 }
 
+// add or update info about user
 exports.patchUserInfo = (req, res, next) => {
     try {
         const { userId, name, surname, dateOfBirth } = req.body
 
         console.log(userId, name, surname, dateOfBirth)
 
-        db.query("SELECT user_id FROM `users_data`", (err, rows, fields) => {
+        db.query("SELECT user_id FROM `users_data`",  (err, rows, fields) => {
             if (err) throw err;
+            const userIdFinder = rows.some(id => id.user_id === userId);
 
-            const userIdFinder = rows.some(id => id.userId === userId);
-
-
-            if (!Boolean(`${userIdFinder}`)) {
-                db.query("INSERT INTO `users_data` (`user_id`, `Name`, `Surname`, `date_of_birth`, `type_of_account`, `active`, `polls`) VALUES ('" + userId + "', '" + name + "', '" + surname + "', '" + dateOfBirth + "', '0', '0', '[]')", (err, rows, fields) => {
+            // INSERT INTO `users_data` (`user_id`, `Name`, `Surname`, `date_of_birth`, `type_of_account`, `active`, `polls`) VALUES ('03e47531-cc8f-4927-9857-c3bc73c305cc', '"tet', 'testtest', '2021-06-06', '0', '0', '[2]')
+              if  (!Boolean(`${userIdFinder}`)) {
+                db.query("INSERT INTO `users_data` (`user_id`, `Name`, `Surname`, `date_of_birth`, `type_of_account`, `active`, `polls`) VALUES ('" + userId + "', '" + name + "', '" + surname + "', '" + dateOfBirth + "', '0', '0', '[]')",  (err, rows, fields) => {
                     if (err) throw err;
                     res.status(200).json({
-                        message: 'pomyślnie zakutalizowano dane',
-                        data: rows,
+                        message: 'wstawiono razem, pomyślnie zakutalizowano dane',
+                        rows: rows,
+                        error: err,
                     })
                 })
             } else {
                 db.query("UPDATE `users_data` SET `Name` = '" + name + "', `Surname` = '" + surname + "', `date_of_birth` = '" + dateOfBirth + "' WHERE `users_data`.`user_id` ='" + userId + "'", (err, rows, fields) => {
-                    // if (err) throw err;
-                    console.log(err)
+                    if (err) throw err;
                     res.status(200).json({
-                        rows: err
+                        message: 'zaktualozowano dane',
+                        rows: rows,
+                        error: err
                         // error: err
                     })
 
@@ -119,6 +121,30 @@ exports.patchUserInfo = (req, res, next) => {
             error: err,
             message: "Coś nie tak z aktalizacją danych "
 
+        })
+    }
+}
+
+
+exports.getUserData = (req, res, next) => {
+    try{
+        const { userId } = req.body
+
+        console.log(userId)
+        
+        db.query("SELECT * FROM `users_data` WHERE user_id = '"+userId+"' ", (err, rows, fields) => {
+            if (err) throw err;
+            res.status(200).json({
+                message: "twoje dane",
+                data: rows,
+                error: err
+            })
+        })
+
+
+    } catch (err){
+        res.status(500).json({
+            message: "Błąd z serwerem"
         })
     }
 }

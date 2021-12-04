@@ -16,7 +16,7 @@ const Login = () => {
     const [password, setPassword] = useState<string>("");
     const [secondPassword, setSecondPassword] = useState<string>("");
 
-    const { info, statusLogin: status } = useAppSelector((state) => state.users);
+    const { infoLogin, statusLogin: status } = useAppSelector((state) => state.users);
 
     const dispatch = useAppDispatch();
 
@@ -37,8 +37,8 @@ const Login = () => {
     const handleLogin = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log('email ', validatedEmail(email));
-        console.log('pass ', validatePassword(password));
+        // console.log('email ', validatedEmail(email));
+        // console.log('pass ', validatePassword(password));
 
         if (validatedEmail(email) && validatePassword(password)) {
             const userData = {
@@ -56,17 +56,17 @@ const Login = () => {
     }
 
     useEffect(() => {
-        console.log(info)
-        console.log(status)
-    }, [status, info])
+        // console.log(info)
+        // console.log(status)
+    }, [status, infoLogin])
 
 
     const handleRegistry = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        console.log('email ', validatedEmail(email))
-        console.log('pass ', validatePassword(password))
-        console.log('pass 2 ', password === secondPassword)
+        // console.log('email ', validatedEmail(email))
+        // console.log('pass ', validatePassword(password))
+        // console.log('pass 2 ', password === secondPassword)
 
         if (validatedEmail(email) && validatePassword(password) && (password === secondPassword)) {
             fetch('http://localhost:3022/users/register', {
@@ -110,7 +110,7 @@ const Login = () => {
                 <button className='loginBtn' type='submit'>{toggleRegistry ? "Register" : "Log in"}</button>
             </form>
             <p className="toRegistryParagraph">{toggleRegistry ? "If you have account, please " : "If you don't have account, please"} <button className='toRegistryBtn' onClick={handleToggleRegistry}> {!toggleRegistry ? "register now." : "log into it here."} </button></p>
-            {info.login ? <Redirect exact to="/Account" /> : null}
+            {infoLogin.login ? <Redirect exact to="/Account" /> : null}
         </section>
     )
 }

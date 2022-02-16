@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 
 import './Login.scss'
@@ -16,7 +16,7 @@ const Login = () => {
     const [password, setPassword] = useState<string>("");
     const [secondPassword, setSecondPassword] = useState<string>("");
 
-    const { infoLogin, statusLogin: status } = useAppSelector((state) => state.users);
+    const { infoLogin } = useAppSelector((state) => state.users);
 
     const dispatch = useAppDispatch();
 
@@ -41,24 +41,25 @@ const Login = () => {
         // console.log('pass ', validatePassword(password));
 
         if (validatedEmail(email) && validatePassword(password)) {
-            const userData = {
+            const userLoginData = {
                 email,
                 password
             }
-            dispatch(fetchUsersLogin(userData))
+            dispatch(fetchUsersLogin(userLoginData))
+
+            // console.log(dispatch(fetchUsersLogin(userLoginData)))
             console.log('zalogowany')
             setEmail('');
             setPassword('');
 
+            // console.log(infoLogin);
+            // window.sessionStorage.setItem()
         } else {
             console.log('nie zalogowany')
         }
-    }
 
-    useEffect(() => {
-        // console.log(info)
-        // console.log(status)
-    }, [status, infoLogin])
+
+    }
 
 
     const handleRegistry = (e: FormEvent<HTMLFormElement>) => {

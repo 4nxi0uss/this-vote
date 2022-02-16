@@ -28,6 +28,9 @@ const Header = () => {
                 {infoLogin.login ? <Link to='/Account' className='NavLink'>
                     Account
                 </Link> : null}
+                {infoLogin.login ? <Link to='/Pools' className='NavLink'>
+                    Pools
+                </Link> : null}
                 {!infoLogin.login ? <Link to='/login' className='NavLink'>
                     Login/Registry
                 </Link> : <button className='NavLink' onClick={handleLogout}>Logout</button>}

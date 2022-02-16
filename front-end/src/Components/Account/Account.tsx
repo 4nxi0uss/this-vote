@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { ChangeEvent, FormEvent, MouseEvent } from 'react';
 
 import './Account.scss'
@@ -8,24 +8,32 @@ import { fetchUpdateInfo, fetchGetUserData } from '../../Redux/Slice/accountSlic
 
 
 const Account = () => {
-    const [name, setName] = useState<string>('');
-    const [surname, setSurname] = useState<string>('');
-    const [date, setDate] = useState<string>("");
+    const { infoLogin, infoUpdate, userData, statusUpdateInfo } = useAppSelector(state => state.users)
+
+    const betterDate = (date: string) => date.slice(0, 10)
+
+    const [name, setName] = useState<string>(userData.data[0].Name);
+    const [surname, setSurname] = useState<string>(userData.data[0].Surname);
+    const [date, setDate] = useState<string>(betterDate(userData.data[0].date_of_birth));
+    const [typeOfAccount, setTypeOfAccount] = useState<number>(userData.data[0].type_of_account);
+    const [accountStatus, setAccountStatus] = useState<number>(userData.data[0].active);
 
     const dispatch = useAppDispatch();
-    const { infoLogin, infoUpdate, userData, statusUpdateInfo, statusUserData } = useAppSelector(state => state.users)
 
     const TodayDate = new Date();
 
     const handleName = (e: ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault()
         setName(e.target.value)
     }
 
     const handleSurname = (e: ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault()
         setSurname(e.target.value)
     }
 
     const handleDate = (e: ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault()
         setDate(e.target.value.trim())
     }
 
@@ -33,38 +41,52 @@ const Account = () => {
         e.preventDefault();
 
         const infoUpdates = { userId: infoLogin.rows[0].user_id, name, surname, dateOfBirth: date };
-
-        dispatch(fetchUpdateInfo(infoUpdates));
+        try {
+            dispatch(fetchUpdateInfo(infoUpdates));
+            console.log(46, infoUpdate);
+        } catch (error) {
+            console.warn(error)
+        }
 
         console.log("udalo sie");
-        console.log(infoUpdate);
+        console.log(52, infoUpdate);
         console.log('status: ', statusUpdateInfo);
     }
 
     const handleActive = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
+        fetch('http://localhost:3022/users/active', {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: infoLogin.rows[0].user_id,
+            })
+        }).then(res => res.json()).then(data => console.table(data))
+
         console.log("udalo sie");
     }
 
-    // const userDataF = () => {
-    //     console.log(infoLogin.rows[0].user_id);
-    //     dispatch(fetchGetUserData(infoLogin.rows[0].user_id));
-    //     console.log(statusUserData, userData)
-    // }
-
     useEffect(() => {
-        console.log(infoLogin.rows[0].user_id);
         dispatch(fetchGetUserData(infoLogin.rows[0].user_id));
-        console.log(statusUserData, userData)
     }, [])
+
+    useMemo(() => {
+        setName(userData.data[0].Name)
+        setSurname(userData.data[0].Surname)
+        setDate(betterDate(userData.data[0].date_of_birth))
+        setAccountStatus(userData.data[0].active)
+        setTypeOfAccount(userData.data[0].type_of_account)
+    }, [userData])
 
     return (
         <section className="AccountSection">
 
-            <h2 className='AcountTitle'> Hello name </h2>
+            <h2 className='AcountTitle'> Hello {name} </h2>
 
-            <button className="AccountActivateBtn" onClick={handleActive} >Activate</button>
+            <button disabled={accountStatus === 1 ? true : false} className="AccountActivateBtn" onClick={handleActive} >Activate</button>
 
             <form className='AccountForm' onSubmit={handleSubmit} method="submit">
 
@@ -78,10 +100,10 @@ const Account = () => {
                 <input type="date" max={`${TodayDate.getFullYear()}-${TodayDate.getMonth() + 1}-${TodayDate.getDate()}`} onChange={handleDate} value={date} />
 
                 <label >Type of account:</label>
-                <input type="text" readOnly disabled />
+                <input type="text" readOnly disabled value={typeOfAccount} />
 
                 <label >Account status:</label>
-                <input type="text" readOnly disabled />
+                <input type="text" readOnly disabled value={accountStatus} />
 
                 <button className="AccountSubmitBtn" type="submit">Save</button>
             </form>

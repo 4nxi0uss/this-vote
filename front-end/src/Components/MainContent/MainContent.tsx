@@ -7,6 +7,7 @@ import Introduction from './subcoponent/Introduction/Introduction';
 import Login from '../Login/Login';
 import Account from '../Account/Account';
 import { useAppSelector } from '../../Redux/Hooks/hooks';
+import Pools from '../Pools/pools';
 
 const MainContent = () => {
 
@@ -18,6 +19,7 @@ const MainContent = () => {
                 <Route exact path='/' render={() => (<Introduction />)} />
                 <Route exact path='/Login' render={() => (<Login />)} />
                 {infoLogin.login ? <Route exact path='/Account' render={() => (<Account />)} /> : <Redirect to='/' />}
+                {infoLogin.login ? <Route exact path='/Pools' render={() => (<Pools />)} /> : <Redirect to='/' />}
             </Switch>
 
         </main>

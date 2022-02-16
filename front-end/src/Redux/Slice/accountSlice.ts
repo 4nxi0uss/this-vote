@@ -19,7 +19,17 @@ const initialState: userLoginStatus & userLoginInfo = {
     },
     userData: {
         message: 'próba zaciągnięcia danych z bazy',
-        data: {},
+        data: [
+            {
+                Name: '',
+                Surname: '',
+                active: Number(),
+                date_of_birth: '',
+                id: Number(),
+                polls: '',
+                type_of_account: Number(),
+user_id: '',
+            }],
         error:''
     },
 }
@@ -73,14 +83,16 @@ export const fetchUpdateInfo = createAsyncThunk("users/infoUpdate", async (infoU
 export const fetchGetUserData = createAsyncThunk("users/getUserData", async (userId: infoUpdate) => {
 
     try {
-        const data = await fetch('http://localhost:3022/users/getUserData', {
+        const data = await fetch(`http://localhost:3022/users/getUserData/${userId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                userId: `${userId}`,
-            })
+            mode: 'cors',
+            cache: 'default',
+            // body: JSON.stringify({
+            //     userId: `${userId}`,
+            // })
         })
           const result = data.json();
          return await result;

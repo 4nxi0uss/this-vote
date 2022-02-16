@@ -1,5 +1,6 @@
 const db = require('../Database/Database');
 const { v4: uid } = require('uuid');
+const { closeSync } = require('fs');
 db.connect()
 
 //checking email in database
@@ -125,14 +126,48 @@ exports.patchUserInfo = (req, res, next) => {
     }
 }
 
+// UPDATE users_data SET active = 3 WHERE users_data.user_id = 'a6ff932f-0da3-490d-91dd-e60876db2cc9';
+
+
+exports.patchActiveUser = (req, res, next) => {
+    try {
+        const { userId} = req.body
+        db.query("SELECT user_id, `active` FROM `users_data`",  (err, rows, fields) => {
+            if (err) throw err;
+console.log(rows)
+            const userIdFinder = rows.some(id => id.user_id === userId);
+            const activeFinder = rows.some(row => row.active === 0);
+
+            if(Boolean(userIdFinder) && Boolean(activeFinder)){
+                db.query("UPDATE users_data SET active = 1 WHERE users_data.user_id = '"+userId+"'",  (err, rows, fields) => {
+                    res.status(200).json({
+                        message: "Konto zaktualizowano pomyślnie"
+                    })
+                })
+            }
+
+        })
+    } catch (error) {
+        res.status(500).json({
+            error: err,
+            message: "Coś nie tak z aktalizacją danych "
+
+        })
+    }
+}
+
 
 exports.getUserData = (req, res, next) => {
     try{
-        const { userId } = req.body
-
-        console.log(userId)
+        const { id } = req.params
+console.log(id)
+        console.log('tu')
         
-        db.query("SELECT * FROM `users_data` WHERE user_id = '"+userId+"' ", (err, rows, fields) => {
+        db.query("SELECT * FROM `users_data` WHERE user_id = '"+id+"' ", (err, rows, fields) => {
+            console.log('ty')
+            console.log(rows)
+            console.log(err)
+
             if (err) throw err;
             res.status(200).json({
                 message: "twoje dane",

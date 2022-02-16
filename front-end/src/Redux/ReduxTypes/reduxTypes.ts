@@ -27,7 +27,18 @@ export interface userLoginInfo {
     }
     userData: {
         message: string,
-        data: any,
+        data: [
+            {
+                Name: string,
+                Surname: string,
+                active: number,
+                date_of_birth: string,
+                id: number,
+                polls: string,
+                type_of_account: number,
+user_id: string,
+            }
+        ]
         error: any
     }
 }

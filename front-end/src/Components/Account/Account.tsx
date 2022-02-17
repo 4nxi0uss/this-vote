@@ -42,7 +42,7 @@ const Account = () => {
 
         const infoUpdates = { userId: infoLogin.rows[0].user_id, name, surname, dateOfBirth: date };
         try {
-            dispatch(fetchUpdateInfo(infoUpdates));
+            dispatch<any>(fetchUpdateInfo(infoUpdates));
             console.log(46, infoUpdate);
         } catch (error) {
             console.warn(error)
@@ -70,7 +70,7 @@ const Account = () => {
     }
 
     useEffect(() => {
-        dispatch(fetchGetUserData(infoLogin.rows[0].user_id));
+        dispatch<any>(fetchGetUserData(infoLogin.rows[0].user_id));
     }, [])
 
     useMemo(() => {

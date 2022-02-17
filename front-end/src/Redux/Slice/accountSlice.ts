@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
 import { infoLoginType, FAILED, SUCCESS, LOADING, userLoginStatus, userLoginInfo, infoUpdate } from '../ReduxTypes/reduxTypes';
-import type { RootState } from '../Store/store'
+// import type { RootState } from '../Store/store'
 
 // Define the initial state using that type
 const initialState: userLoginStatus & userLoginInfo = {
@@ -15,7 +15,7 @@ const initialState: userLoginStatus & userLoginInfo = {
     infoUpdate: {
         message: 'tak',
         rows: '',
-        error:''
+        error: ''
     },
     userData: {
         message: 'próba zaciągnięcia danych z bazy',
@@ -28,9 +28,9 @@ const initialState: userLoginStatus & userLoginInfo = {
                 id: Number(),
                 polls: '',
                 type_of_account: Number(),
-user_id: '',
+                user_id: '',
             }],
-        error:''
+        error: ''
     },
 }
 
@@ -74,8 +74,8 @@ export const fetchUpdateInfo = createAsyncThunk("users/infoUpdate", async (infoU
                 dateOfBirth: `${dateOfBirth}`,
             })
         })
-          const result = data.json();
-         return await result;
+        const result = data.json();
+        return await result;
     } catch (error) {
         throw await error
     }
@@ -94,8 +94,8 @@ export const fetchGetUserData = createAsyncThunk("users/getUserData", async (use
             //     userId: `${userId}`,
             // })
         })
-          const result = data.json();
-         return await result;
+        const result = data.json();
+        return await result;
     } catch (error) {
         throw await error
     }
@@ -153,6 +153,6 @@ export const usersLoginSlice = createSlice({
 export const { clearStatus, clearInfo } = usersLoginSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectStatus = (state: RootState) => state.users.statusLogin
+// export const selectStatus = (state: RootState) => state.users.statusLogin
 
 export default usersLoginSlice.reducer

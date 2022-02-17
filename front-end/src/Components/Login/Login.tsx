@@ -5,8 +5,10 @@ import './Login.scss'
 
 import { fetchUsersLogin } from '../../Redux/Slice/accountSlice';
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
+import { Navigate, Routes } from 'react-router-dom';
 
-import { Redirect } from 'react-router';
+// import { Redirect } from 'react-router';
+// import { Redirect } from 'react-router-dom';
 
 
 const Login = () => {
@@ -45,7 +47,7 @@ const Login = () => {
                 email,
                 password
             }
-            dispatch(fetchUsersLogin(userLoginData))
+            dispatch<any>(fetchUsersLogin(userLoginData))
 
             // console.log(dispatch(fetchUsersLogin(userLoginData)))
             console.log('zalogowany')
@@ -100,7 +102,6 @@ const Login = () => {
     const handleSecondPassword = (e: ChangeEvent<HTMLInputElement>) => {
         setSecondPassword(e.target.value.trim())
     }
-
     return (
         <section className='loginSection'>
             <h2 className='loginTitle'>{!toggleRegistry ? "Sing in" : "Register"}</h2>
@@ -111,7 +112,8 @@ const Login = () => {
                 <button className='loginBtn' type='submit'>{toggleRegistry ? "Register" : "Log in"}</button>
             </form>
             <p className="toRegistryParagraph">{toggleRegistry ? "If you have account, please " : "If you don't have account, please"} <button className='toRegistryBtn' onClick={handleToggleRegistry}> {!toggleRegistry ? "register now." : "log into it here."} </button></p>
-            {infoLogin.login ? <Redirect exact to="/Account" /> : null}
+            {infoLogin.login ? <Navigate to="/Account" /> : null}
+            {/* {infoLogin.login ? <Redirect exact to="/Account" /> : null} */}
         </section>
     )
 }

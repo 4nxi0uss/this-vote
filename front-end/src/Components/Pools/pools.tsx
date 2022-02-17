@@ -3,27 +3,44 @@ import Modal from '../Modal/modal';
 
 import './pools.scss'
 
+let options: string[] = []
+
 const Pools = () => {
+
     const [isShown, setIsShown] = useState<boolean>(false)
+    const [optionText, setOptionText] = useState<string>("");
+
     const handleModal = () => {
         setIsShown(!isShown)
     }
 
     const test = useRef<any>(null)
-
-    let options: string[] = []
-
-    const handleAddOption = (e: any) => {
+    
+    const handleClearInput =(e:any)=>{
         e.preventDefault()
+        setOptionText("")
+    }
+    const handleOptionText = (event: any) => {
+        event.preventDefault()
+        setOptionText(event.target.value)
+        // options = [...options]
+    }
+
+
+    const handleAddOption = (event: any) => {
+        event.preventDefault()
         // console.log(test.current?.value)
 
-        options = [...options, test.current?.value]
+        // options = [...options, test.current?.value]
+        options= [...options, optionText]
         console.log(options)
+        handleClearInput(event)
+
     }
-    console.log(options)
-    const optionShow = () => {
-        return options.map((index, option) => { return (<p key={index}>{option}</p>) })
-    }
+
+    const optionShow = () => options.map((option, index) => <p key={index}>{option}</p>)
+    
+console.log('proba: ', optionShow())
 
     return (
         <>
@@ -36,7 +53,7 @@ const Pools = () => {
                         <label className='numberLabel'>Numer:</label>
                         <input className='numberInput' type="number" />
                         <label>Option to choose in pool:</label>
-                        <input ref={test} type="text" />
+                        <input ref={test} type="text" value={optionText} onChange={handleOptionText} />
                         <button onClick={handleAddOption}>+</button>
                         {optionShow()}
                     </form>
@@ -44,6 +61,9 @@ const Pools = () => {
                 </div>
             </Modal>
             <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed dolorum, veritatis dolores ratione nam unde consequuntur nostrum delectus possimus quaerat id vero corporis blanditiis dolorem commodi modi deserunt aperiam! Explicabo.</h1>
+            {/* <div className='test'>
+                {optionShow()}
+            </div> */}
         </>
     )
 }

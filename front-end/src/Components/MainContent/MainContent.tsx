@@ -8,7 +8,7 @@ import Introduction from './subcoponent/Introduction/Introduction';
 import Login from '../Login/Login';
 import Account from '../Account/Account';
 import { useAppSelector } from '../../Redux/Hooks/hooks';
-import Pools from '../Pools/pools';
+import Pools from '../Pools/Pools';
 
 const MainContent = () => {
 

@@ -1,7 +1,8 @@
 import { useRef, useState } from 'react';
-import Modal from '../Modal/modal';
+import Modal from '../Modal/Modal';
 
-import './pools.scss'
+import './Pools.scss'
+import Pool from './subcomponent/Pool/Pool';
 
 let options: string[] = []
 
@@ -9,11 +10,19 @@ const Pools = () => {
 
     const [isShown, setIsShown] = useState<boolean>(false)
     const [optionText, setOptionText] = useState<string>("");
+    const [randomNumber, setRandomNumber] = useState<number>(0);
 
-    const handleModal = () => {
-        setIsShown(!isShown)
+    const handleRandomNumber = (e?: any) => {
+        e.preventDefault()
+        setRandomNumber(Math.floor(Math.random() * 1000000))
     }
 
+    const handleModal = (e: any) => {
+        setIsShown(!isShown)
+        handleRandomNumber(e)
+    }
+
+    // console.log("1", randomNumber())
     const test = useRef<any>(null)
 
     const handleClearInput = (e: any) => {
@@ -40,25 +49,29 @@ const Pools = () => {
     console.log('proba: ', optionShow())
 
     return (
-        <>
+        <section className='mainPoolsSection'>
             <button className='addPool' onClick={handleModal}>Add pool</button>
             <Modal isOpen={isShown} >
                 <div className='modalPool'>
                     <form className='modalFormPool'>
                         <label>Name:</label>
                         <input type="text" />
-                        <label className='numberLabel'>Numer:</label>
-                        <input className='numberInput' type="number" />
+                        <label>Question:</label>
+                        <input type="text" />
+                        <label className='numberLabel'>Number:</label>
+                        <input className='numberInput' type="number" readOnly disabled value={randomNumber} />
                         <label>Option to choose in pool:</label>
                         <input ref={test} type="text" value={optionText} onChange={handleOptionText} />
                         <button onClick={handleAddOption}>+</button>
                         {optionShow()}
                     </form>
                     <button className='btnModalClose' onClick={handleModal}>Zamknij</button>
+                    <button className='btnModalClose' onClick={handleModal}>Wyślij</button>
                 </div>
             </Modal>
-            <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed dolorum, veritatis dolores ratione nam unde consequuntur nostrum delectus possimus quaerat id vero corporis blanditiis dolorem commodi modi deserunt aperiam! Explicabo.</h1>
-        </>
+
+            <Pool />
+        </section>
     )
 }
 

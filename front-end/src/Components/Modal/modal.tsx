@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom';
 
-import './modal.scss'
+import './Modal.scss'
 
 import { ModalProp } from '../../Types/Types';
 

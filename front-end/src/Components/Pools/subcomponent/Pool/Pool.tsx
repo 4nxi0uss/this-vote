@@ -5,7 +5,7 @@ import './Pool.scss'
 const Pool = () => {
     return (
         <section className='poolSection'>
-            <div className='firstPart'>tak </div>
+            <div className='firstPart'></div>
             <div className='secondPart'>nei</div>
         </section>
     )

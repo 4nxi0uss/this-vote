@@ -4,7 +4,7 @@ import Modal from '../Modal/Modal';
 import './Pools.scss'
 import Pool from './subcomponent/Pool/Pool';
 
-let options: string[] = []
+let optionsList: string[] = []
 
 const Pools = () => {
 
@@ -38,13 +38,13 @@ const Pools = () => {
     const handleAddOption = (event: any) => {
         event.preventDefault()
 
-        options = [...options, optionText]
-        console.log(options)
+        optionsList = [...optionsList, optionText]
+        console.log(optionsList)
         handleClearInput(event)
 
     }
 
-    const optionShow = () => options.map((option, index) => <p key={index}>{option}</p>)
+    const optionShow = () => optionsList.map((option, index) => <p key={index}>{option}</p>)
 
     console.log('proba: ', optionShow())
 

@@ -1,4 +1,13 @@
+$red : #F15854;
+$gray : #4D4D4D;
+$blue : #5DA5DA;
+$yellow : #DECF3F;
+$purple : #B276B2;
+$orange : #FAA43A;
+
 .poolSection {
+    display: flex;
+    flex-direction: column;
     background-color: rgba(0, 0, 255, 0.349);
     margin: 2vw;
     padding: 1vw;
@@ -6,10 +15,35 @@
     border: 1px solid black;
 
     .firstPart {
-        background-color: rgba(170, 255, 0, 0.452);
-        padding: 2vw;
+        padding: 4.5vw;
+        margin: 1vw;
         border: 1px solid black;
+        // align-content: center;
+        background:
+            conic-gradient($red 0 54%,
+                // $gray 0 8%,
+                // $blue 0 17%,
+                // $yellow 0 48%,
+                // $purple 0 54%,
+                $orange 0 12%);
+        border-radius: 50%;
+        // width: 50%;
+        // height: 0;
+        // padding-top: 50%;
+        // float: left;
+        // padding-right: 20px;
+        //https://css-tricks.com/making-charts-with-css/
     }
+
+    // .firstPart {
+    //     background-color: rgba(170, 255, 0, 0.452);
+    //     padding: 2vw;
+    //     border-width: 50px;
+    //     border-style: solid;
+    //     border-color: $red green blue yellow;
+    //     border-radius: 100%;
+    //     content: "";
+    // }
 
     .secondPart {
         background-color: rgba(255, 68, 0, 0.315);

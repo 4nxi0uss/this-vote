@@ -15,32 +15,29 @@ const Pools = () => {
     }
 
     const test = useRef<any>(null)
-    
-    const handleClearInput =(e:any)=>{
+
+    const handleClearInput = (e: any) => {
         e.preventDefault()
         setOptionText("")
     }
     const handleOptionText = (event: any) => {
         event.preventDefault()
         setOptionText(event.target.value)
-        // options = [...options]
     }
 
 
     const handleAddOption = (event: any) => {
         event.preventDefault()
-        // console.log(test.current?.value)
 
-        // options = [...options, test.current?.value]
-        options= [...options, optionText]
+        options = [...options, optionText]
         console.log(options)
         handleClearInput(event)
 
     }
 
     const optionShow = () => options.map((option, index) => <p key={index}>{option}</p>)
-    
-console.log('proba: ', optionShow())
+
+    console.log('proba: ', optionShow())
 
     return (
         <>
@@ -61,9 +58,6 @@ console.log('proba: ', optionShow())
                 </div>
             </Modal>
             <h1>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed dolorum, veritatis dolores ratione nam unde consequuntur nostrum delectus possimus quaerat id vero corporis blanditiis dolorem commodi modi deserunt aperiam! Explicabo.</h1>
-            {/* <div className='test'>
-                {optionShow()}
-            </div> */}
         </>
     )
 }

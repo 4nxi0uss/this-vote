@@ -1,7 +1,3 @@
-// import React, { useEffect, useState } from 'react';
-
-// import type { dataTypes } from './Types/Types';
-
 import { HashRouter as Router } from 'react-router-dom';
 
 import './App.scss';

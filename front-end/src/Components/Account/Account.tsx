@@ -6,7 +6,6 @@ import './Account.scss'
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
 import { fetchUpdateInfo, fetchGetUserData } from '../../Redux/Slice/accountSlice';
 
-
 const Account = () => {
     const { infoLogin, infoUpdate, userData, statusUpdateInfo } = useAppSelector(state => state.users)
 

@@ -14,9 +14,9 @@ export interface dataTypes {
   }
   
   export interface ModalProp {
-    // children: React.ReactChildren,
+
     children: React.ReactChild,
-    // children: HTMLFormElement ,
+
     isOpen: boolean, 
     handleOnClose?: ()=> void,
     shouldBeCloseOnOutsideClick?: boolean;

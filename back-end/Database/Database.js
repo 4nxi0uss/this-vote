@@ -4,6 +4,5 @@ module.exports = mysql.createConnection({
   user: 'root',
   password: '',
   database: 'this_vote',
-  // debug: false,
 })
 

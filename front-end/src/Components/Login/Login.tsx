@@ -5,10 +5,7 @@ import './Login.scss'
 
 import { fetchUsersLogin } from '../../Redux/Slice/accountSlice';
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
-import { Navigate, Routes } from 'react-router-dom';
-
-// import { Redirect } from 'react-router';
-// import { Redirect } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 
 
 const Login = () => {
@@ -39,9 +36,6 @@ const Login = () => {
     const handleLogin = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        // console.log('email ', validatedEmail(email));
-        // console.log('pass ', validatePassword(password));
-
         if (validatedEmail(email) && validatePassword(password)) {
             const userLoginData = {
                 email,
@@ -49,27 +43,18 @@ const Login = () => {
             }
             dispatch<any>(fetchUsersLogin(userLoginData))
 
-            // console.log(dispatch(fetchUsersLogin(userLoginData)))
             console.log('zalogowany')
             setEmail('');
             setPassword('');
 
-            // console.log(infoLogin);
-            // window.sessionStorage.setItem()
         } else {
             console.log('nie zalogowany')
         }
-
-
     }
 
 
     const handleRegistry = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
-        // console.log('email ', validatedEmail(email))
-        // console.log('pass ', validatePassword(password))
-        // console.log('pass 2 ', password === secondPassword)
 
         if (validatedEmail(email) && validatePassword(password) && (password === secondPassword)) {
             fetch('http://localhost:3022/users/register', {
@@ -113,7 +98,6 @@ const Login = () => {
             </form>
             <p className="toRegistryParagraph">{toggleRegistry ? "If you have account, please " : "If you don't have account, please"} <button className='toRegistryBtn' onClick={handleToggleRegistry}> {!toggleRegistry ? "register now." : "log into it here."} </button></p>
             {infoLogin.login ? <Navigate to="/Account" /> : null}
-            {/* {infoLogin.login ? <Redirect exact to="/Account" /> : null} */}
         </section>
     )
 }

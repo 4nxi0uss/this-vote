@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
 import { infoLoginType, FAILED, SUCCESS, LOADING, userLoginStatus, userLoginInfo, infoUpdate } from '../ReduxTypes/reduxTypes';
-// import type { RootState } from '../Store/store'
 
 // Define the initial state using that type
 const initialState: userLoginStatus & userLoginInfo = {
@@ -90,9 +89,6 @@ export const fetchGetUserData = createAsyncThunk("users/getUserData", async (use
             },
             mode: 'cors',
             cache: 'default',
-            // body: JSON.stringify({
-            //     userId: `${userId}`,
-            // })
         })
         const result = data.json();
         return await result;

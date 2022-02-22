@@ -1,53 +1,58 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
+import type { ChangeEvent, MouseEvent } from "react"
 import Modal from '../Modal/Modal';
 
 import './Pools.scss'
 import Pool from './subcomponent/Pool/Pool';
 
-let optionsList: string[] = []
+let optionsList: (string | any | object)[] = []
 
 const Pools = () => {
 
     const [isShown, setIsShown] = useState<boolean>(false)
     const [optionText, setOptionText] = useState<string>("");
+    const [optionColor, setOptionColor] = useState<string>("");
     const [randomNumber, setRandomNumber] = useState<number>(0);
 
-    const handleRandomNumber = (e?: any) => {
-        e.preventDefault()
+    const handleRandomNumber = (event?: MouseEvent<HTMLButtonElement>) => {
+        event?.preventDefault()
         setRandomNumber(Math.floor(Math.random() * 1000000))
     }
 
-    const handleModal = (e: any) => {
+    const handleModal = (event: MouseEvent<HTMLButtonElement>) => {
         setIsShown(!isShown)
-        handleRandomNumber(e)
+        handleRandomNumber(event)
     }
 
-    // console.log("1", randomNumber())
-    const test = useRef<any>(null)
-
-    const handleClearInput = (e: any) => {
-        e.preventDefault()
+    const handleClearInput = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault()
         setOptionText("")
     }
-    const handleOptionText = (event: any) => {
+    const handleOptionText = (event: ChangeEvent<HTMLInputElement>) => {
         event.preventDefault()
-        setOptionText(event.target.value)
+        setOptionText((event.target.value).trim())
     }
 
-
-    const handleAddOption = (event: any) => {
+    const handleOptionColor = (event: ChangeEvent<HTMLInputElement>) => {
         event.preventDefault()
+        setOptionColor(event.target.value)
+    }
 
-        optionsList = [...optionsList, optionText]
-        console.log(optionsList)
-        handleClearInput(event)
+    const handleAddOption = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault()
+        if (!Boolean(optionText === "")) {
+            optionsList = [...optionsList, { name: optionText, color: optionColor }]
+            console.log(optionsList)
+            console.log(optionColor)
+            console.log(optionText)
+            handleClearInput(event)
+        }
 
     }
 
-    const optionShow = () => optionsList.map((option, index) => <p key={index}>{option}</p>)
+    const optionShow = () => optionsList.map((option, index) => <p className='optionShow' key={index}>{option?.name} <span className='optionDotColor' style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
 
     console.log('proba: ', optionShow())
-
     return (
         <section className='mainPoolsSection'>
             <button className='addPool' onClick={handleModal}>Add pool</button>
@@ -60,13 +65,15 @@ const Pools = () => {
                         <input type="text" />
                         <label className='numberLabel'>Number:</label>
                         <input className='numberInput' type="number" readOnly disabled value={randomNumber} />
-                        <label>Option to choose in pool:</label>
-                        <input ref={test} type="text" value={optionText} onChange={handleOptionText} />
+                        <label>Option to choose in pool (max 6):</label>
+                        <input type="text" value={optionText} onChange={handleOptionText} required />
+                        <input type="color" onChange={handleOptionColor} value={optionColor} />
                         <button onClick={handleAddOption}>+</button>
                         {optionShow()}
                     </form>
                     <button className='btnModalClose' onClick={handleModal}>Zamknij</button>
                     <button className='btnModalClose' onClick={handleModal}>Wyślij</button>
+                    {/* <button className='btnModalClose' onClick={() => handleTest(2)}>Wyślij</button> */}
                 </div>
             </Modal>
 

@@ -39,4 +39,21 @@
         color: rgb(14, 14, 14);
 
     }
+
+    .optionShow {
+        display: flex;
+        flex-direction: row;
+        margin: .5vw 0;
+        // padding: .5vw 0;
+        justify-content: space-between;
+
+        .optionDotColor {
+            position: relative;
+            border-radius: 100%;
+            border: 5px solid;
+            height: 1vw;
+            width: 1vw;
+            
+        }
+    }
 }

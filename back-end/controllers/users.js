@@ -17,12 +17,12 @@ exports.postRegisterUser = (req, res, next) => {
     try {
         const { usersEmail: email, pass } = req.body;
 
-        console.log(email, pass)
+        // console.log(email, pass)
 
         db.query("SELECT `email`,`password` FROM `login`", (err, rows, fields) => {
             if (err) throw err;
 
-            console.log(checkEmail(rows, email));
+            // console.log(checkEmail(rows, email));
 
             if (checkEmail(rows, email)) {
                 res.status(406).json({
@@ -87,15 +87,15 @@ exports.patchUserInfo = (req, res, next) => {
     try {
         const { userId, name, surname, dateOfBirth } = req.body
 
-        console.log(userId, name, surname, dateOfBirth)
+        // console.log(userId, name, surname, dateOfBirth)
 
-        db.query("SELECT user_id FROM `users_data`",  (err, rows, fields) => {
+        db.query("SELECT user_id FROM `users_data`", (err, rows, fields) => {
             if (err) throw err;
             const userIdFinder = rows.some(id => id.user_id === userId);
 
             // INSERT INTO `users_data` (`user_id`, `Name`, `Surname`, `date_of_birth`, `type_of_account`, `active`, `polls`) VALUES ('03e47531-cc8f-4927-9857-c3bc73c305cc', '"tet', 'testtest', '2021-06-06', '0', '0', '[2]')
-              if  (!Boolean(`${userIdFinder}`)) {
-                db.query("INSERT INTO `users_data` (`user_id`, `Name`, `Surname`, `date_of_birth`, `type_of_account`, `active`, `polls`) VALUES ('" + userId + "', '" + name + "', '" + surname + "', '" + dateOfBirth + "', '0', '0', '[]')",  (err, rows, fields) => {
+            if (!Boolean(`${userIdFinder}`)) {
+                db.query("INSERT INTO `users_data` (`user_id`, `Name`, `Surname`, `date_of_birth`, `type_of_account`, `active`, `polls`) VALUES ('" + userId + "', '" + name + "', '" + surname + "', '" + dateOfBirth + "', '0', '0', '[]')", (err, rows, fields) => {
                     if (err) throw err;
                     res.status(200).json({
                         message: 'wstawiono razem, pomyślnie zakutalizowano dane',
@@ -131,15 +131,15 @@ exports.patchUserInfo = (req, res, next) => {
 
 exports.patchActiveUser = (req, res, next) => {
     try {
-        const { userId} = req.body
-        db.query("SELECT user_id, `active` FROM `users_data`",  (err, rows, fields) => {
+        const { userId } = req.body
+        db.query("SELECT user_id, `active` FROM `users_data`", (err, rows, fields) => {
             if (err) throw err;
-console.log(rows)
+            // console.log(rows)
             const userIdFinder = rows.some(id => id.user_id === userId);
             const activeFinder = rows.some(row => row.active === 0);
 
-            if(Boolean(userIdFinder) && Boolean(activeFinder)){
-                db.query("UPDATE users_data SET active = 1 WHERE users_data.user_id = '"+userId+"'",  (err, rows, fields) => {
+            if (Boolean(userIdFinder) && Boolean(activeFinder)) {
+                db.query("UPDATE users_data SET active = 1 WHERE users_data.user_id = '" + userId + "'", (err, rows, fields) => {
                     res.status(200).json({
                         message: "Konto zaktualizowano pomyślnie"
                     })
@@ -158,15 +158,15 @@ console.log(rows)
 
 
 exports.getUserData = (req, res, next) => {
-    try{
+    try {
         const { id } = req.params
-console.log(id)
-        console.log('tu')
-        
-        db.query("SELECT * FROM `users_data` WHERE user_id = '"+id+"' ", (err, rows, fields) => {
-            console.log('ty')
-            console.log(rows)
-            console.log(err)
+        // console.log(id)
+        // console.log('tu')
+
+        db.query("SELECT * FROM `users_data` WHERE user_id = '" + id + "' ", (err, rows, fields) => {
+            // console.log('ty')
+            // console.log(rows)
+            // console.log(err)
 
             if (err) throw err;
             res.status(200).json({
@@ -177,9 +177,31 @@ console.log(id)
         })
 
 
-    } catch (err){
+    } catch (err) {
         res.status(500).json({
-            message: "Błąd z serwerem"
+            message: "Błąd z serwerem",
+            error: err
+        })
+    }
+}
+
+exports.postPolls = (req, res, next) => {
+    try {
+        const {name,question,number,option,id} = req.body
+        // INSERT INTO `polls` (`id`, `creator_id`, `name`, `question`, `number`, `options`) VALUES (NULL, 'a6ff932f-0da3-490d-91dd-e60876db2cc9', 'name', 'question name?', '321123', '[{\'name:\' \'2\', \'color:\' \'#bc3434\'},\r\n{\'name:\' \'3\', \'color:\' \'#3da485\'},\r\n{\'name:\' \'4\', \'color:\' \'#3da485\'},\r\n{\'name:\' \'5\', \'color:\' \'#e34f45\'},]');
+        db.query("INSERT INTO `polls` ( `creator_id`, `name`, `question`, `number`, `options`) VALUES ('"+id+"', '"+name+"', '"+question+"', '"+number+"', '"+option+"');", (err, rows, fields) => {
+            if (err) throw err;
+            res.status(200).json({
+                message: "Pool added sucesfuly",
+                data: rows,
+                error: err
+            })
+        })
+
+    } catch (err) {
+        res.status(500).json({
+            message: "Błąd z serwerem.",
+            error: err
         })
     }
 }

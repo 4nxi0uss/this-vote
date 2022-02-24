@@ -1,11 +1,12 @@
 const express = require('express')
 
-const { postRegisterUser, postLoginUser, patchUserInfo,getUserData, patchActiveUser } = require('../controllers/users')
+const { postRegisterUser, postLoginUser, patchUserInfo,getUserData, patchActiveUser, postPolls } = require('../controllers/users')
 
 const router = express.Router();
 
 router.post('/register', postRegisterUser);
 router.post('/login', postLoginUser);
+router.post('/postPolls', postPolls);
 router.patch('/infoUpdate', patchUserInfo);
 router.patch('/active', patchActiveUser);
 router.get('/getUserData/:id', getUserData);

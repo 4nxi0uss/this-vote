@@ -11,6 +11,8 @@ const Pools = () => {
 
     const [isShown, setIsShown] = useState<boolean>(false)
     const [optionText, setOptionText] = useState<string>("");
+    const [nameText, setNameText] = useState<string>("");
+    const [questionText, setQuestionText] = useState<string>("");
     const [optionColor, setOptionColor] = useState<string>("");
     const [randomNumber, setRandomNumber] = useState<number>(0);
 
@@ -22,6 +24,15 @@ const Pools = () => {
     const handleModal = (event: MouseEvent<HTMLButtonElement>) => {
         setIsShown(!isShown)
         handleRandomNumber(event)
+    }
+
+    const handleNameText = (e: ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault()
+        setNameText(e.target.value)
+    }
+    const handleQuestionText = (e: ChangeEvent<HTMLInputElement>) => {
+        e.preventDefault()
+        setQuestionText(e.target.value)
     }
 
     const handleClearInput = (event: MouseEvent<HTMLButtonElement>) => {
@@ -40,11 +51,8 @@ const Pools = () => {
 
     const handleAddOption = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
-        if (!Boolean(optionText === "")) {
+        if (!Boolean(optionText === "") && optionsList.length < 6) {
             optionsList = [...optionsList, { name: optionText, color: optionColor }]
-            console.log(optionsList)
-            console.log(optionColor)
-            console.log(optionText)
             handleClearInput(event)
         }
 
@@ -60,9 +68,9 @@ const Pools = () => {
                 <div className='modalPool'>
                     <form className='modalFormPool'>
                         <label>Name:</label>
-                        <input type="text" />
+                        <input type="text" onChange={handleNameText} value={nameText} />
                         <label>Question:</label>
-                        <input type="text" />
+                        <input type="text" onChange={handleQuestionText} value={questionText} />
                         <label className='numberLabel'>Number:</label>
                         <input className='numberInput' type="number" readOnly disabled value={randomNumber} />
                         <label>Option to choose in pool (max 6):</label>
@@ -71,8 +79,10 @@ const Pools = () => {
                         <button onClick={handleAddOption}>+</button>
                         {optionShow()}
                     </form>
-                    <button className='btnModalClose' onClick={handleModal}>Zamknij</button>
-                    <button className='btnModalClose' onClick={handleModal}>Wyślij</button>
+                    <div>
+                        <button className='btnModalClose' onClick={handleModal}>Zamknij</button>
+                        <button className='btnModalClose' onClick={handleModal}>Wyślij</button>
+                    </div>
                     {/* <button className='btnModalClose' onClick={() => handleTest(2)}>Wyślij</button> */}
                 </div>
             </Modal>

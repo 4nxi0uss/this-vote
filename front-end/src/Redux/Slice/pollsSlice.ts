@@ -11,34 +11,35 @@ const initialState: any = {
     },
 };
 
-export const fetchPostPolls = createAsyncThunk(
-    "polls/postPolls",
-    async (pollsData: pollsData) => {
-        const { name, question, number, option, id } = pollsData;
+export const fetchPostPolls = createAsyncThunk("polls/postPolls", async (pollsData: pollsData) => {
 
-        try {
-            const data = await fetch(`http://localhost:3022/users/postPolls`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    name,
-                    question,
-                    number,
-                    option: {
-                        name: option.name,
-                        color: option.color
-                    },
-                    id,
-                }),
-                mode: "cors",
-                cache: "default",
-            });
-            const result = data.json();
-            return await result;
-        } catch (error) { }
-    }
+    const { name, question, number, option, id } = pollsData;
+    console.log(option)
+
+    try {
+        const data = await fetch(`http://localhost:3022/users/postPolls`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                name,
+                question,
+                number,
+                option,
+                // option: {
+                //     name: option.name,
+                //     color: option.color
+                // },
+                id,
+            }),
+            mode: "cors",
+            cache: "default",
+        });
+        const result = data.json();
+        return await result;
+    } catch (error) { }
+}
 );
 
 export const usersPolls = createSlice({

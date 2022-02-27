@@ -4,10 +4,18 @@ import Modal from '../Modal/Modal';
 
 import './Pools.scss'
 import Pool from './subcomponent/Pool/Pool';
+import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
+import { fetchPostPolls } from '../../Redux/Slice/pollsSlice';
+import { pollsData } from '../../Redux/ReduxTypes/reduxTypes';
+import { optionListType } from '../../Types/Types';
 
-let optionsList: (string | any | object)[] = []
+let optionsList: optionListType[] = []
+// let optionsList: (string | any | object) = []
 
 const Pools = () => {
+    const dispatch = useAppDispatch();
+
+    const { infoLogin } = useAppSelector(state => state.users)
 
     const [isShown, setIsShown] = useState<boolean>(false)
     const [optionText, setOptionText] = useState<string>("");
@@ -55,12 +63,24 @@ const Pools = () => {
             optionsList = [...optionsList, { name: optionText, color: optionColor }]
             handleClearInput(event)
         }
-
     }
 
-    const optionShow = () => optionsList.map((option, index) => <p className='optionShow' key={index}>{option?.name} <span className='optionDotColor' style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
+    const poolsObject: pollsData = {
+        name: nameText,
+        question: questionText,
+        number: randomNumber,
+        option: optionsList,
+        id: infoLogin.rows[0].user_id
+    }
 
-    console.log('proba: ', optionShow())
+    const handleSendPool = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault()
+        dispatch<any>(fetchPostPolls(poolsObject))
+    }
+
+    const optionShow = () => optionsList.map((option: any, index: number) => <p className='optionShow' key={index}>{option?.name} <span className='optionDotColor' style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
+
+    // console.log('proba: ', optionShow())
     return (
         <section className='mainPoolsSection'>
             <button className='addPool' onClick={handleModal}>Add pool</button>
@@ -81,7 +101,7 @@ const Pools = () => {
                     </form>
                     <div>
                         <button className='btnModalClose' onClick={handleModal}>Zamknij</button>
-                        <button className='btnModalClose' onClick={handleModal}>Wyślij</button>
+                        <button className='btnModalClose' onClick={handleSendPool}>Wyślij</button>
                     </div>
                     {/* <button className='btnModalClose' onClick={() => handleTest(2)}>Wyślij</button> */}
                 </div>

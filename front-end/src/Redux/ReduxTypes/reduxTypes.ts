@@ -1,3 +1,5 @@
+import { optionListType } from "../../Types/Types";
+
 export const LOADING = "LOADING";
 export const SUCCESS = "SUCCESS";
 export const FAILED = "FAILED";
@@ -52,6 +54,8 @@ export interface pollsData {
     name: string;
     question: string;
     number: number;
-    option: { name: string; color: string };
+    // option: string[]
+    option: optionListType[]
+    // option: { name: string; color: string };
     id: string;
 }

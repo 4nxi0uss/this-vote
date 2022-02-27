@@ -187,9 +187,12 @@ exports.getUserData = (req, res, next) => {
 
 exports.postPolls = (req, res, next) => {
     try {
-        const {name,question,number,option,id} = req.body
+        const { name, question, number, option, id } = req.body
         // INSERT INTO `polls` (`id`, `creator_id`, `name`, `question`, `number`, `options`) VALUES (NULL, 'a6ff932f-0da3-490d-91dd-e60876db2cc9', 'name', 'question name?', '321123', '[{\'name:\' \'2\', \'color:\' \'#bc3434\'},\r\n{\'name:\' \'3\', \'color:\' \'#3da485\'},\r\n{\'name:\' \'4\', \'color:\' \'#3da485\'},\r\n{\'name:\' \'5\', \'color:\' \'#e34f45\'},]');
-        db.query("INSERT INTO `polls` ( `creator_id`, `name`, `question`, `number`, `options`) VALUES ('"+id+"', '"+name+"', '"+question+"', '"+number+"', '"+option+"');", (err, rows, fields) => {
+
+        console.log(option)
+
+        db.query("INSERT INTO `polls` (`id`, `creator_id`, `name`, `question`, `number`, `options`) VALUES (NULL, '" + id + "', '" + name + "', '" + question + "', '" + number + "', '" + "{" + option + "}" + "');", (err, rows, fields) => {
             if (err) throw err;
             res.status(200).json({
                 message: "Pool added sucesfuly",

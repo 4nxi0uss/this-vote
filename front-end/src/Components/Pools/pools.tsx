@@ -46,6 +46,10 @@ const Pools = () => {
     const handleClearInput = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         setOptionText("")
+        setNameText("")
+        setQuestionText("")
+        handleRandomNumber()
+        optionsList = []
     }
     const handleOptionText = (event: ChangeEvent<HTMLInputElement>) => {
         event.preventDefault()
@@ -61,21 +65,28 @@ const Pools = () => {
         event.preventDefault()
         if (!Boolean(optionText === "") && optionsList.length < 6) {
             optionsList = [...optionsList, { name: optionText, color: optionColor }]
-            handleClearInput(event)
+            setOptionText("")
         }
     }
+
+    let text = '';
+
+    optionsList.forEach(option => text = text + `{"name": ${option.name}, "color": ${option.color}},`)
+    console.log(text)
 
     const poolsObject: pollsData = {
         name: nameText,
         question: questionText,
         number: randomNumber,
-        option: optionsList,
+        option: text,
         id: infoLogin.rows[0].user_id
     }
 
     const handleSendPool = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         dispatch<any>(fetchPostPolls(poolsObject))
+        handleClearInput(event)
+
     }
 
     const optionShow = () => optionsList.map((option: any, index: number) => <p className='optionShow' key={index}>{option?.name} <span className='optionDotColor' style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)

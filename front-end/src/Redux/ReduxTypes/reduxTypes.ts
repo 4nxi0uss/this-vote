@@ -55,7 +55,8 @@ export interface pollsData {
     question: string;
     number: number;
     // option: string[]
-    option: optionListType[]
+    option: string
+    // option: optionListType[]
     // option: { name: string; color: string };
     id: string;
 }

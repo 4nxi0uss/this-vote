@@ -60,3 +60,12 @@ export interface pollsData {
     // option: { name: string; color: string };
     id: string;
 }
+
+export interface pollsInfo {
+    statusPolls: string;
+    infoPolls: {
+        message: string;
+        rows: string;
+        error: string;
+    },
+}

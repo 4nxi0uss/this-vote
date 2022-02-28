@@ -16,6 +16,10 @@ const Pools = () => {
     const dispatch = useAppDispatch();
 
     const { infoLogin } = useAppSelector(state => state.users)
+    const { infoPolls, statusPolls } = useAppSelector(state => state.polls)
+
+    console.log(statusPolls)
+    console.log(infoPolls)
 
     const [isShown, setIsShown] = useState<boolean>(false)
     const [optionText, setOptionText] = useState<string>("");
@@ -72,7 +76,7 @@ const Pools = () => {
     let text = '';
 
     optionsList.forEach(option => text = text + `{"name": ${option.name}, "color": ${option.color}},`)
-    console.log(text)
+    // console.log(text)
 
     const poolsObject: pollsData = {
         name: nameText,
@@ -88,7 +92,6 @@ const Pools = () => {
         handleClearInput(event)
 
     }
-
     const optionShow = () => optionsList.map((option: any, index: number) => <p className='optionShow' key={index}>{option?.name} <span className='optionDotColor' style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
 
     // console.log('proba: ', optionShow())

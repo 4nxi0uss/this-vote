@@ -6,6 +6,7 @@ import './Login.scss'
 import { fetchUsersLogin } from '../../Redux/Slice/accountSlice';
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
 import { Navigate } from 'react-router-dom';
+import { fetchPostRegister } from '../../Redux/Slice/registerSlice';
 
 
 const Login = () => {
@@ -24,6 +25,7 @@ const Login = () => {
         const dotCheck = (toVerified.length / 2) < toVerified.lastIndexOf('.');
         return (atCheck && dotCheck)
     }
+
     const validatePassword = (toVerified: string) => {
         const regularExpression = /^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{4,16}$/;
         return (Boolean(toVerified.match(regularExpression)))
@@ -56,18 +58,14 @@ const Login = () => {
     const handleRegistry = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
+        const registerData = {
+            email: email,
+            password: password
+        }
+
         if (validatedEmail(email) && validatePassword(password) && (password === secondPassword)) {
-            fetch('http://localhost:3022/users/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    usersEmail: `${email}`,
-                    pass: `${password}`,
-                })
-            }).then(res => res.json()).then(data => console.table(data))
-            console.log('zarejestrowano');
+
+            console.log(dispatch<any>(fetchPostRegister(registerData)))
             setEmail('');
             setPassword('');
             setSecondPassword('');
@@ -87,6 +85,7 @@ const Login = () => {
     const handleSecondPassword = (e: ChangeEvent<HTMLInputElement>) => {
         setSecondPassword(e.target.value.trim())
     }
+
     return (
         <section className='loginSection'>
             <h2 className='loginTitle'>{!toggleRegistry ? "Sing in" : "Register"}</h2>

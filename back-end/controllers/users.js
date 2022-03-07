@@ -1,6 +1,7 @@
 const db = require('../Database/Database');
 const { v4: uid } = require('uuid');
 const { closeSync } = require('fs');
+const { serialize } = require('v8');
 db.connect()
 
 //checking email in database
@@ -17,19 +18,17 @@ exports.postRegisterUser = (req, res, next) => {
     try {
         const { usersEmail: email, pass } = req.body;
 
-        // console.log(email, pass)
-
         db.query("SELECT `email`,`password` FROM `login`", (err, rows, fields) => {
             if (err) throw err;
-
-            // console.log(checkEmail(rows, email));
 
             if (checkEmail(rows, email)) {
                 res.status(406).json({
                     message: "Uzytkownik o podanym E-mailu istnieje."
                 })
+
             } else {
                 db.query('INSERT INTO `login` (`user_id`,`email`, `password`) VALUES ("' + uid() + '", "' + email + '", "' + pass + '");', (err, rows, fields) => {
+
                     try {
                         res.status(201).json({
                             message: "Pomyślnie zarejestrowano nowego użytkownika.",
@@ -46,6 +45,7 @@ exports.postRegisterUser = (req, res, next) => {
                 });
             }
         })
+
     } catch (error) {
         res.status(500).json({
             error,
@@ -57,17 +57,19 @@ exports.postRegisterUser = (req, res, next) => {
 
 // login user 
 exports.postLoginUser = (req, res, next) => {
+
     try {
         const { password, email } = req.body;
 
         db.query("SELECT * FROM `login` WHERE `email` LIKE  " + `'%${ScrapOfEmail(email)}%'`, (err, rows, fields) => {
             if (err) throw err;
-            // const userEmail = rows.find(em => em.email === usersEmail);
+
             if (!(checkEmail(rows, email))) {
                 res.status(406).json({
                     message: "Login lub hasło jest nie poprawne, sprobój ponownie",
                     login: false,
                 })
+
             } else {
                 res.status(201).json({
                     message: 'zostałeś zalogowany',
@@ -77,6 +79,7 @@ exports.postLoginUser = (req, res, next) => {
 
             }
         })
+
     } catch (err) {
 
     }
@@ -86,8 +89,6 @@ exports.postLoginUser = (req, res, next) => {
 exports.patchUserInfo = (req, res, next) => {
     try {
         const { userId, name, surname, dateOfBirth } = req.body
-
-        // console.log(userId, name, surname, dateOfBirth)
 
         db.query("SELECT user_id FROM `users_data`", (err, rows, fields) => {
             if (err) throw err;
@@ -103,6 +104,7 @@ exports.patchUserInfo = (req, res, next) => {
                         error: err,
                     })
                 })
+
             } else {
                 db.query("UPDATE `users_data` SET `Name` = '" + name + "', `Surname` = '" + surname + "', `date_of_birth` = '" + dateOfBirth + "' WHERE `users_data`.`user_id` ='" + userId + "'", (err, rows, fields) => {
                     if (err) throw err;
@@ -116,6 +118,7 @@ exports.patchUserInfo = (req, res, next) => {
                 })
             }
         })
+
     } catch (err) {
 
         res.status(500).json({
@@ -147,6 +150,7 @@ exports.patchActiveUser = (req, res, next) => {
             }
 
         })
+
     } catch (error) {
         res.status(500).json({
             error: err,
@@ -156,17 +160,11 @@ exports.patchActiveUser = (req, res, next) => {
     }
 }
 
-
 exports.getUserData = (req, res, next) => {
     try {
         const { id } = req.params
-        // console.log(id)
-        // console.log('tu')
 
         db.query("SELECT * FROM `users_data` WHERE user_id = '" + id + "' ", (err, rows, fields) => {
-            // console.log('ty')
-            // console.log(rows)
-            // console.log(err)
 
             if (err) throw err;
             res.status(200).json({
@@ -175,7 +173,6 @@ exports.getUserData = (req, res, next) => {
                 error: err
             })
         })
-
 
     } catch (err) {
         res.status(500).json({
@@ -197,13 +194,34 @@ exports.postPolls = (req, res, next) => {
             res.status(200).json({
                 message: "Pool added sucesfuly",
                 data: rows,
-                error: err
             })
         })
 
     } catch (err) {
         res.status(500).json({
             message: "Błąd z serwerem.",
+            error: err
+        })
+    }
+}
+
+exports.getPolls = (req, res, next) => {
+    try {
+
+        const { creatorID } = req.params
+
+        //SELECT * FROM `polls` WHERE `creator_id` = '236364d2-59be-4612-8ad0-4e6407da5428';
+        db.query(" SELECT * FROM `polls` WHERE `creator_id` = '" + creatorID + "' ", (err, rows, fields) => {
+            if (err) throw err;
+            res.status(200).json({
+                message: "download polls",
+                data: rows,
+            })
+        })
+
+    } catch (err) {
+        res.status(500).json({
+            message: "Błąd z serwerem",
             error: err
         })
     }

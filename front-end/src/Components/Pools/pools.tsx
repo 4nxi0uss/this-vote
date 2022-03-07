@@ -1,13 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { ChangeEvent, MouseEvent } from "react"
 import Modal from '../Modal/Modal';
 
 import './Pools.scss'
 import Pool from './subcomponent/Pool/Pool';
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
-import { fetchPostPolls } from '../../Redux/Slice/pollsSlice';
-import { pollsData } from '../../Redux/ReduxTypes/reduxTypes';
+import { fetchPostPolls } from '../../Redux/Slice/postPollsSlice';
+import { getPollsInfo, pollsData } from '../../Redux/ReduxTypes/reduxTypes';
 import { optionListType } from '../../Types/Types';
+import { fetchGetPolls } from '../../Redux/Slice/getPoolSlice';
 
 let optionsList: optionListType[] = []
 // let optionsList: (string | any | object) = []
@@ -16,10 +17,11 @@ const Pools = () => {
     const dispatch = useAppDispatch();
 
     const { infoLogin } = useAppSelector(state => state.users)
-    const { infoPolls, statusPolls } = useAppSelector(state => state.polls)
+    // const { infoPolls, statusPolls } = useAppSelector(state => state.polls)
+    const { statusGetPolls, infoGetPolls } = useAppSelector(state => state.getPolls)
 
-    console.log(statusPolls)
-    console.log(infoPolls)
+    // console.log(statusPolls)
+    // console.log(infoPolls)
 
     const [isShown, setIsShown] = useState<boolean>(false)
     const [optionText, setOptionText] = useState<string>("");
@@ -90,17 +92,35 @@ const Pools = () => {
         event.preventDefault()
         dispatch<any>(fetchPostPolls(poolsObject))
         handleClearInput(event)
-
     }
+
+    const handleGetPoll = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id))
+
+        console.log("1", statusGetPolls)
+        console.log(infoGetPolls)
+    }
+
+    // dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id))
+
+    useEffect(() => {
+        dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id))
+        // console.log(statusGetPolls)
+        // console.log(infoGetPolls)
+    }, [])
+
     const optionShow = () => optionsList.map((option: any, index: number) => <p className='optionShow' key={index}>{option?.name} <span className='optionDotColor' style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
 
     // console.log('proba: ', optionShow())
+    const idJ = () => infoGetPolls.data.map((el: any, index: any) => <Pool key={index} name={el.name} question={el.question} />);
+
     return (
-        <section className='mainPoolsSection'>
-            <button className='addPool' onClick={handleModal}>Add pool</button>
+        <section className='mainPollsSection'>
+            <button className='addPoll' onClick={handleModal}>Add pool</button>
             <Modal isOpen={isShown} >
-                <div className='modalPool'>
-                    <form className='modalFormPool'>
+                <div className='modalPoll'>
+                    <form className='modalFormPoll'>
                         <label>Name:</label>
                         <input type="text" onChange={handleNameText} value={nameText} />
                         <label>Question:</label>
@@ -120,8 +140,11 @@ const Pools = () => {
                     {/* <button className='btnModalClose' onClick={() => handleTest(2)}>Wyślij</button> */}
                 </div>
             </Modal>
+            <button className='addPoll' onClick={handleGetPoll}>test pobierania polls</button>
 
-            <Pool />
+            {/* <Pool/> */}
+            {/* <div>{infoGetPolls.data[1].id}</div> */}
+            {idJ()}
         </section>
     )
 }

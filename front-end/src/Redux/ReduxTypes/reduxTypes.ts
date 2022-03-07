@@ -1,4 +1,4 @@
-import { optionListType } from "../../Types/Types";
+// import { optionListType } from "../../Types/Types";
 
 export const LOADING = "LOADING";
 export const SUCCESS = "SUCCESS";
@@ -61,11 +61,35 @@ export interface pollsData {
     id: string;
 }
 
-export interface pollsInfo {
+export interface postPollsInfo {
     statusPolls: string;
     infoPolls: {
         message: string;
         rows: string;
         error: string;
     },
+}
+
+export interface registerInfo {
+    registerStatus: string
+    registerInfo: {
+        message: string,
+        row: string,
+        error: string,
+    }
+}
+
+export interface getPollsInfo {
+    statusGetPolls: string
+    infoGetPolls: {
+        message: string,
+        data: [{
+            id: number,
+            creator_id: string,
+            name: string,
+            question: string,
+            number: number,
+            options: string
+        }]
+    }
 }

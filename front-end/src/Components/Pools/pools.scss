@@ -1,16 +1,15 @@
-.mainPoolsSection {
+.mainPollsSection {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    .addPool {
+    .addPoll {
         padding: .5vw;
-        // position: fixed;
     }
 }
 
-.modalPool {
+.modalPoll {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -18,10 +17,9 @@
     background-color: white;
     padding: 2vw;
 
-    .modalFormPool {
+    .modalFormPoll {
         display: flex;
         flex-direction: column;
-
     }
 
     .btnModalClose {
@@ -30,21 +28,18 @@
         background-color: rgb(100, 100, 255);
         color: white;
         border: none;
-
     }
 
     .btnModalClose:hover {
         padding: .5vw;
         background-color: rgb(131, 131, 255);
         color: rgb(14, 14, 14);
-
     }
 
     .optionShow {
         display: flex;
         flex-direction: row;
         margin: .5vw 0;
-        // padding: .5vw 0;
         justify-content: space-between;
 
         .optionDotColor {
@@ -53,7 +48,6 @@
             border: 5px solid;
             height: 1vw;
             width: 1vw;
-
         }
     }
 }

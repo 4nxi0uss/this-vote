@@ -1,12 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit'
 import usersLoginSlice from '../Slice/accountSlice'
 import thunkMiddleware from 'redux-thunk';
-import usersPolls from '../Slice/pollsSlice';
+import usersPolls from '../Slice/postPollsSlice';
+import registerSlice from '../Slice/registerSlice';
+import usersGetPolls from '../Slice/getPoolSlice';
 
 export const store = configureStore({
   reducer: {
     users: usersLoginSlice,
     polls: usersPolls,
+    getPolls: usersGetPolls,
+    register: registerSlice,
   },
   middleware: [thunkMiddleware]
 });

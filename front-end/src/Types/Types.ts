@@ -9,8 +9,7 @@ export interface dataTypes {
     bus_number: number,
     departure_time: string,
     destination: string
-  }
-  ]
+  }]
 }
 
 export interface ModalProp {
@@ -19,8 +18,9 @@ export interface ModalProp {
 
   isOpen: boolean,
   handleOnClose?: () => void,
-  shouldBeCloseOnOutsideClick?: boolean;
+  shouldBeCloseOnOutsideClick?: boolean,
 }
+
 export const userAcountType = {
   0: 'Standar user',
   1: "Admin",

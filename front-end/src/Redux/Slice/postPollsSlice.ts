@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { FAILED, LOADING, pollsData, pollsInfo, SUCCESS } from "../ReduxTypes/reduxTypes";
+import { FAILED, LOADING, pollsData, postPollsInfo, SUCCESS } from "../ReduxTypes/reduxTypes";
 
 // Define the initial state using that type
-const initialState: pollsInfo = {
+const initialState: postPollsInfo = {
     statusPolls: FAILED,
     infoPolls: {
         message: 'Próba wysłania ankiety',
@@ -11,7 +11,7 @@ const initialState: pollsInfo = {
     },
 };
 
-export const fetchPostPolls = createAsyncThunk("polls/postPolls", async (pollsData: pollsData) => {
+export const fetchPostPolls = createAsyncThunk("postPolls/postPolls", async (pollsData: pollsData) => {
 
     const { name, question, number, option, id } = pollsData;
 
@@ -26,10 +26,6 @@ export const fetchPostPolls = createAsyncThunk("polls/postPolls", async (pollsDa
                 question,
                 number,
                 option,
-                // option: {
-                //     name: option.name,
-                //     color: option.color
-                // },
                 id,
             }),
             mode: "cors",
@@ -37,12 +33,14 @@ export const fetchPostPolls = createAsyncThunk("polls/postPolls", async (pollsDa
         });
         const result = data.json();
         return await result;
-    } catch (error) { }
+    } catch (error) {
+        console.warn(error)
+    }
 }
 );
 
 export const usersPolls = createSlice({
-    name: "polls",
+    name: "postPolls",
     // `createSlice` will infer the state type from the `initialState` argument
     initialState,
     reducers: {},

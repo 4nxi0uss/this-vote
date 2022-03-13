@@ -3,11 +3,21 @@ import * as React from 'react';
 import './Pool.scss'
 
 import { orange, red } from '../colors';
+import { PoolProp } from '../../../../Types/Types';
 
-const buttonOfChoose = (text = "ok") => <button>{text}</button>
 
 
-const Pool = (name: any, question: any,) => {
+const Pool = ({ name, question, options }: PoolProp) => {
+    // /^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{4,16}$/
+
+    let optionOperationOnString = options.replaceAll("[", "{").replaceAll(",]", "}").replaceAll("{{", "{").replaceAll("},{", " , ").replaceAll("}}", "}")
+    let optionJsonParse = JSON.parse(optionOperationOnString)
+
+    const buttonOfChoose = (text = "ok") => <button>{text}</button>
+
+    // console.log(JSON.parse(test))
+    console.log(optionJsonParse)
+
     return (
         <section className='poolSection'>
             <h2>{name}</h2>
@@ -16,6 +26,7 @@ const Pool = (name: any, question: any,) => {
             <div className='secondPart'>
                 {buttonOfChoose()}
             </div>
+            <p>{options}</p>
         </section>
     )
 }

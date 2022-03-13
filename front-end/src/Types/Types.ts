@@ -31,3 +31,9 @@ export interface optionListType {
   name: string,
   color: string,
 }
+
+export interface PoolProp {
+  name: string,
+  question: string,
+  options: string
+}

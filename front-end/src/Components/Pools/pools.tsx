@@ -76,8 +76,8 @@ const Pools = () => {
     }
 
     let text = '';
-
-    optionsList.forEach(option => text = text + `{"name": ${option.name}, "color": ${option.color}},`)
+    let i = 0
+    optionsList.forEach(option => text = text + `{"name${i++}": \"${option.name}\", "color${i++}": \"${option.color}\"},`)
     // console.log(text)
 
     const poolsObject: pollsData = {
@@ -113,7 +113,7 @@ const Pools = () => {
     const optionShow = () => optionsList.map((option: any, index: number) => <p className='optionShow' key={index}>{option?.name} <span className='optionDotColor' style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
 
     // console.log('proba: ', optionShow())
-    const idJ = () => infoGetPolls.data.map((el: any, index: any) => <Pool key={index} name={el.name} question={el.question} />);
+    const idJ = () => infoGetPolls.data.map((el: any, index: any) => <Pool key={index} name={el.name} question={el.question} options={el.options} /> /*console.log("1", el.name, "2", el.question)*/);
 
     return (
         <section className='mainPollsSection'>

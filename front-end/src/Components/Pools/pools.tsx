@@ -77,7 +77,7 @@ const Pools = () => {
 
     let text = '';
     let i = 0
-    optionsList.forEach(option => text = text + `"option${i++}":{"name": \"${option.name}\", "color": \"${option.color}\", "vote": 0},`)
+    optionsList.forEach(option => text = text + `"option${i++}":{"name": "${option.name}", "color": "${option.color}", "vote": 0},`)
     // console.log(text)
 
     const poolsObject: pollsData = {

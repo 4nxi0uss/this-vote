@@ -30,8 +30,8 @@ export interface userLoginInfo {
         message: string;
         data: [
             {
-                Name: string;
-                Surname: string;
+                name: string;
+                surname: string;
                 active: number;
                 date_of_birth: string;
                 id: number;

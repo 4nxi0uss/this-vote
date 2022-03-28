@@ -20,14 +20,14 @@ const initialState: userLoginStatus & userLoginInfo = {
         message: 'próba zaciągnięcia danych z bazy',
         data: [
             {
-                Name: '',
-                Surname: '',
-                active: Number(),
-                date_of_birth: '',
                 id: Number(),
-                polls: '',
-                type_of_account: Number(),
                 user_id: '',
+                name: '',
+                surname: '',
+                date_of_birth: '',
+                type_of_account: Number(),
+                active: Number(),
+                polls: '',
             }],
         error: ''
     },

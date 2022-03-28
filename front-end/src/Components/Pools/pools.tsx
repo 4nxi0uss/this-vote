@@ -6,7 +6,7 @@ import './Pools.scss'
 import Pool from './subcomponent/Pool/Pool';
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
 import { fetchPostPolls } from '../../Redux/Slice/postPollsSlice';
-import { getPollsInfo, pollsData } from '../../Redux/ReduxTypes/reduxTypes';
+import { pollsData } from '../../Redux/ReduxTypes/reduxTypes';
 import { optionListType } from '../../Types/Types';
 import { fetchGetPolls } from '../../Redux/Slice/getPoolSlice';
 
@@ -77,7 +77,7 @@ const Pools = () => {
 
     let text = '';
     let i = 0
-    optionsList.forEach(option => text = text + `{"name${i++}": \"${option.name}\", "color${i++}": \"${option.color}\"},`)
+    optionsList.forEach(option => text = text + `"option${i++}":{"name": \"${option.name}\", "color": \"${option.color}\", "vote": 0},`)
     // console.log(text)
 
     const poolsObject: pollsData = {
@@ -102,18 +102,12 @@ const Pools = () => {
         console.log(infoGetPolls)
     }
 
-    // dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id))
 
-    useEffect(() => {
-        dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id))
-        // console.log(statusGetPolls)
-        // console.log(infoGetPolls)
-    }, [])
+    useEffect(() => { dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id)) }, [dispatch, infoLogin.rows])
 
     const optionShow = () => optionsList.map((option: any, index: number) => <p className='optionShow' key={index}>{option?.name} <span className='optionDotColor' style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
 
-    // console.log('proba: ', optionShow())
-    const idJ = () => infoGetPolls.data.map((el: any, index: any) => <Pool key={index} name={el.name} question={el.question} options={el.options} /> /*console.log("1", el.name, "2", el.question)*/);
+    const idJ = () => infoGetPolls.data.map((el: any, index: any) => <Pool key={index} name={el.name} question={el.question} options={el.options} />);
 
     return (
         <section className='mainPollsSection'>

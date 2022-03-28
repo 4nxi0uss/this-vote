@@ -6,18 +6,22 @@ import { orange, red } from '../colors';
 import { PoolProp } from '../../../../Types/Types';
 
 
-
-const Pool = ({ name, question, options }: PoolProp) => {
+const Pool = ({ name, question, options = "ok" }: PoolProp) => {
     // /^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{4,16}$/
 
-    let optionOperationOnString = options.replaceAll("[", "{").replaceAll(",]", "}").replaceAll("{{", "{").replaceAll("},{", " , ").replaceAll("}}", "}")
-    let optionJsonParse = JSON.parse(optionOperationOnString)
+    let optionOperationOnString: string = options.replaceAll("[", "{").replaceAll(",]", "}")
 
-    const buttonOfChoose = (text = "ok") => <button>{text}</button>
-
-    // console.log(JSON.parse(test))
+    let optionJsonParse: any = "test"
+    try {
+        optionJsonParse = JSON.parse(optionOperationOnString)
+    } catch (error) {
+        // console.warn(error)
+    }
     console.log(optionJsonParse)
 
+    const buttonOfChoose = () => Object.values(optionJsonParse).map((valueOfJsonData: any) => <button className='addedBtn'>{valueOfJsonData.name}</button>);
+
+    console.log(buttonOfChoose())
     return (
         <section className='poolSection'>
             <h2>{name}</h2>

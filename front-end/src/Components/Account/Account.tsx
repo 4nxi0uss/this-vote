@@ -11,8 +11,8 @@ const Account = () => {
 
     const betterDate = (date: string) => date.slice(0, 10)
 
-    const [name, setName] = useState<string>(userData.data[0].Name);
-    const [surname, setSurname] = useState<string>(userData.data[0].Surname);
+    const [name, setName] = useState<string>(userData.data[0].name);
+    const [surname, setSurname] = useState<string>(userData.data[0].surname);
     const [date, setDate] = useState<string>(betterDate(userData.data[0].date_of_birth));
     const [typeOfAccount, setTypeOfAccount] = useState<number>(userData.data[0].type_of_account);
     const [accountStatus, setAccountStatus] = useState<number>(userData.data[0].active);
@@ -73,8 +73,8 @@ const Account = () => {
     }, [])
 
     useMemo(() => {
-        setName(userData.data[0].Name)
-        setSurname(userData.data[0].Surname)
+        setName(userData.data[0].name)
+        setSurname(userData.data[0].surname)
         setDate(betterDate(userData.data[0].date_of_birth))
         setAccountStatus(userData.data[0].active)
         setTypeOfAccount(userData.data[0].type_of_account)

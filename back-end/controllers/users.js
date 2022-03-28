@@ -23,7 +23,7 @@ exports.postRegisterUser = (req, res, next) => {
 
             if (checkEmail(rows, email)) {
                 res.status(406).json({
-                    message: "Uzytkownik o podanym E-mailu istnieje."
+                    message: "User with this E-mail does not exist."
                 })
 
             } else {
@@ -31,7 +31,7 @@ exports.postRegisterUser = (req, res, next) => {
 
                     try {
                         res.status(201).json({
-                            message: "Pomyślnie zarejestrowano nowego użytkownika.",
+                            message: "Successfully registered new user.",
                             error: err,
                             data: rows
                         })
@@ -39,7 +39,7 @@ exports.postRegisterUser = (req, res, next) => {
                     } catch (err) {
                         res.status(402).json({
                             err,
-                            message: "Problem z zarejestrowaniem nowego użytkownika."
+                            message: "Error with registering."
                         })
                     }
                 });
@@ -49,7 +49,7 @@ exports.postRegisterUser = (req, res, next) => {
     } catch (error) {
         res.status(500).json({
             error,
-            message: "Coś nie tak z Rejestracją "
+            message: "Backend error with registration."
 
         })
     }
@@ -66,13 +66,13 @@ exports.postLoginUser = (req, res, next) => {
 
             if (!(checkEmail(rows, email))) {
                 res.status(406).json({
-                    message: "Login lub hasło jest nie poprawne, sprobój ponownie",
+                    message: "Login or password is incorect.",
                     login: false,
                 })
 
             } else {
                 res.status(201).json({
-                    message: 'zostałeś zalogowany',
+                    message: 'Logged.',
                     login: true,
                     rows: rows,
                 })
@@ -99,7 +99,7 @@ exports.patchUserInfo = (req, res, next) => {
                 db.query("INSERT INTO `users_data` (`user_id`, `Name`, `Surname`, `date_of_birth`, `type_of_account`, `active`, `polls`) VALUES ('" + userId + "', '" + name + "', '" + surname + "', '" + dateOfBirth + "', '0', '0', '[]')", (err, rows, fields) => {
                     if (err) throw err;
                     res.status(200).json({
-                        message: 'wstawiono razem, pomyślnie zakutalizowano dane',
+                        message: 'Actualization and adding new information was succeeded.',
                         rows: rows,
                         error: err,
                     })
@@ -109,7 +109,7 @@ exports.patchUserInfo = (req, res, next) => {
                 db.query("UPDATE `users_data` SET `Name` = '" + name + "', `Surname` = '" + surname + "', `date_of_birth` = '" + dateOfBirth + "' WHERE `users_data`.`user_id` ='" + userId + "'", (err, rows, fields) => {
                     if (err) throw err;
                     res.status(200).json({
-                        message: 'zaktualozowano dane',
+                        message: 'Actualization succeseed.',
                         rows: rows,
                         error: err
                         // error: err
@@ -123,7 +123,7 @@ exports.patchUserInfo = (req, res, next) => {
 
         res.status(500).json({
             error: err,
-            message: "Coś nie tak z aktalizacją danych "
+            message: "Backend error with update user info."
 
         })
     }
@@ -144,7 +144,7 @@ exports.patchActiveUser = (req, res, next) => {
             if (Boolean(userIdFinder) && Boolean(activeFinder)) {
                 db.query("UPDATE users_data SET active = 1 WHERE users_data.user_id = '" + userId + "'", (err, rows, fields) => {
                     res.status(200).json({
-                        message: "Konto zaktualizowano pomyślnie"
+                        message: "Account activated succefuly."
                     })
                 })
             }
@@ -154,7 +154,7 @@ exports.patchActiveUser = (req, res, next) => {
     } catch (error) {
         res.status(500).json({
             error: err,
-            message: "Coś nie tak z aktalizacją danych "
+            message: "Backend error with activation you account."
 
         })
     }
@@ -168,7 +168,7 @@ exports.getUserData = (req, res, next) => {
 
             if (err) throw err;
             res.status(200).json({
-                message: "twoje dane",
+                message: "user data fetch succesfuly.",
                 data: rows,
                 error: err
             })
@@ -176,7 +176,7 @@ exports.getUserData = (req, res, next) => {
 
     } catch (err) {
         res.status(500).json({
-            message: "Błąd z serwerem",
+            message: "Backend error with geting user data.",
             error: err
         })
     }
@@ -192,14 +192,14 @@ exports.postPolls = (req, res, next) => {
         db.query("INSERT INTO `polls` (`id`, `creator_id`, `name`, `question`, `number`, `options`) VALUES (NULL, '" + id + "', '" + name + "', '" + question + "', '" + number + "', '" + "[" + option + "]" + "');", (err, rows, fields) => {
             if (err) throw err;
             res.status(200).json({
-                message: "Pool added sucesfuly",
+                message: "Pool added sucesfuly.",
                 data: rows,
             })
         })
 
     } catch (err) {
         res.status(500).json({
-            message: "Błąd z serwerem.",
+            message: "Backend error with adding pool.",
             error: err
         })
     }
@@ -214,14 +214,14 @@ exports.getPolls = (req, res, next) => {
         db.query(" SELECT * FROM `polls` WHERE `creator_id` = '" + creatorID + "' ", (err, rows, fields) => {
             if (err) throw err;
             res.status(200).json({
-                message: "download polls",
+                message: "download polls.",
                 data: rows,
             })
         })
 
     } catch (err) {
         res.status(500).json({
-            message: "Błąd z serwerem",
+            message: "Backend error with geting pools.",
             error: err
         })
     }

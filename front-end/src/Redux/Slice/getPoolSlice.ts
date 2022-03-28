@@ -21,7 +21,7 @@ export const fetchGetPolls = createAsyncThunk("getPolls/getPolls", async (id: st
 
     try {
         const data = await fetch(`http://localhost:3022/users/getPools/${id}`, {
-            method: "GET",
+            method: 'GET',
             headers: {
                 "Content-Type": "application/json",
             },

@@ -4,12 +4,14 @@ import thunkMiddleware from 'redux-thunk';
 import usersPolls from '../Slice/postPollsSlice';
 import registerSlice from '../Slice/registerSlice';
 import usersGetPolls from '../Slice/getPoolSlice';
+import usersPutPoll from '../Slice/voteSlice';
 
 export const store = configureStore({
   reducer: {
     users: usersLoginSlice,
     polls: usersPolls,
     getPolls: usersGetPolls,
+    putPull: usersPutPoll,
     register: registerSlice,
   },
   middleware: [thunkMiddleware]

@@ -11,7 +11,6 @@ import { optionListType } from '../../Types/Types';
 import { fetchGetPolls } from '../../Redux/Slice/getPoolSlice';
 
 let optionsList: optionListType[] = []
-// let optionsList: (string | any | object) = []
 
 const Pools = () => {
     const dispatch = useAppDispatch();
@@ -20,19 +19,16 @@ const Pools = () => {
     // const { infoPolls, statusPolls } = useAppSelector(state => state.polls)
     const { statusGetPolls, infoGetPolls } = useAppSelector(state => state.getPolls)
 
-    // console.log(statusPolls)
-    // console.log(infoPolls)
-
     const [isShown, setIsShown] = useState<boolean>(false)
     const [optionText, setOptionText] = useState<string>("");
     const [nameText, setNameText] = useState<string>("");
     const [questionText, setQuestionText] = useState<string>("");
-    const [optionColor, setOptionColor] = useState<string>("");
+    const [optionColor, setOptionColor] = useState<string>("#000000");
     const [randomNumber, setRandomNumber] = useState<number>(0);
 
     const handleRandomNumber = (event?: MouseEvent<HTMLButtonElement>) => {
         event?.preventDefault()
-        setRandomNumber(Math.floor(Math.random() * 1000000))
+        setRandomNumber((Math.floor(Math.random() * 100000) + 100000))
     }
 
     const handleModal = (event: MouseEvent<HTMLButtonElement>) => {
@@ -59,7 +55,7 @@ const Pools = () => {
     }
     const handleOptionText = (event: ChangeEvent<HTMLInputElement>) => {
         event.preventDefault()
-        setOptionText((event.target.value).trim())
+        setOptionText((event.target.value))
     }
 
     const handleOptionColor = (event: ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +66,7 @@ const Pools = () => {
     const handleAddOption = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         if (!Boolean(optionText === "") && optionsList.length < 6) {
-            optionsList = [...optionsList, { name: optionText, color: optionColor }]
+            optionsList = [...optionsList, { name: optionText.trim(), color: optionColor }]
             setOptionText("")
         }
     }
@@ -78,7 +74,6 @@ const Pools = () => {
     let text = '';
     let i = 0
     optionsList.forEach(option => text = text + `"option${i++}":{"name": "${option.name}", "color": "${option.color}", "vote": 0},`)
-    // console.log(text)
 
     const poolsObject: pollsData = {
         name: nameText,
@@ -90,8 +85,10 @@ const Pools = () => {
 
     const handleSendPool = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
-        dispatch<any>(fetchPostPolls(poolsObject))
-        handleClearInput(event)
+        if (Boolean(questionText) && Boolean(nameText) && Boolean(optionsList.length !== 0)) {
+            dispatch<any>(fetchPostPolls(poolsObject));
+            handleClearInput(event);
+        }
     }
 
     const handleGetPoll = (event: MouseEvent<HTMLButtonElement>) => {
@@ -102,12 +99,11 @@ const Pools = () => {
         console.log(infoGetPolls)
     }
 
-
     useEffect(() => { dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id)) }, [dispatch, infoLogin.rows])
 
     const optionShow = () => optionsList.map((option: any, index: number) => <p className='optionShow' key={index}>{option?.name} <span className='optionDotColor' style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
 
-    const idJ = () => infoGetPolls.data.map((el: any, index: any) => <Pool key={index} name={el.name} question={el.question} options={el.options} />);
+    const idJ = () => infoGetPolls.data.map((el: any, index: any) => <Pool key={index} id={el.id} name={el.name} question={el.question} options={el.options} />);
 
     return (
         <section className='mainPollsSection'>
@@ -122,7 +118,7 @@ const Pools = () => {
                         <label className='numberLabel'>Number:</label>
                         <input className='numberInput' type="number" readOnly disabled value={randomNumber} />
                         <label>Option to choose in pool (max 6):</label>
-                        <input type="text" value={optionText} onChange={handleOptionText} required />
+                        <input type="text" value={optionText} onChange={handleOptionText} />
                         <input type="color" onChange={handleOptionColor} value={optionColor} />
                         <button onClick={handleAddOption}>+</button>
                         {optionShow()}
@@ -136,8 +132,6 @@ const Pools = () => {
             </Modal>
             <button className='addPoll' onClick={handleGetPoll}>test pobierania polls</button>
 
-            {/* <Pool/> */}
-            {/* <div>{infoGetPolls.data[1].id}</div> */}
             {idJ()}
         </section>
     )

@@ -1,5 +1,11 @@
 import * as React from 'react';
 
+export const userAcountType = {
+  0: 'Standar user',
+  1: "Admin",
+  2: "Super Admin"
+}
+
 export interface dataTypes {
   fields: [...{
     name: string
@@ -13,18 +19,11 @@ export interface dataTypes {
 }
 
 export interface ModalProp {
-
   children: React.ReactChild,
 
   isOpen: boolean,
   handleOnClose?: () => void,
   shouldBeCloseOnOutsideClick?: boolean,
-}
-
-export const userAcountType = {
-  0: 'Standar user',
-  1: "Admin",
-  2: "Super Admin"
 }
 
 export interface optionListType {
@@ -33,6 +32,7 @@ export interface optionListType {
 }
 
 export interface PoolProp {
+  id: number | string,
   name: string,
   question: string,
   options: string

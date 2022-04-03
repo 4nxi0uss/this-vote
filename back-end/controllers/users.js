@@ -1,6 +1,5 @@
 const db = require('../Database/Database');
 const { v4: uid } = require('uuid');
-const { closeSync } = require('fs');
 const { serialize } = require('v8');
 db.connect()
 
@@ -94,7 +93,6 @@ exports.patchUserInfo = (req, res, next) => {
             if (err) throw err;
             const userIdFinder = rows.some(id => id.user_id === userId);
 
-            // INSERT INTO `users_data` (`user_id`, `Name`, `Surname`, `date_of_birth`, `type_of_account`, `active`, `polls`) VALUES ('03e47531-cc8f-4927-9857-c3bc73c305cc', '"tet', 'testtest', '2021-06-06', '0', '0', '[2]')
             if (!Boolean(`${userIdFinder}`)) {
                 db.query("INSERT INTO `users_data` (`user_id`, `Name`, `Surname`, `date_of_birth`, `type_of_account`, `active`, `polls`) VALUES ('" + userId + "', '" + name + "', '" + surname + "', '" + dateOfBirth + "', '0', '0', '[]')", (err, rows, fields) => {
                     if (err) throw err;
@@ -128,9 +126,6 @@ exports.patchUserInfo = (req, res, next) => {
         })
     }
 }
-
-// UPDATE users_data SET active = 3 WHERE users_data.user_id = 'a6ff932f-0da3-490d-91dd-e60876db2cc9';
-
 
 exports.patchActiveUser = (req, res, next) => {
     try {
@@ -185,9 +180,6 @@ exports.getUserData = (req, res, next) => {
 exports.postPolls = (req, res, next) => {
     try {
         const { name, question, number, option, id } = req.body
-        // INSERT INTO `polls` (`id`, `creator_id`, `name`, `question`, `number`, `options`) VALUES (NULL, 'a6ff932f-0da3-490d-91dd-e60876db2cc9', 'name', 'question name?', '321123', '[{\'name:\' \'2\', \'color:\' \'#bc3434\'},\r\n{\'name:\' \'3\', \'color:\' \'#3da485\'},\r\n{\'name:\' \'4\', \'color:\' \'#3da485\'},\r\n{\'name:\' \'5\', \'color:\' \'#e34f45\'},]');
-
-        // console.log(option)
 
         db.query("INSERT INTO `polls` (`id`, `creator_id`, `name`, `question`, `number`, `options`) VALUES (NULL, '" + id + "', '" + name + "', '" + question + "', '" + number + "', '" + "[" + option + "]" + "');", (err, rows, fields) => {
             if (err) throw err;
@@ -222,6 +214,26 @@ exports.getPolls = (req, res, next) => {
     } catch (err) {
         res.status(500).json({
             message: "Backend error with geting pools.",
+            error: err
+        })
+    }
+}
+
+exports.putPoll = (req, res, next) => {
+
+    try {
+        const { id, option } = req.body
+
+        db.query("UPDATE `polls` SET `options` = '" + option + "' WHERE `polls`.`id` = " + id + ";", (err, rows, fields) => {
+            if (err) throw err;
+            res.status(200).json({
+                message: "Vote added succefsuly"
+            })
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Backend error with geting addiing vote.",
             error: err
         })
     }

@@ -54,10 +54,7 @@ export interface pollsData {
     name: string;
     question: string;
     number: number;
-    // option: string[]
     option: string
-    // option: optionListType[]
-    // option: { name: string; color: string };
     id: string;
 }
 
@@ -92,4 +89,17 @@ export interface getPollsInfo {
             options: string
         }]
     }
+}
+
+export interface putPoolsInfo {
+    statusPutPoll: string,
+    infoPutPoll: {
+        message: string,
+    },
+}
+
+export interface putOptionType {
+
+    id: number,
+    options: string
 }

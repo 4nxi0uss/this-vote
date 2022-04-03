@@ -25,9 +25,6 @@ export const fetchGetPolls = createAsyncThunk("getPolls/getPolls", async (id: st
             headers: {
                 "Content-Type": "application/json",
             },
-            // body: JSON.stringify({
-            // creatorID: id
-            // }),
             mode: "cors",
             cache: "default",
         });

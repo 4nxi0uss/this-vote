@@ -1,14 +1,14 @@
-import * as React from 'react';
-
 import './Pool.scss'
 
 import { orange, red } from '../colors';
 import { PoolProp } from '../../../../Types/Types';
+import { useAppDispatch } from '../../../../Redux/Hooks/hooks';
+import { fetchPutPolls } from '../../../../Redux/Slice/voteSlice';
+
+const Pool = ({ id, name, question, options = "ok" }: PoolProp) => {
 
 
-const Pool = ({ name, question, options = "ok" }: PoolProp) => {
-    // /^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{4,16}$/
-
+    const dispatch = useAppDispatch()
     let optionOperationOnString: string = options.replaceAll("[", "{").replaceAll(",]", "}")
 
     let optionJsonParse: any = "test"
@@ -17,11 +17,17 @@ const Pool = ({ name, question, options = "ok" }: PoolProp) => {
     } catch (error) {
         // console.warn(error)
     }
-    console.log(optionJsonParse)
+    console.log(id, optionOperationOnString)
+    const putOption = { id: Number(id), options: 'nie' }
 
-    const buttonOfChoose = () => Object.values(optionJsonParse).map((valueOfJsonData: any) => <button className='addedBtn'>{valueOfJsonData.name}</button>);
+    const handleBtnFunction = (e: any) => {
+        e.preventDefault()
+        dispatch<any>(fetchPutPolls(putOption))
+    }
 
-    console.log(buttonOfChoose())
+    const buttonOfChoose = () => Object.values(optionJsonParse).map((valueOfJsonData: any) => !Boolean(typeof (valueOfJsonData.name) === String(undefined)) ? <button key={valueOfJsonData.name + `1`} className='addedBtn' onClick={handleBtnFunction}>{valueOfJsonData.name}</button> : null);
+    Object.values(optionJsonParse).forEach((valueOfJsonData: any) => console.log(valueOfJsonData.name, valueOfJsonData.color, valueOfJsonData.vote));
+
     return (
         <section className='poolSection'>
             <h2>{name}</h2>
@@ -30,7 +36,7 @@ const Pool = ({ name, question, options = "ok" }: PoolProp) => {
             <div className='secondPart'>
                 {buttonOfChoose()}
             </div>
-            <p>{options}</p>
+            <p>{id}</p>
         </section>
     )
 }

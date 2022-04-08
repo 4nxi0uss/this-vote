@@ -54,7 +54,7 @@ export interface pollsData {
     name: string;
     question: string;
     number: number;
-    option: string
+    option: object
     id: string;
 }
 

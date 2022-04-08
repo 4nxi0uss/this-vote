@@ -3,11 +3,13 @@ import type { ChangeEvent, MouseEvent } from "react"
 import Modal from '../Modal/Modal';
 
 import './Pools.scss'
+
 import Pool from './subcomponent/Pool/Pool';
+
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
 import { fetchPostPolls } from '../../Redux/Slice/postPollsSlice';
 import { pollsData } from '../../Redux/ReduxTypes/reduxTypes';
-import { optionListType } from '../../Types/Types';
+import { ObjectPushType, optionListType } from '../../Types/Types';
 import { fetchGetPolls } from '../../Redux/Slice/getPoolSlice';
 
 let optionsList: optionListType[] = []
@@ -71,9 +73,8 @@ const Pools = () => {
         }
     }
 
-    let text = '';
-    let i = 0
-    optionsList.forEach(option => text = text + `"option${i++}":{"name": "${option.name}", "color": "${option.color}", "vote": 0},`)
+    let text: ObjectPushType = {};
+    optionsList.forEach((option, index) => text[`option${index}`] = option)
 
     const poolsObject: pollsData = {
         name: nameText,

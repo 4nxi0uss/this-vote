@@ -37,3 +37,7 @@ export interface PoolProp {
   question: string,
   options: string
 }
+
+export interface ObjectPushType {
+  [key: string]: any;
+}

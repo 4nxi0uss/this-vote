@@ -132,7 +132,6 @@ exports.patchActiveUser = (req, res, next) => {
         const { userId } = req.body
         db.query("SELECT user_id, `active` FROM `users_data`", (err, rows, fields) => {
             if (err) throw err;
-            // console.log(rows)
             const userIdFinder = rows.some(id => id.user_id === userId);
             const activeFinder = rows.some(row => row.active === 0);
 
@@ -181,7 +180,7 @@ exports.postPolls = (req, res, next) => {
     try {
         const { name, question, number, option, id } = req.body
 
-        db.query("INSERT INTO `polls` (`id`, `creator_id`, `name`, `question`, `number`, `options`) VALUES (NULL, '" + id + "', '" + name + "', '" + question + "', '" + number + "', '" + "[" + option + "]" + "');", (err, rows, fields) => {
+        db.query("INSERT INTO `polls` (`id`, `creator_id`, `name`, `question`, `number`, `options`) VALUES (NULL, '" + id + "', '" + name + "', '" + question + "', '" + number + "', '" + JSON.stringify(option) + "');", (err, rows, fields) => {
             if (err) throw err;
             res.status(200).json({
                 message: "Pool added sucesfuly.",
@@ -218,6 +217,8 @@ exports.getPolls = (req, res, next) => {
         })
     }
 }
+
+// UPDATE `polls` SET `options` = '[\"option0\":{\"name\": \"123\", \"color\": \"#832525\", \"vote\": 2},\"option1\":{\"name\": \"sad\", \"color\": \"#ff0000\", \"vote\": 0},]' WHERE `polls`.`id` = 1;
 
 exports.putPoll = (req, res, next) => {
 

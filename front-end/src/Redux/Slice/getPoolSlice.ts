@@ -12,7 +12,7 @@ const initialState: getPollsInfo = {
             name: "ANton",
             question: "question",
             number: 0,
-            options: "option"
+            options: `{}`
         }]
     },
 };

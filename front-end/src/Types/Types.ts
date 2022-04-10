@@ -35,7 +35,8 @@ export interface PoolProp {
   id: number | string,
   name: string,
   question: string,
-  options: string
+  options: string,
+  index: number
 }
 
 export interface ObjectPushType {

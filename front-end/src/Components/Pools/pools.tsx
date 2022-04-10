@@ -18,7 +18,6 @@ const Pools = () => {
     const dispatch = useAppDispatch();
 
     const { infoLogin } = useAppSelector(state => state.users)
-    // const { infoPolls, statusPolls } = useAppSelector(state => state.polls)
     const { statusGetPolls, infoGetPolls } = useAppSelector(state => state.getPolls)
 
     const [isShown, setIsShown] = useState<boolean>(false)
@@ -55,6 +54,7 @@ const Pools = () => {
         handleRandomNumber()
         optionsList = []
     }
+
     const handleOptionText = (event: ChangeEvent<HTMLInputElement>) => {
         event.preventDefault()
         setOptionText((event.target.value))
@@ -95,16 +95,13 @@ const Pools = () => {
     const handleGetPoll = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id))
-
-        console.log("1", statusGetPolls)
-        console.log(infoGetPolls)
     }
 
     useEffect(() => { dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id)) }, [dispatch, infoLogin.rows])
 
     const optionShow = () => optionsList.map((option: any, index: number) => <p className='optionShow' key={index}>{option?.name} <span className='optionDotColor' style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
 
-    const idJ = () => infoGetPolls.data.map((el: any, index: any) => <Pool key={index} id={el.id} name={el.name} question={el.question} options={el.options} />);
+    const idJ = () => infoGetPolls.data.map((el: any, index: number) => <Pool key={index} index={index} id={el.id} name={el.name} question={el.question} options={el.options} />);
 
     return (
         <section className='mainPollsSection'>
@@ -125,10 +122,9 @@ const Pools = () => {
                         {optionShow()}
                     </form>
                     <div>
-                        <button className='btnModalClose' onClick={handleModal}>Zamknij</button>
-                        <button className='btnModalClose' onClick={handleSendPool}>Wyślij</button>
+                        <button className='btnModalClose' onClick={handleModal}>Close</button>
+                        <button className='btnModalClose' onClick={handleSendPool}>Submmit</button>
                     </div>
-                    {/* <button className='btnModalClose' onClick={() => handleTest(2)}>Wyślij</button> */}
                 </div>
             </Modal>
             <button className='addPoll' onClick={handleGetPoll}>test pobierania polls</button>

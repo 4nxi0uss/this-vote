@@ -225,12 +225,15 @@ exports.putPoll = (req, res, next) => {
     try {
         const { id, option } = req.body
 
-        db.query("UPDATE `polls` SET `options` = '" + option + "' WHERE `polls`.`id` = " + id + ";", (err, rows, fields) => {
-            if (err) throw err;
-            res.status(200).json({
-                message: "Vote added succefsuly"
-            })
-        })
+console.log(option)
+// console.log(JSON.stringify(option))
+
+        // db.query("UPDATE `polls` SET `options` = '" + JSON.stringify(option) + "' WHERE `polls`.`id` = " + id + ";", (err, rows, fields) => {
+        //     if (err) throw err;
+        //     res.status(200).json({
+        //         message: "Vote added succefsuly"
+        //     })
+        // })
 
     } catch (error) {
         res.status(500).json({

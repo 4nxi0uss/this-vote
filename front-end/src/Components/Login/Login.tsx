@@ -12,8 +12,8 @@ import { fetchPostRegister } from '../../Redux/Slice/registerSlice';
 const Login = () => {
 
     const [toggleRegistry, setToggleRegistry] = useState<boolean>(false);
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
+    const [email, setEmail] = useState<string>("qwe@qwe.pl");
+    const [password, setPassword] = useState<string>("1qaz@WSX");
     const [secondPassword, setSecondPassword] = useState<string>("");
 
     const { infoLogin } = useAppSelector((state) => state.users);

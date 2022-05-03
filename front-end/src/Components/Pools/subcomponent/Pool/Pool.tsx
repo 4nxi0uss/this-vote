@@ -6,35 +6,30 @@ import { PoolProp } from '../../../../Types/Types';
 import { useAppDispatch, useAppSelector } from '../../../../Redux/Hooks/hooks';
 import { fetchPutPolls } from '../../../../Redux/Slice/voteSlice';
 import { fetchGetPolls } from '../../../../Redux/Slice/getPoolSlice';
-import { useState } from 'react';
 
 const Pool = ({ id, name, question, options }: PoolProp) => {
-    const [vo, setVo] = useState(JSON.parse(options))
 
     const dispatch = useAppDispatch()
     const { infoLogin } = useAppSelector(state => state.users)
+    const { infoPutPoll } = useAppSelector(state => state.putPull)
 
-    let optionJsonParse: any = "test"
-    optionJsonParse = JSON.parse(options)
-    console.log(optionJsonParse)
+    console.warn(infoPutPoll.error)
+    let optionJsonParse: object = JSON.parse(options)
 
     const handleRefresh = () => {
         dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id));
     }
 
     const handleBtnFunction = (event: any, vote?: any, index?: number) => {
-        handleRefresh()
         event.preventDefault();
-        setVo(vo[`option0`].vote = ++vote.vote)
-        const putOption = { id: Number(id), options: vo }
+
+        const putOption = { id: Number(id), optionId: vote.id }
+
         dispatch<any>(fetchPutPolls(putOption));
-        setVo(JSON.parse(options))
-        console.log(vo, index)
+        handleRefresh()
     }
 
-    const buttonOfChoose = () => Object.values(optionJsonParse).map((valueOfJsonData: any, index: number) => !Boolean(typeof (valueOfJsonData.name) === String(undefined)) ? <button key={valueOfJsonData.name + `1`} className='addedBtn' onClick={(event: any) => handleBtnFunction(event, valueOfJsonData, index)}>{valueOfJsonData.name}--{valueOfJsonData.vote}</button> : null);
-
-    // UPDATE `polls` SET `options` = '[\"option0\":{\"name\": \"123\", \"color\": \"#832525\", \"vote\": 2},\"option1\":{\"name\": \"sad\", \"color\": \"#ff0000\", \"vote\": 0},]' WHERE `polls`.`id` = 1;
+    const buttonOfChoose = () => Object.values(optionJsonParse).map((valueOfJsonData: any, index: number) => !Boolean(typeof (valueOfJsonData.name) === String(undefined)) ? <button key={valueOfJsonData.id} className='addedBtn' onClick={(event: any) => handleBtnFunction(event, valueOfJsonData, index)}>{valueOfJsonData.name}--{valueOfJsonData.vote}</button> : null);
 
     return (
         <section className='poolSection'>

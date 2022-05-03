@@ -1,7 +1,5 @@
 const db = require('../Database/Database');
 const { v4: uid } = require('uuid');
-const { serialize } = require('v8');
-db.connect()
 
 //checking email in database
 const checkEmail = (rows, usersEmail) => {
@@ -13,7 +11,8 @@ const ScrapOfEmail = (email) => {
 }
 
 // register user in database
-exports.postRegisterUser = (req, res, next) => {
+exports.postRegisterUser = (req, res) => {
+
     try {
         const { usersEmail: email, pass } = req.body;
 
@@ -55,7 +54,7 @@ exports.postRegisterUser = (req, res, next) => {
 }
 
 // login user 
-exports.postLoginUser = (req, res, next) => {
+exports.postLoginUser = (req, res) => {
 
     try {
         const { password, email } = req.body;
@@ -85,7 +84,7 @@ exports.postLoginUser = (req, res, next) => {
 }
 
 // add or update info about user
-exports.patchUserInfo = (req, res, next) => {
+exports.patchUserInfo = (req, res) => {
     try {
         const { userId, name, surname, dateOfBirth } = req.body
 
@@ -127,7 +126,7 @@ exports.patchUserInfo = (req, res, next) => {
     }
 }
 
-exports.patchActiveUser = (req, res, next) => {
+exports.patchActiveUser = (req, res) => {
     try {
         const { userId } = req.body
         db.query("SELECT user_id, `active` FROM `users_data`", (err, rows, fields) => {
@@ -154,7 +153,7 @@ exports.patchActiveUser = (req, res, next) => {
     }
 }
 
-exports.getUserData = (req, res, next) => {
+exports.getUserData = (req, res) => {
     try {
         const { id } = req.params
 
@@ -176,7 +175,7 @@ exports.getUserData = (req, res, next) => {
     }
 }
 
-exports.postPolls = (req, res, next) => {
+exports.postPolls = (req, res) => {
     try {
         const { name, question, number, option, id } = req.body
 
@@ -196,7 +195,7 @@ exports.postPolls = (req, res, next) => {
     }
 }
 
-exports.getPolls = (req, res, next) => {
+exports.getPolls = (req, res) => {
     try {
 
         const { creatorID } = req.params
@@ -220,13 +219,13 @@ exports.getPolls = (req, res, next) => {
 
 // UPDATE `polls` SET `options` = '[\"option0\":{\"name\": \"123\", \"color\": \"#832525\", \"vote\": 2},\"option1\":{\"name\": \"sad\", \"color\": \"#ff0000\", \"vote\": 0},]' WHERE `polls`.`id` = 1;
 
-exports.putPoll = (req, res, next) => {
+exports.putPoll = (req, res) => {
 
     try {
         const { id, option } = req.body
 
-console.log(option)
-// console.log(JSON.stringify(option))
+        console.log(option)
+        // console.log(JSON.stringify(option))
 
         // db.query("UPDATE `polls` SET `options` = '" + JSON.stringify(option) + "' WHERE `polls`.`id` = " + id + ";", (err, rows, fields) => {
         //     if (err) throw err;

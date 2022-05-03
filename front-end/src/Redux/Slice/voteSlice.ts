@@ -6,12 +6,13 @@ const initialState: putPoolsInfo = {
     statusPutPoll: FAILED,
     infoPutPoll: {
         message: 'Próba wysłania ankiety',
+        error: "error"
     },
 };
 
 export const fetchPutPolls = createAsyncThunk("putPoll/putPoll", async (putOptions: putOptionType) => {
 
-    const { id, options } = putOptions;
+    const { id, options, optionId } = putOptions;
 
     try {
         const data = await fetch(`http://localhost:3022/users/putPool`, {
@@ -21,7 +22,8 @@ export const fetchPutPolls = createAsyncThunk("putPoll/putPoll", async (putOptio
             },
             body: JSON.stringify({
                 id: id,
-                option: options
+                option: options,
+                optionID: optionId
             }),
             mode: "cors",
             cache: "default",
@@ -42,7 +44,7 @@ export const usersPutPoll = createSlice({
         builder.addCase(fetchPutPolls.pending, (state) => {
             state.statusPutPoll = LOADING
         })
-        builder.addCase(fetchPutPolls.fulfilled, (state, action: PayloadAction<{ message: string }>) => {
+        builder.addCase(fetchPutPolls.fulfilled, (state, action: PayloadAction<{ message: string, error: string }>) => {
             state.infoPutPoll = action.payload
             state.statusPutPoll = SUCCESS
         })

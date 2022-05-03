@@ -95,11 +95,12 @@ export interface putPoolsInfo {
     statusPutPoll: string,
     infoPutPoll: {
         message: string,
+        error: string
     },
 }
 
 export interface putOptionType {
-
     id: number,
-    options: string
+    options?: string,
+    optionId: number
 }

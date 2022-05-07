@@ -29,6 +29,7 @@ export interface ModalProp {
 export interface optionListType {
   name: string,
   color: string,
+  vote:number
 }
 
 export interface PoolProp {
@@ -36,9 +37,12 @@ export interface PoolProp {
   name: string,
   question: string,
   options: string,
-  index: number,
 }
 
 export interface ObjectPushType {
   [key: string]: any;
+}
+
+export interface VoteType {
+  vote: number
 }

@@ -18,7 +18,7 @@ const Pools = () => {
     const dispatch = useAppDispatch();
 
     const { infoLogin } = useAppSelector(state => state.users)
-    const { statusGetPolls, infoGetPolls } = useAppSelector(state => state.getPolls)
+    const { infoGetPolls } = useAppSelector(state => state.getPolls)
 
     const [isShown, setIsShown] = useState<boolean>(false)
     const [optionText, setOptionText] = useState<string>("");
@@ -68,25 +68,25 @@ const Pools = () => {
     const handleAddOption = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         if (!Boolean(optionText === "") && optionsList.length < 6) {
-            optionsList = [...optionsList, { name: optionText.trim(), color: optionColor }]
+            optionsList = [...optionsList, { name: optionText.trim(), color: optionColor, vote: 0 }]
             setOptionText("")
         }
     }
 
-    let text: ObjectPushType = {};
-    optionsList.forEach((option, index) => text[`option${index}`] = option)
+    let optionObject: ObjectPushType = {};
+    optionsList.forEach((option, index) => optionObject[`option${index}`] = { id: index, ...option })
 
     const poolsObject: pollsData = {
         name: nameText,
         question: questionText,
         number: randomNumber,
-        option: text,
+        option: optionObject,
         id: infoLogin.rows[0].user_id
     }
 
     const handleSendPool = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
-        if (Boolean(questionText) && Boolean(nameText) && Boolean(optionsList.length !== 0)) {
+        if (Boolean(questionText) && Boolean(nameText) && Boolean(optionsList.length >= 2)) {
             dispatch<any>(fetchPostPolls(poolsObject));
             handleClearInput(event);
         }
@@ -101,7 +101,7 @@ const Pools = () => {
 
     const optionShow = () => optionsList.map((option: any, index: number) => <p className='optionShow' key={index}>{option?.name} <span className='optionDotColor' style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
 
-    const idJ = () => infoGetPolls.data.map((el: any, index: number) => <Pool key={index} index={index} id={el.id} name={el.name} question={el.question} options={el.options} />);
+    const idJ = () => infoGetPolls.data.map((el: any, index: number) => <Pool key={el.number} id={el.id} name={el.name} question={el.question} options={el.options} />);
 
     return (
         <section className='mainPollsSection'>

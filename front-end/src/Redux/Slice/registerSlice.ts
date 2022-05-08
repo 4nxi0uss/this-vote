@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FAILED, LOADING, registerInfo, SUCCESS } from "../ReduxTypes/reduxTypes";
+import { FAILED, LOADING, registerDataType, registerInfo, SUCCESS } from "../ReduxTypes/reduxTypes";
 
 
 // Define the initial state using that type
@@ -12,7 +12,7 @@ const initialState: registerInfo = {
     }
 };
 
-export const fetchPostRegister = createAsyncThunk("register/postRegister", async (registerData: any) => {
+export const fetchPostRegister = createAsyncThunk("register/postRegister", async (registerData: registerDataType) => {
     const { email, password } = registerData
     try {
         const data = await fetch('http://localhost:3022/users/register', {

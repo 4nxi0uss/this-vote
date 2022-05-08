@@ -189,7 +189,7 @@ exports.postPolls = (req, res) => {
 
     } catch (err) {
         res.status(500).json({
-            message: "Backend error with adding pool.",
+            message: "Backend error with adding poll.",
             error: err
         })
     }
@@ -198,10 +198,9 @@ exports.postPolls = (req, res) => {
 exports.getPolls = (req, res) => {
     try {
 
-        const { creatorID } = req.params
+        const { creatorId } = req.params
 
-        //SELECT * FROM `polls` WHERE `creator_id` = '236364d2-59be-4612-8ad0-4e6407da5428';
-        db.query(" SELECT * FROM `polls` WHERE `creator_id` = '" + creatorID + "' ", (err, rows, fields) => {
+        db.query(" SELECT * FROM `polls` WHERE `creator_id` = '" + creatorId + "' ", (err, rows, fields) => {
             if (err) throw err;
             res.status(200).json({
                 message: "download polls.",
@@ -211,32 +210,26 @@ exports.getPolls = (req, res) => {
 
     } catch (err) {
         res.status(500).json({
-            message: "Backend error with geting pools.",
+            message: "Backend error with geting polls.",
             error: err
         })
     }
 }
 
-// UPDATE `polls` SET `options` = '[\"option0\":{\"name\": \"123\", \"color\": \"#832525\", \"vote\": 2},\"option1\":{\"name\": \"sad\", \"color\": \"#ff0000\", \"vote\": 0},]' WHERE `polls`.`id` = 1;
-
-exports.putPoll = (req, res) => {
-
+exports.deletePoll = (req, res) => {
     try {
-        const { id, option } = req.body
+        const { creatorId, id } = req.body
 
-        console.log(option)
-        // console.log(JSON.stringify(option))
+        db.query("DELETE FROM `polls` WHERE id=" + id + " and creator_id='" + creatorId + "'", (err, rows, fields) => {
+            if (err) throw err
+            res.status(200).json({
+                message: "delating polls succesful.",
+            })
+        })
 
-        // db.query("UPDATE `polls` SET `options` = '" + JSON.stringify(option) + "' WHERE `polls`.`id` = " + id + ";", (err, rows, fields) => {
-        //     if (err) throw err;
-        //     res.status(200).json({
-        //         message: "Vote added succefsuly"
-        //     })
-        // })
-
-    } catch (error) {
+    } catch (err) {
         res.status(500).json({
-            message: "Backend error with geting addiing vote.",
+            message: "Backend error with deleting polls.",
             error: err
         })
     }

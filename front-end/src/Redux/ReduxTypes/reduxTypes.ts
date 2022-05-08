@@ -91,7 +91,7 @@ export interface getPollsInfo {
     }
 }
 
-export interface putPoolsInfo {
+export interface putPollsInfo {
     statusPutPoll: string,
     infoPutPoll: {
         message: string,
@@ -103,4 +103,23 @@ export interface putOptionType {
     id: number,
     options?: string,
     optionId: number
+}
+
+export interface registerDataType {
+    email: string,
+    password: string
+}
+
+export interface deletingDataType {
+    creatorId: string,
+    id: number
+}
+
+
+export interface deletingInfo {
+    deletingStatus: string
+    deletingInfo: {
+        message: string,
+        error: string,
+    }
 }

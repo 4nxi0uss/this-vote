@@ -2,19 +2,19 @@ import { useEffect, useState } from 'react';
 import type { ChangeEvent, MouseEvent } from "react"
 import Modal from '../Modal/Modal';
 
-import './Pools.scss'
+import './Polls.scss'
 
-import Pool from './subcomponent/Pool/Pool';
+import Poll from './subcomponent/Poll/Poll';
 
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
 import { fetchPostPolls } from '../../Redux/Slice/postPollsSlice';
 import { pollsData } from '../../Redux/ReduxTypes/reduxTypes';
 import { ObjectPushType, optionListType } from '../../Types/Types';
-import { fetchGetPolls } from '../../Redux/Slice/getPoolSlice';
+import { fetchGetPolls } from '../../Redux/Slice/getPollSlice';
 
 let optionsList: optionListType[] = []
 
-const Pools = () => {
+const Polls = () => {
     const dispatch = useAppDispatch();
 
     const { infoLogin } = useAppSelector(state => state.users)
@@ -76,7 +76,7 @@ const Pools = () => {
     let optionObject: ObjectPushType = {};
     optionsList.forEach((option, index) => optionObject[`option${index}`] = { id: index, ...option })
 
-    const poolsObject: pollsData = {
+    const pollsObject: pollsData = {
         name: nameText,
         question: questionText,
         number: randomNumber,
@@ -84,10 +84,10 @@ const Pools = () => {
         id: infoLogin.rows[0].user_id
     }
 
-    const handleSendPool = (event: MouseEvent<HTMLButtonElement>) => {
+    const handleSendPoll = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         if (Boolean(questionText) && Boolean(nameText) && Boolean(optionsList.length >= 2)) {
-            dispatch<any>(fetchPostPolls(poolsObject));
+            dispatch<any>(fetchPostPolls(pollsObject));
             handleClearInput(event);
         }
     }
@@ -95,17 +95,18 @@ const Pools = () => {
     const handleGetPoll = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id))
+        console.log("ok")
     }
 
     useEffect(() => { dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id)) }, [dispatch, infoLogin.rows])
 
     const optionShow = () => optionsList.map((option: any, index: number) => <p className='optionShow' key={index}>{option?.name} <span className='optionDotColor' style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
 
-    const idJ = () => infoGetPolls.data.map((el: any, index: number) => <Pool key={el.number} id={el.id} name={el.name} question={el.question} options={el.options} />);
+    const idJ = () => infoGetPolls.data.map((el: any, index: number) => <Poll key={el.number} id={el.id} name={el.name} question={el.question} options={el.options} />);
 
     return (
         <section className='mainPollsSection'>
-            <button className='addPoll' onClick={handleModal}>Add pool</button>
+            <button className='addPoll' onClick={handleModal}>Add poll</button>
             <Modal isOpen={isShown} >
                 <div className='modalPoll'>
                     <form className='modalFormPoll'>
@@ -115,7 +116,7 @@ const Pools = () => {
                         <input type="text" onChange={handleQuestionText} value={questionText} />
                         <label className='numberLabel'>Number:</label>
                         <input className='numberInput' type="number" readOnly disabled value={randomNumber} />
-                        <label>Option to choose in pool (max 6):</label>
+                        <label>Option to choose in poll (max 6):</label>
                         <input type="text" value={optionText} onChange={handleOptionText} />
                         <input type="color" onChange={handleOptionColor} value={optionColor} />
                         <button onClick={handleAddOption}>+</button>
@@ -123,7 +124,7 @@ const Pools = () => {
                     </form>
                     <div>
                         <button className='btnModalClose' onClick={handleModal}>Close</button>
-                        <button className='btnModalClose' onClick={handleSendPool}>Submmit</button>
+                        <button className='btnModalClose' onClick={handleSendPoll}>Submmit</button>
                     </div>
                 </div>
             </Modal>
@@ -134,4 +135,4 @@ const Pools = () => {
     )
 }
 
-export default Pools
+export default Polls

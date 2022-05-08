@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { FAILED, LOADING, putOptionType, putPoolsInfo, SUCCESS } from "../ReduxTypes/reduxTypes";
+import { FAILED, LOADING, putOptionType, putPollsInfo, SUCCESS } from "../ReduxTypes/reduxTypes";
 
 // Define the initial state using that type
-const initialState: putPoolsInfo = {
+const initialState: putPollsInfo = {
     statusPutPoll: FAILED,
     infoPutPoll: {
         message: 'Próba wysłania ankiety',
@@ -15,7 +15,7 @@ export const fetchPutPolls = createAsyncThunk("putPoll/putPoll", async (putOptio
     const { id, options, optionId } = putOptions;
 
     try {
-        const data = await fetch(`http://localhost:3022/users/putPool`, {
+        const data = await fetch(`http://localhost:3022/users/putPoll`, {
             method: 'PUT',
             headers: {
                 "Content-Type": "application/json",

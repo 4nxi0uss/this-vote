@@ -1,13 +1,15 @@
-import './Pool.scss'
+import * as React from 'react';
 
-import { colors } from '../colors';
-import { PoolProp, VoteType } from '../../../../Types/Types';
+import './Poll.scss'
+
+import { PollProp, VoteType } from '../../../../Types/Types';
 
 import { useAppDispatch, useAppSelector } from '../../../../Redux/Hooks/hooks';
 import { fetchPutPolls } from '../../../../Redux/Slice/voteSlice';
-import { fetchGetPolls } from '../../../../Redux/Slice/getPoolSlice';
+import { fetchGetPolls } from '../../../../Redux/Slice/getPollSlice';
+import { deletePoll } from '../../../../Redux/Slice/deletingPoll';
 
-const Pool = ({ id, name, question, options }: PoolProp) => {
+const Poll = ({ id, name, question, options }: PollProp) => {
 
     const dispatch = useAppDispatch()
     const { infoLogin } = useAppSelector(state => state.users)
@@ -17,6 +19,15 @@ const Pool = ({ id, name, question, options }: PoolProp) => {
 
     const handleRefresh = () => {
         dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id));
+    }
+
+    const handlePollDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+
+        const delData = { creatorId: String(infoLogin.rows[0].user_id), id: id }
+        console.log(id)
+        dispatch<any>(deletePoll(delData))
+
+
     }
 
     const handleBtnFunction = (event: any, vote?: any, index?: number) => {
@@ -33,13 +44,16 @@ const Pool = ({ id, name, question, options }: PoolProp) => {
     const circleStyle = () => {
 
         let percentArr: number[] = []
+        let colorArr: string[] = []
         let voteSum: number = 0
 
         optionJsonParseValuses.forEach(({ vote }: VoteType) => {
             voteSum += vote
         })
-        optionJsonParseValuses.forEach(({ vote }: VoteType) => {
+
+        optionJsonParseValuses.forEach(({ vote, color }: VoteType) => {
             percentArr.push(Number(((vote / voteSum) * 100).toFixed(2)))
+            colorArr.push(String(color))
         })
 
         let sectionOfStyle = ``
@@ -51,9 +65,8 @@ const Pool = ({ id, name, question, options }: PoolProp) => {
         }
 
         percentArr.forEach((el: number, i: number) => {
-
             let percent1 = Number((percent0 + el).toFixed(2));
-            sectionOfStyle += `${colors[i]} ${percent0}% ${percent1}%, `
+            sectionOfStyle += `${colorArr[i]} ${percent0}% ${percent1}%, `
             percent0 = percent1
         })
 
@@ -63,7 +76,8 @@ const Pool = ({ id, name, question, options }: PoolProp) => {
     }
 
     return (
-        <section className='poolSection'>
+        <section className='pollSection'>
+            <button onClick={handlePollDelete}>del</button>
             <h2>{name}</h2>
             <h3>{question}</h3>
             <div className='firstPart' style={({ background: circleStyle() })}></div>
@@ -75,4 +89,4 @@ const Pool = ({ id, name, question, options }: PoolProp) => {
     )
 }
 
-export default Pool
+export default Poll

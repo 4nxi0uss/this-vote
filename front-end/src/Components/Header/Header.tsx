@@ -28,8 +28,8 @@ const Header = () => {
                 {infoLogin.login ? <Link to='/Account' className='NavLink'>
                     Account
                 </Link> : null}
-                {infoLogin.login ? <Link to='/Pools' className='NavLink'>
-                    Pools
+                {infoLogin.login ? <Link to='/Polls' className='NavLink'>
+                    Polls
                 </Link> : null}
                 {!infoLogin.login ? <Link to='/login' className='NavLink'>
                     Login/Registry

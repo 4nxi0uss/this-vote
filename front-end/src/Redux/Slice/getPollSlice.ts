@@ -8,7 +8,7 @@ const initialState: getPollsInfo = {
         message: 'Próba wysłania ankiety',
         data: [{
             id: 0,
-            creator_id: "creatorID",
+            creator_id: "creatorId",
             name: "ANton",
             question: "question",
             number: 0,
@@ -20,7 +20,7 @@ const initialState: getPollsInfo = {
 export const fetchGetPolls = createAsyncThunk("getPolls/getPolls", async (id: string) => {
 
     try {
-        const data = await fetch(`http://localhost:3022/users/getPools/${id}`, {
+        const data = await fetch(`http://localhost:3022/users/getPolls/${id}`, {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",

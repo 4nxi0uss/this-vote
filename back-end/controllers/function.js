@@ -1,6 +1,6 @@
 const db = require('../Database/Database');
 
-exports.incrementPool = (req, res) => {
+exports.incrementPoll = (req, res) => {
     try {
 
         const { id, optionID } = req.body

@@ -8,7 +8,7 @@ import Introduction from './subcoponent/Introduction/Introduction';
 import Login from '../Login/Login';
 import Account from '../Account/Account';
 import { useAppSelector } from '../../Redux/Hooks/hooks';
-import Pools from '../Pools/Pools';
+import Polls from '../Polls/Polls';
 
 const MainContent = () => {
 
@@ -20,7 +20,7 @@ const MainContent = () => {
                 <Route path='/' element={<Introduction />} />
                 <Route path='/Login' element={<Login />} />
                 {<Route path='/Account' element={infoLogin.login ? <Account /> : <Navigate to='/' />} />}
-                {<Route path='/Pools' element={infoLogin.login ? <Pools /> : <Navigate to='/' />} />}
+                {<Route path='/Polls' element={infoLogin.login ? <Polls /> : <Navigate to='/' />} />}
             </Routes>
 
         </main>

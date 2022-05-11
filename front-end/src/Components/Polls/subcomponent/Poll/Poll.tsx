@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 
 import './Poll.scss'
 
@@ -8,11 +8,14 @@ import { useAppDispatch, useAppSelector } from '../../../../Redux/Hooks/hooks';
 import { fetchPutPolls } from '../../../../Redux/Slice/voteSlice';
 import { fetchGetPolls } from '../../../../Redux/Slice/getPollSlice';
 import { deletePoll } from '../../../../Redux/Slice/deletingPoll';
+import EditPoll from '../EditPoll/EditPoll';
 
 const Poll = ({ id, name, question, options }: PollProp) => {
 
     const dispatch = useAppDispatch()
     const { infoLogin } = useAppSelector(state => state.users)
+
+    const [isOpenEdit, setIsShownEdit] = useState<boolean>(false)
 
     let optionJsonParse: object = JSON.parse(options)
     const optionJsonParseValuses = Object.values(optionJsonParse)
@@ -35,6 +38,11 @@ const Poll = ({ id, name, question, options }: PollProp) => {
 
         dispatch<any>(fetchPutPolls(putOption));
         handleRefresh()
+    }
+
+    const handleEdit = (event: any) => {
+        event.preventDefault();
+        setIsShownEdit(!isOpenEdit)
     }
 
     const buttonOfChoose = () => optionJsonParseValuses.map((valueOfJsonData: any, index: number) => !Boolean(typeof (valueOfJsonData.name) === String(undefined)) ? <button key={valueOfJsonData.id} className='addedBtn' onClick={(event: any) => handleBtnFunction(event, valueOfJsonData, index)}>{valueOfJsonData.name}--{valueOfJsonData.vote}</button> : null);
@@ -76,6 +84,8 @@ const Poll = ({ id, name, question, options }: PollProp) => {
     return (
         <section className='pollSection'>
             <button onClick={handlePollDelete}>del</button>
+            <button onClick={handleEdit}>Edit</button>
+            {EditPoll(isOpenEdit)}
             <h2>{name}</h2>
             <h3>{question}</h3>
             <div className='firstPart' style={({ background: circleStyle() })}></div>

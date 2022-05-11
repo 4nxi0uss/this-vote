@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
-import Modal from '../../../Modal/Modal';
 import type { ChangeEvent, MouseEvent } from "react"
+import Modal from '../../../Modal/Modal';
+
+import "./AddPoll.scss"
+
 import { ObjectPushType, optionListType } from '../../../../Types/Types';
-import { fetchPostPolls } from '../../../../Redux/Slice/postPollsSlice';
 import { pollsData } from '../../../../Redux/ReduxTypes/reduxTypes';
+
+import { fetchPostPolls } from '../../../../Redux/Slice/postPollsSlice';
 import { useAppDispatch, useAppSelector } from '../../../../Redux/Hooks/hooks';
+
 
 let optionsList: optionListType[] = []
 
@@ -92,27 +97,29 @@ const AddPoll = (show: any, modalFun: any, random: number) => {
 
 
     return (
-        <><Modal isOpen={show} >
-            <div className='modalPoll'>
-                <form className='modalFormPoll'>
-                    <label>Name:</label>
-                    <input type="text" onChange={handleNameText} value={nameText} />
-                    <label>Question:</label>
-                    <input type="text" onChange={handleQuestionText} value={questionText} />
-                    <label className='numberLabel'>Number:</label>
-                    <input className='numberInput' type="number" readOnly disabled value={random} />
-                    <label>Option to choose in poll (max 6):</label>
-                    <input type="text" value={optionText} onChange={handleOptionText} />
-                    <input type="color" onChange={handleOptionColor} value={optionColor} />
-                    <button onClick={handleAddOption}>+</button>
-                    {optionShow()}
-                </form>
-                <div>
-                    <button className='btnModalClose' onClick={() => { modalFun() }}>Close</button>
-                    <button className='btnModalClose' onClick={handleSendPoll}>Submmit</button>
+        <>
+            <Modal isOpen={show} >
+                <div className='modalAddPoll'>
+                    <form className='modalFormAddPoll'>
+                        <label>Name:</label>
+                        <input type="text" onChange={handleNameText} value={nameText} />
+                        <label>Question:</label>
+                        <input type="text" onChange={handleQuestionText} value={questionText} />
+                        <label className='numberLabel'>Number:</label>
+                        <input className='numberInput' type="number" readOnly disabled value={random} />
+                        <label>Option to choose in poll (max 6):</label>
+                        <input type="text" value={optionText} onChange={handleOptionText} />
+                        <input type="color" onChange={handleOptionColor} value={optionColor} />
+                        <button onClick={handleAddOption}>+</button>
+                        {optionShow()}
+                    </form>
+                    <div>
+                        <button className='btnModalClose' onClick={() => { modalFun() }}>Close</button>
+                        <button className='btnModalClose' onClick={handleSendPoll}>Submmit</button>
+                    </div>
                 </div>
-            </div>
-        </Modal></>
+            </Modal>
+        </>
     )
 }
 

@@ -24,13 +24,11 @@ const Polls = () => {
     const handleRandomNumber = (event?: MouseEvent<HTMLButtonElement>) => {
         event?.preventDefault();
         setRandomNumber((Math.floor(Math.random() * 100000) + 100000));
-        console.log("taktaktak");
     }
 
     const handleModal = (event: MouseEvent<HTMLButtonElement>) => {
         handleRandomNumber(event);
         setIsShownAdd(!isShownAdd);
-        console.log("okkook");
     }
 
     let optionObject: ObjectPushType = {};
@@ -40,12 +38,11 @@ const Polls = () => {
     const handleGetPoll = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id))
-        console.log("ok")
     }
 
     useEffect(() => { dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id)) }, [dispatch, infoLogin.rows])
 
-    const idJ = () => infoGetPolls.data.map((el: any, index: number) => <Poll key={el.number} id={el.id} name={el.name} question={el.question} options={el.options} />);
+    const PollDisplay = () => infoGetPolls.data.map((el: any) => <Poll key={el.number} id={el.id} name={el.name} question={el.question} options={el.options} />);
 
     return (
         <section className='mainPollsSection'>
@@ -53,7 +50,7 @@ const Polls = () => {
             {AddPoll(isShownAdd, handleModal, randomNumber)}
             <button className='addPoll' onClick={handleGetPoll}>test pobierania polls</button>
 
-            {idJ()}
+            {PollDisplay()}
         </section>
     )
 }

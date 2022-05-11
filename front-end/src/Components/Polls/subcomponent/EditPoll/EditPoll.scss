@@ -1,0 +1,47 @@
+.test-edit{
+    font-size: 10vw;
+    color: aqua;
+}
+
+.modalEditPoll {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    padding: 2vw;
+
+    .modalFormEditPoll {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .btnModalClose {
+        margin: .5vw;
+        padding: .5vw;
+        background-color: rgb(100, 100, 255);
+        color: white;
+        border: none;
+    }
+
+    .btnModalClose:hover {
+        padding: .5vw;
+        background-color: rgb(131, 131, 255);
+        color: rgb(14, 14, 14);
+    }
+
+    .optionShow {
+        display: flex;
+        flex-direction: row;
+        margin: .5vw 0;
+        justify-content: space-between;
+
+        .optionDotColor {
+            position: relative;
+            border-radius: 100%;
+            border: 5px solid;
+            height: 1vw;
+            width: 1vw;
+        }
+    }
+}

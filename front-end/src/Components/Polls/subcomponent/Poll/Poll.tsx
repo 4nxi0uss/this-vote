@@ -26,8 +26,6 @@ const Poll = ({ id, name, question, options }: PollProp) => {
         const delData = { creatorId: String(infoLogin.rows[0].user_id), id: id }
         console.log(id)
         dispatch<any>(deletePoll(delData))
-
-
     }
 
     const handleBtnFunction = (event: any, vote?: any, index?: number) => {

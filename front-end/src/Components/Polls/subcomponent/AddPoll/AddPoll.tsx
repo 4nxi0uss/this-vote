@@ -17,19 +17,13 @@ const AddPoll = (show: any, modalFun: any, random: number) => {
 
     const { infoLogin } = useAppSelector(state => state.users)
 
-    // const [isShownAdd, setIsShownAdd] = useState<boolean>(false)
     const [optionText, setOptionText] = useState<string>("");
     const [nameText, setNameText] = useState<string>("");
     const [questionText, setQuestionText] = useState<string>("");
     const [optionColor, setOptionColor] = useState<string>("#000000");
-    // const [randomNumber, setRandomNumber] = useState<number>(random);
 
     const dispatch = useAppDispatch();
 
-    // const handleRandomNumber = (event?: MouseEvent<HTMLButtonElement>) => {
-    //     event?.preventDefault()
-    //     setRandomNumber((Math.floor(Math.random() * 100000) + 100000))
-    // }
 
     const handleNameText = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
@@ -59,11 +53,6 @@ const AddPoll = (show: any, modalFun: any, random: number) => {
         }
     }
 
-    // const handleModal = (event: MouseEvent<HTMLButtonElement>) => {
-    //     setIsShownAdd(!isShownAdd)
-    //     handleRandomNumber(event)
-    // }
-
     let optionObject: ObjectPushType = {};
     optionsList.forEach((option, index) => optionObject[`option${index}`] = { id: index, ...option })
 
@@ -80,7 +69,6 @@ const AddPoll = (show: any, modalFun: any, random: number) => {
         setOptionText("")
         setNameText("")
         setQuestionText("")
-        // handleRandomNumber()
         optionsList = []
     }
 
@@ -93,8 +81,6 @@ const AddPoll = (show: any, modalFun: any, random: number) => {
     }
 
     const optionShow = () => optionsList.map((option: any, index: number) => <p className='optionShow' key={index}>{option?.name} <span className='optionDotColor' style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
-
-
 
     return (
         <>

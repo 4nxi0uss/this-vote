@@ -8,6 +8,7 @@ import Poll from './subcomponent/Poll/Poll';
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
 import { ObjectPushType, optionListType } from '../../Types/Types';
 import { fetchGetPolls } from '../../Redux/Slice/getPollSlice';
+
 import AddPoll from './subcomponent/AddPoll/AddPoll';
 
 let optionsList: optionListType[] = []
@@ -33,7 +34,6 @@ const Polls = () => {
 
     let optionObject: ObjectPushType = {};
     optionsList.forEach((option, index) => optionObject[`option${index}`] = { id: index, ...option })
-
 
     const handleGetPoll = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();

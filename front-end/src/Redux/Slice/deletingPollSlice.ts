@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { deletingDataType, deletingInfo, FAILED, LOADING, SUCCESS } from "../ReduxTypes/reduxTypes";
+import { deletingDataType, deletingInfo, FAILED_STATUS, IDLE_STATUS, LOADING_STATUS, SUCCESS_STATUS } from "../ReduxTypes/reduxTypes";
 
 
 // Define the initial state using that type
 const initialState: deletingInfo = {
-    deletingStatus: FAILED,
+    deletingStatus: IDLE_STATUS,
     deletingInfo: {
         message: "register",
         error: "oby nie error"
@@ -33,29 +33,29 @@ export const deletePoll = createAsyncThunk("deleting/pollDeleting", async (delDa
 
 })
 
-export const registerSlice = createSlice({
+export const deletingPollSlice = createSlice({
     name: 'deleting',
     // `createSlice` will infer the state type from the `initialState` argument
     initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(deletePoll.pending, (state) => {
-            state.deletingStatus = LOADING
+            state.deletingStatus = LOADING_STATUS
         })
         builder.addCase(deletePoll.fulfilled, (state, action: PayloadAction<{ message: string, error: string }>) => {
             state.deletingInfo = action.payload
-            state.deletingStatus = SUCCESS
+            state.deletingStatus = SUCCESS_STATUS
         })
         builder.addCase(deletePoll.rejected, (state) => {
-            state.deletingStatus = FAILED
+            state.deletingStatus = FAILED_STATUS
         })
     },
 })
 
 
-// export const { clearStatus, clearInfo } = registerSlice.actions
+// export const { clearStatus, clearInfo } = deletingPollSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 // export const selectStatus = (state: RootState) => state.users.statusLogin
 
-export default registerSlice.reducer
+export default deletingPollSlice.reducer

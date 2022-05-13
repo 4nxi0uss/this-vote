@@ -7,13 +7,14 @@ import { PollProp, VoteType } from '../../../../Types/Types';
 import { useAppDispatch, useAppSelector } from '../../../../Redux/Hooks/hooks';
 import { fetchPutPolls } from '../../../../Redux/Slice/voteSlice';
 import { fetchGetPolls } from '../../../../Redux/Slice/getPollSlice';
-import { deletePoll } from '../../../../Redux/Slice/deletingPoll';
+import { deletePoll } from '../../../../Redux/Slice/deletingPollSlice';
 import EditPoll from '../EditPoll/EditPoll';
 
 const Poll = ({ id, name, question, options }: PollProp) => {
 
     const dispatch = useAppDispatch()
     const { infoLogin } = useAppSelector(state => state.users)
+    const { infoGetPolls } = useAppSelector(state => state.getPolls)
 
     const [isOpenEdit, setIsShownEdit] = useState<boolean>(false)
 
@@ -45,7 +46,7 @@ const Poll = ({ id, name, question, options }: PollProp) => {
         setIsShownEdit(!isOpenEdit)
     }
 
-    const buttonOfChoose = () => optionJsonParseValuses.map((valueOfJsonData: any, index: number) => !Boolean(typeof (valueOfJsonData.name) === String(undefined)) ? <button key={valueOfJsonData.id} className='addedBtn' onClick={(event: any) => handleBtnFunction(event, valueOfJsonData, index)}>{valueOfJsonData.name}--{valueOfJsonData.vote}</button> : null);
+    const buttonOfChoose = () => optionJsonParseValuses.map((valueOfJsonData: any, index: number) => !Boolean(typeof (valueOfJsonData.name) === String(undefined)) && <button key={valueOfJsonData.id} className='addedBtn' onClick={(event: any) => handleBtnFunction(event, valueOfJsonData, index)}>{valueOfJsonData.name}--{valueOfJsonData.vote}</button>);
 
     const circleStyle = () => {
 
@@ -85,7 +86,7 @@ const Poll = ({ id, name, question, options }: PollProp) => {
         <section className='pollSection'>
             <button onClick={handlePollDelete}>del</button>
             <button onClick={handleEdit}>Edit</button>
-            {EditPoll(isOpenEdit)}
+            {EditPoll(isOpenEdit, handleEdit, id)}
             <h2>{name}</h2>
             <h3>{question}</h3>
             <div className='firstPart' style={({ background: circleStyle() })}></div>

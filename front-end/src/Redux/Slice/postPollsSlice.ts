@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
-import { FAILED, LOADING, pollsData, postPollsInfo, SUCCESS } from "../ReduxTypes/reduxTypes";
+import { FAILED_STATUS, IDLE_STATUS, LOADING_STATUS, pollsData, postPollsInfo, SUCCESS_STATUS } from "../ReduxTypes/reduxTypes";
 
 // Define the initial state using that type
 const initialState: postPollsInfo = {
-    statusPolls: FAILED,
+    statusPolls: IDLE_STATUS,
     infoPolls: {
         message: 'Próba wysłania ankiety',
         rows: 'test',
@@ -39,28 +39,28 @@ export const fetchPostPolls = createAsyncThunk("postPolls/postPolls", async (pol
 }
 );
 
-export const usersPolls = createSlice({
+export const postPollsSlice = createSlice({
     name: "postPolls",
     // `createSlice` will infer the state type from the `initialState` argument
     initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(fetchPostPolls.pending, (state) => {
-            state.statusPolls = LOADING
+            state.statusPolls = LOADING_STATUS
         })
         builder.addCase(fetchPostPolls.fulfilled, (state, action: PayloadAction<{ message: string, rows: any, error: any }>) => {
             state.infoPolls = action.payload
-            state.statusPolls = SUCCESS
+            state.statusPolls = SUCCESS_STATUS
         })
         builder.addCase(fetchPostPolls.rejected, (state) => {
-            state.statusPolls = FAILED
+            state.statusPolls = FAILED_STATUS
         })
     },
 });
 
-// export const {  } = usersPolls.actions
+// export const {  } = postPollsSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
 // export const selectStatus = (state: RootState) => state.users.statusLogin
 
-export default usersPolls.reducer;
+export default postPollsSlice.reducer;

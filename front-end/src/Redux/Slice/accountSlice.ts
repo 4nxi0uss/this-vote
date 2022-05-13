@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit'
-import { infoLoginType, FAILED, SUCCESS, LOADING, userLoginStatus, userLoginInfo, infoUpdate } from '../ReduxTypes/reduxTypes';
+import { infoLoginType, FAILED_STATUS, SUCCESS_STATUS, LOADING_STATUS, userLoginStatus, userLoginInfo, infoUpdate, IDLE_STATUS } from '../ReduxTypes/reduxTypes';
 
 // Define the initial state using that type
 const initialState: userLoginStatus & userLoginInfo = {
-    statusLogin: FAILED,
-    statusUpdateInfo: FAILED,
-    statusUserData: FAILED,
+    statusLogin: IDLE_STATUS,
+    statusUpdateInfo: IDLE_STATUS,
+    statusUserData: IDLE_STATUS,
     infoLogin: {
         message: 'Zaloguj się',
         login: false,
@@ -103,7 +103,7 @@ export const usersLoginSlice = createSlice({
     initialState,
     reducers: {
         clearStatus: (state) => {
-            state.statusLogin = FAILED
+            state.statusLogin = IDLE_STATUS
         },
         clearInfo: (state: userLoginInfo) => {
             state.infoLogin.login = false
@@ -113,34 +113,34 @@ export const usersLoginSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchUsersLogin.pending, (state) => {
-            state.statusLogin = LOADING
+            state.statusLogin = LOADING_STATUS
         })
         builder.addCase(fetchUpdateInfo.pending, (state) => {
-            state.statusUpdateInfo = LOADING
+            state.statusUpdateInfo = LOADING_STATUS
         })
         builder.addCase(fetchGetUserData.pending, (state) => {
-            state.statusUserData = LOADING
+            state.statusUserData = LOADING_STATUS
         })
         builder.addCase(fetchUsersLogin.fulfilled, (state, action: PayloadAction<{ message: string, login: boolean, rows: any }>) => {
             state.infoLogin = action.payload
-            state.statusLogin = SUCCESS
+            state.statusLogin = SUCCESS_STATUS
         })
         builder.addCase(fetchUpdateInfo.fulfilled, (state, action: PayloadAction<{ message: string, rows: any, error: any }>) => {
             state.infoUpdate = action.payload
-            state.statusUpdateInfo = SUCCESS
+            state.statusUpdateInfo = SUCCESS_STATUS
         })
         builder.addCase(fetchGetUserData.fulfilled, (state, action: PayloadAction<{ message: string, data: any, error: any }>) => {
             state.userData = action.payload
-            state.statusUserData = SUCCESS
+            state.statusUserData = SUCCESS_STATUS
         })
         builder.addCase(fetchUsersLogin.rejected, (state) => {
-            state.statusLogin = FAILED
+            state.statusLogin = FAILED_STATUS
         })
         builder.addCase(fetchUpdateInfo.rejected, (state) => {
-            state.statusUpdateInfo = FAILED
+            state.statusUpdateInfo = FAILED_STATUS
         })
         builder.addCase(fetchGetUserData.rejected, (state) => {
-            state.statusUserData = FAILED
+            state.statusUserData = FAILED_STATUS
         })
     },
 })

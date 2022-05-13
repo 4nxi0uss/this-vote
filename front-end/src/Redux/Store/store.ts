@@ -1,20 +1,22 @@
 import { configureStore } from '@reduxjs/toolkit'
 import usersLoginSlice from '../Slice/accountSlice'
 import thunkMiddleware from 'redux-thunk';
-import usersPolls from '../Slice/postPollsSlice';
+import postPollsSlice from '../Slice/postPollsSlice';
 import registerSlice from '../Slice/registerSlice';
 import usersGetPolls from '../Slice/getPollSlice';
 import usersPutPoll from '../Slice/voteSlice';
-import deletePoll from '../Slice/deletingPoll';
+import deletePoll from '../Slice/deletingPollSlice';
+import editPollSlice from '../Slice/editPollSlice';
 
 export const store = configureStore({
   reducer: {
     users: usersLoginSlice,
-    polls: usersPolls,
+    polls: postPollsSlice,
     getPolls: usersGetPolls,
     putPoll: usersPutPoll,
     register: registerSlice,
     delete: deletePoll,
+    edit: editPollSlice,
   },
   middleware: [thunkMiddleware]
 });

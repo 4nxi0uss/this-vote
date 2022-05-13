@@ -1,8 +1,8 @@
-// import { optionListType } from "../../Types/Types";
+export const LOADING_STATUS = "LOADING";
+export const SUCCESS_STATUS = "SUCCESS";
+export const FAILED_STATUS = "FAILED";
+export const IDLE_STATUS = "IDLE";
 
-export const LOADING = "LOADING";
-export const SUCCESS = "SUCCESS";
-export const FAILED = "FAILED";
 
 export interface infoLoginType {
     email: string;
@@ -122,4 +122,8 @@ export interface deletingInfo {
         message: string,
         error: string,
     }
+}
+
+export interface editSlice {
+    isOpenEdit: boolean
 }

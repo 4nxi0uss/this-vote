@@ -1,10 +1,9 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { FAILED, LOADING, registerDataType, registerInfo, SUCCESS } from "../ReduxTypes/reduxTypes";
-
+import { FAILED_STATUS, IDLE_STATUS, LOADING_STATUS, registerDataType, registerInfo, SUCCESS_STATUS } from "../ReduxTypes/reduxTypes";
 
 // Define the initial state using that type
 const initialState: registerInfo = {
-    registerStatus: FAILED,
+    registerStatus: IDLE_STATUS,
     registerInfo: {
         message: "register",
         row: "",
@@ -31,7 +30,6 @@ export const fetchPostRegister = createAsyncThunk("register/postRegister", async
     } catch (error) {
         throw await error
     }
-
 })
 
 export const registerSlice = createSlice({
@@ -41,18 +39,17 @@ export const registerSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(fetchPostRegister.pending, (state) => {
-            state.registerStatus = LOADING
+            state.registerStatus = LOADING_STATUS
         })
         builder.addCase(fetchPostRegister.fulfilled, (state, action: PayloadAction<{ message: string, row: string, error: string }>) => {
             state.registerInfo = action.payload
-            state.registerStatus = SUCCESS
+            state.registerStatus = SUCCESS_STATUS
         })
         builder.addCase(fetchPostRegister.rejected, (state) => {
-            state.registerStatus = FAILED
+            state.registerStatus = FAILED_STATUS
         })
     },
 })
-
 
 // export const { clearStatus, clearInfo } = registerSlice.actions
 

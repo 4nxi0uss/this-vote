@@ -3,7 +3,7 @@ import type { ChangeEvent, FormEvent } from 'react';
 
 import './Login.scss'
 
-import { fetchUsersLogin } from '../../Redux/Slice/accountSlice';
+import { fetchUsersLogin } from '../../Redux/Slice/usersLoginSlice';
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
 import { Navigate } from 'react-router-dom';
 import { fetchPostRegister } from '../../Redux/Slice/registerSlice';
@@ -16,7 +16,7 @@ const Login = () => {
     const [password, setPassword] = useState<string>("1qaz@WSX");
     const [secondPassword, setSecondPassword] = useState<string>("");
 
-    const { infoLogin } = useAppSelector((state) => state.users);
+    const { infoLogin } = useAppSelector((state) => state.usersLogin);
 
     const dispatch = useAppDispatch();
 

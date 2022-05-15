@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Route, Routes } from 'react-router';
 import { Navigate } from 'react-router-dom';
 
@@ -12,7 +11,7 @@ import Polls from '../Polls/Polls';
 
 const MainContent = () => {
 
-    const { infoLogin } = useAppSelector(state => state.users)
+    const { infoLogin } = useAppSelector(state => state.usersLogin)
 
     return (
         <main className='mainContent'>

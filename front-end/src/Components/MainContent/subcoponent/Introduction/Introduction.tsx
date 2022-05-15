@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import './Introduction.scss'
 
 const Introduction = () => {

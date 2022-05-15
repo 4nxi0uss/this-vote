@@ -4,10 +4,14 @@ import type { ChangeEvent, FormEvent, MouseEvent } from 'react';
 import './Account.scss'
 
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
-import { fetchUpdateInfo, fetchGetUserData } from '../../Redux/Slice/accountSlice';
+import { fetchUpdateInfo } from '../../Redux/Slice/userUpdateSlice';
+import { fetchGetUserData } from '../../Redux/Slice/GetUserDataSlice';
 
 const Account = () => {
-    const { infoLogin, infoUpdate, userData, statusUpdateInfo } = useAppSelector(state => state.users)
+
+    const { infoLogin } = useAppSelector(state => state.usersLogin)
+    const { userData } = useAppSelector(state => state.userData)
+    const { statusUpdateInfo } = useAppSelector(state => state.userUpdate)
 
     const betterDate = (date: string) => date.slice(0, 10)
 
@@ -40,15 +44,14 @@ const Account = () => {
         e.preventDefault();
 
         const infoUpdates = { userId: infoLogin.rows[0].user_id, name, surname, dateOfBirth: date };
+
         try {
             dispatch<any>(fetchUpdateInfo(infoUpdates));
-            console.log(46, infoUpdate);
         } catch (error) {
             console.warn(error)
         }
 
         console.log("udalo sie");
-        console.log(52, infoUpdate);
         console.log('status: ', statusUpdateInfo);
     }
 
@@ -85,7 +88,7 @@ const Account = () => {
 
             <h2 className='AcountTitle'> Hello {name} </h2>
 
-            <button disabled={accountStatus === 1 ? true : false} className="AccountActivateBtn" onClick={handleActive} >Activate</button>
+            <button disabled={accountStatus === 1 ? true : false} className="AccountActivateBtn" onClick={handleActive}> Activate</button>
 
             <form className='AccountForm' onSubmit={handleSubmit} method="submit">
 

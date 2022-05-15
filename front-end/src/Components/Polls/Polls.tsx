@@ -16,7 +16,7 @@ let optionsList: optionListType[] = []
 const Polls = () => {
     const dispatch = useAppDispatch();
 
-    const { infoLogin } = useAppSelector(state => state.users)
+    const { infoLogin } = useAppSelector(state => state.usersLogin)
     const { infoGetPolls } = useAppSelector(state => state.getPolls)
 
     const [isShownAdd, setIsShownAdd] = useState<boolean>(false)
@@ -39,10 +39,12 @@ const Polls = () => {
         event.preventDefault();
         dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id))
     }
+    const PollDisplay = () => infoGetPolls.data.map((el: any) => <Poll key={el.number} id={el.id} name={el.name} question={el.question} options={el.options} />)
 
-    useEffect(() => { dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id)) }, [dispatch, infoLogin.rows])
-
-    const PollDisplay = () => infoGetPolls.data.map((el: any) => <Poll key={el.number} id={el.id} name={el.name} question={el.question} options={el.options} />);
+    useEffect(() => { dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id)) }, [dispatch, infoLogin])
+    useEffect(() => {
+        PollDisplay()
+    }, [infoGetPolls])
 
     return (
         <section className='mainPollsSection'>

@@ -13,7 +13,7 @@ import EditPoll from '../EditPoll/EditPoll';
 const Poll = ({ id, name, question, options }: PollProp) => {
 
     const dispatch = useAppDispatch()
-    const { infoLogin } = useAppSelector(state => state.users)
+    const { infoLogin } = useAppSelector(state => state.usersLogin)
     const { infoGetPolls } = useAppSelector(state => state.getPolls)
 
     const [isOpenEdit, setIsShownEdit] = useState<boolean>(false)
@@ -82,11 +82,13 @@ const Poll = ({ id, name, question, options }: PollProp) => {
         return style
     }
 
+    const test = () => infoGetPolls.data.map((el) => EditPoll(id, handleEdit, el.id, el))
     return (
         <section className='pollSection'>
             <button onClick={handlePollDelete}>del</button>
             <button onClick={handleEdit}>Edit</button>
             {EditPoll(isOpenEdit, handleEdit, id)}
+            {/* {test} */}
             <h2>{name}</h2>
             <h3>{question}</h3>
             <div className='firstPart' style={({ background: circleStyle() })}></div>

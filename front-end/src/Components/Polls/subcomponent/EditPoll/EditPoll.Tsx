@@ -1,21 +1,32 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import type { ChangeEvent } from "react"
 
 import "./EditPoll.scss"
 import Modal from '../../../Modal/Modal';
 import { optionListType } from "../../../../Types/Types";
+import { useAppSelector } from "../../../../Redux/Hooks/hooks";
 
 let optionsList: optionListType[] = []
 
-const EditPoll = (isOpen: any, edit: any, id: any) => {
+const EditPoll = (isOpen?: any, edit?: any, id?: any, pro?: any) => {
+    const { infoGetPolls } = useAppSelector(state => state.getPolls)
 
     // const [isShown, setIsShown] = useState<boolean>(true)
     const [optionText, setOptionText] = useState<string>();
-    const [nameText, setNameText] = useState<string>();
-    const [questionText, setQuestionText] = useState<string>();
+    const [nameText, setNameText] = useState<string>(infoGetPolls?.data[id]?.name);
+    const [questionText, setQuestionText] = useState<string>(infoGetPolls?.data[id]?.question);
     const [optionColor, setOptionColor] = useState<string>("#000000");
-    const [random, setRandom] = useState<number>()
+    const [random, setRandom] = useState<number>(infoGetPolls?.data[id]?.number)
+
+    // console.log(infoGetPolls, id)
+    console.log(edit)
+    console.log(pro)
+    // useMemo(() => {
+    //     setNameText(infoGetPolls?.data[id]?.name)
+    //     setQuestionText(infoGetPolls?.data[id]?.question);
+    //     setRandom(infoGetPolls?.data[id]?.number);
+    // }, [])
 
     const handleNameText = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()

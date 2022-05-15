@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
-import usersLoginSlice from '../Slice/accountSlice'
+import usersLoginSlice from '../Slice/usersLoginSlice'
 import thunkMiddleware from 'redux-thunk';
 import postPollsSlice from '../Slice/postPollsSlice';
 import registerSlice from '../Slice/registerSlice';
@@ -7,16 +7,20 @@ import usersGetPolls from '../Slice/getPollSlice';
 import usersPutPoll from '../Slice/voteSlice';
 import deletePoll from '../Slice/deletingPollSlice';
 import editPollSlice from '../Slice/editPollSlice';
+import GetUserDataSlice from '../Slice/GetUserDataSlice';
+import usersUpdateSlice from '../Slice/userUpdateSlice';
 
 export const store = configureStore({
   reducer: {
-    users: usersLoginSlice,
-    polls: postPollsSlice,
+    usersLogin: usersLoginSlice,
+    userData: GetUserDataSlice,
+    userUpdate: usersUpdateSlice,
+    registerUser: registerSlice,
+    addPolls: postPollsSlice,
     getPolls: usersGetPolls,
     putPoll: usersPutPoll,
-    register: registerSlice,
-    delete: deletePoll,
-    edit: editPollSlice,
+    deletePoll: deletePoll,
+    editPoll: editPollSlice,
   },
   middleware: [thunkMiddleware]
 });

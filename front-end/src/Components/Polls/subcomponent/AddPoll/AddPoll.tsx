@@ -15,7 +15,7 @@ let optionsList: optionListType[] = []
 
 const AddPoll = (show: any, modalFun: any, random: number) => {
 
-    const { infoLogin } = useAppSelector(state => state.users)
+    const { infoLogin } = useAppSelector(state => state.usersLogin)
 
     const [optionText, setOptionText] = useState<string>("");
     const [nameText, setNameText] = useState<string>("");

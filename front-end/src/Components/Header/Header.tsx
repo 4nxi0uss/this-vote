@@ -3,12 +3,12 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
-import { clearInfo, clearStatus } from '../../Redux/Slice/accountSlice';
+import { clearInfo, clearStatus } from '../../Redux/Slice/usersLoginSlice';
 
 import './Header.scss'
 const Header = () => {
     const dispatch = useAppDispatch();
-    const { infoLogin } = useAppSelector(state => state.users)
+    const { infoLogin } = useAppSelector(state => state.usersLogin)
 
     const handleLogout = () => {
         window.localStorage.clear();

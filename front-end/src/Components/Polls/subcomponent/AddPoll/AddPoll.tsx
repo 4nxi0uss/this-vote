@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import type { ChangeEvent, MouseEvent } from "react"
 import Modal from '../../../Modal/Modal';
 
-import "./AddPoll.scss"
+import style from "./AddPoll.module.scss"
+import block from 'bem-css-modules'
 
 import { ObjectPushType, optionListType } from '../../../../Types/Types';
 import { pollsData } from '../../../../Redux/ReduxTypes/reduxTypes';
@@ -10,6 +11,7 @@ import { pollsData } from '../../../../Redux/ReduxTypes/reduxTypes';
 import { fetchPostPolls } from '../../../../Redux/Slice/postPollsSlice';
 import { useAppDispatch, useAppSelector } from '../../../../Redux/Hooks/hooks';
 
+const b = block(style)
 
 let optionsList: optionListType[] = []
 
@@ -23,7 +25,6 @@ const AddPoll = (show: any, modalFun: any, random: number) => {
     const [optionColor, setOptionColor] = useState<string>("#000000");
 
     const dispatch = useAppDispatch();
-
 
     const handleNameText = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
@@ -80,19 +81,19 @@ const AddPoll = (show: any, modalFun: any, random: number) => {
         }
     }
 
-    const optionShow = () => optionsList.map((option: any, index: number) => <p className='optionShow' key={index}>{option?.name} <span className='optionDotColor' style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
+    const optionShow = () => optionsList.map((option: any, index: number) => <p className={b('option')} key={index}>{option?.name} <span className={b('color')} style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
 
     return (
         <>
             <Modal isOpen={show} >
-                <div className='modalAddPoll'>
-                    <form className='modalFormAddPoll'>
+                <div className={b()}>
+                    <form className={b('form')}>
                         <label>Name:</label>
                         <input type="text" onChange={handleNameText} value={nameText} />
                         <label>Question:</label>
                         <input type="text" onChange={handleQuestionText} value={questionText} />
-                        <label className='numberLabel'>Number:</label>
-                        <input className='numberInput' type="number" readOnly disabled value={random} />
+                        <label >Number:</label>
+                        <input type="number" readOnly disabled value={random} />
                         <label>Option to choose in poll (max 6):</label>
                         <input type="text" value={optionText} onChange={handleOptionText} />
                         <input type="color" onChange={handleOptionColor} value={optionColor} />
@@ -100,8 +101,8 @@ const AddPoll = (show: any, modalFun: any, random: number) => {
                         {optionShow()}
                     </form>
                     <div>
-                        <button className='btnModalClose' onClick={() => { modalFun() }}>Close</button>
-                        <button className='btnModalClose' onClick={handleSendPoll}>Submmit</button>
+                        <button className={b('btn')} onClick={() => { modalFun() }}>Close</button>
+                        <button className={b('btn')} onClick={handleSendPoll}>Submmit</button>
                     </div>
                 </div>
             </Modal>

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import type { MouseEvent } from "react"
+import type { MouseEvent } from "react";
 
-import './Polls.scss'
+import style from './Polls.module.scss';
+import block from 'bem-css-modules';
 
 import Poll from './subcomponent/Poll/Poll';
 
@@ -10,6 +11,8 @@ import { ObjectPushType, optionListType } from '../../Types/Types';
 import { fetchGetPolls } from '../../Redux/Slice/getPollSlice';
 
 import AddPoll from './subcomponent/AddPoll/AddPoll';
+
+const b = block(style);
 
 let optionsList: optionListType[] = []
 
@@ -47,10 +50,10 @@ const Polls = () => {
     }, [infoGetPolls])
 
     return (
-        <section className='mainPollsSection'>
-            <button className='addPoll' onClick={handleModal}>Add poll</button>
+        <section className={b()}>
+            <button className={b('add')} onClick={handleModal}>Add poll</button>
             {AddPoll(isShownAdd, handleModal, randomNumber)}
-            <button className='addPoll' onClick={handleGetPoll}>test pobierania polls</button>
+            <button className={b('add')} onClick={handleGetPoll}>test pobierania polls</button>
 
             {PollDisplay()}
         </section>

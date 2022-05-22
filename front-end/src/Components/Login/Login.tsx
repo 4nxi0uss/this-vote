@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import type { ChangeEvent, FormEvent } from 'react';
 
-import './Login.scss'
+import style from './Login.module.scss'
+import block from 'bem-css-modules'
 
 import { fetchUsersLogin } from '../../Redux/Slice/usersLoginSlice';
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
 import { Navigate } from 'react-router-dom';
 import { fetchPostRegister } from '../../Redux/Slice/registerSlice';
 
+const b = block(style)
 
 const Login = () => {
 
@@ -87,15 +89,15 @@ const Login = () => {
     }
 
     return (
-        <section className='loginSection'>
-            <h2 className='loginTitle'>{!toggleRegistry ? "Sing in" : "Register"}</h2>
-            <form onSubmit={toggleRegistry ? handleRegistry : handleLogin} className='loginForm'>
-                <input required type="email" placeholder='e-mail' onChange={handleEmail} value={email} />
-                <input required type="password" placeholder='password' onChange={handlePassword} value={password} />
+        <section className={b()}>
+            <h2 className={b('title')}>{!toggleRegistry ? "Sing in" : "Register"}</h2>
+            <form onSubmit={toggleRegistry ? handleRegistry : handleLogin} className={b('form')}>
+                <input required type="email" placeholder='e-mail' onChange={handleEmail} value={email} className={b('input')} />
+                <input required type="password" placeholder='password' onChange={handlePassword} value={password} className={b('input')} />
                 {!toggleRegistry ? null : <input type='password' placeholder='repeat password' onChange={handleSecondPassword} value={secondPassword} />}
-                <button className='loginBtn' type='submit'>{toggleRegistry ? "Register" : "Log in"}</button>
+                <button className={b('login-btn')} type='submit'>{toggleRegistry ? "Register" : "Log in"}</button>
             </form>
-            <p className="toRegistryParagraph">{toggleRegistry ? "If you have account, please " : "If you don't have account, please"} <button className='toRegistryBtn' onClick={handleToggleRegistry}> {!toggleRegistry ? "register now." : "log into it here."} </button></p>
+            <p className={b('paragraph')}>{toggleRegistry ? "If you have account, please " : "If you don't have account, please"} <button className={b('paragraph', { btn: true })} onClick={handleToggleRegistry}> {!toggleRegistry ? "register now." : "log into it here."} </button></p>
             {infoLogin.login ? <Navigate to="/Account" /> : null}
         </section>
     )

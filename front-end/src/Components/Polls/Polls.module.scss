@@ -1,10 +1,10 @@
-.mainPollsSection {
+.section-polls {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    .addPoll {
+    &__add {
         padding: .5vw;
     }
 }

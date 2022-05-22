@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
-import './Poll.scss'
+import style from './Poll.module.scss'
+import block from 'bem-css-modules'
 
 import { PollProp, VoteType } from '../../../../Types/Types';
 
@@ -9,6 +10,8 @@ import { fetchPutPolls } from '../../../../Redux/Slice/voteSlice';
 import { fetchGetPolls } from '../../../../Redux/Slice/getPollSlice';
 import { deletePoll } from '../../../../Redux/Slice/deletingPollSlice';
 import EditPoll from '../EditPoll/EditPoll';
+
+const b = block(style);
 
 const Poll = ({ id, name, question, options }: PollProp) => {
 
@@ -84,15 +87,15 @@ const Poll = ({ id, name, question, options }: PollProp) => {
 
     const test = () => infoGetPolls.data.map((el) => EditPoll(id, handleEdit, el.id, el))
     return (
-        <section className='pollSection'>
+        <section className={b()}>
             <button onClick={handlePollDelete}>del</button>
             <button onClick={handleEdit}>Edit</button>
             {EditPoll(isOpenEdit, handleEdit, id)}
             {/* {test} */}
             <h2>{name}</h2>
             <h3>{question}</h3>
-            <div className='firstPart' style={({ background: circleStyle() })}></div>
-            <div className='secondPart'>
+            <div className={b('circle-chart')} style={({ background: circleStyle() })}></div>
+            <div className={b('btns')}>
                 {buttonOfChoose()}
             </div>
             <p>{id}</p>

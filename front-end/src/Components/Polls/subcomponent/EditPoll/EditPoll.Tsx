@@ -1,13 +1,19 @@
 import { useMemo, useState } from "react";
 
-import type { ChangeEvent } from "react"
+import type { ChangeEvent } from "react";
 
-import "./EditPoll.scss"
+import style from "./EditPoll.module.scss";
+import block from 'bem-css-modules';
+
 import Modal from '../../../Modal/Modal';
+
 import { optionListType } from "../../../../Types/Types";
+
 import { useAppSelector } from "../../../../Redux/Hooks/hooks";
 
-let optionsList: optionListType[] = []
+const b = block(style);
+
+let optionsList: optionListType[] = [];
 
 const EditPoll = (isOpen?: any, edit?: any, id?: any, pro?: any) => {
     const { infoGetPolls } = useAppSelector(state => state.getPolls)
@@ -20,8 +26,8 @@ const EditPoll = (isOpen?: any, edit?: any, id?: any, pro?: any) => {
     const [random, setRandom] = useState<number>(infoGetPolls?.data[id]?.number)
 
     // console.log(infoGetPolls, id)
-    console.log(edit)
-    console.log(pro)
+    // console.log(edit)
+    // console.log(pro)
     // useMemo(() => {
     //     setNameText(infoGetPolls?.data[id]?.name)
     //     setQuestionText(infoGetPolls?.data[id]?.question);
@@ -48,18 +54,18 @@ const EditPoll = (isOpen?: any, edit?: any, id?: any, pro?: any) => {
         setOptionColor(event.target.value)
     }
 
-    const optionShow = () => optionsList.map((option: any, index: number) => <p className='optionShow' key={index}>{option?.name} <span className='optionDotColor' style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
+    const optionShow = () => optionsList.map((option: any, index: number) => <p className={b('option')} key={index}>{option?.name} <span className={b('color')} style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
 
     return (
         <Modal isOpen={isOpen}  >
-            <div className='modalEditPoll'>
-                <form className='modalFormEditPoll'>
+            <div className={b()}>
+                <form className={b('form')}>
                     <label>Name:</label>
                     <input type="text" onChange={handleNameText} value={nameText} />
                     <label>Question:</label>
                     <input type="text" onChange={handleQuestionText} value={questionText} />
-                    <label className='numberLabel'>Number:</label>
-                    <input className='numberInput' type="number" readOnly disabled value={random} />
+                    <label >Number:</label>
+                    <input type="number" readOnly disabled value={random} />
                     <label>Option to choose in poll (max 6):</label>
                     <input type="text" value={optionText} onChange={handleOptionText} />
                     <input type="color" onChange={handleOptionColor} value={optionColor} />
@@ -67,7 +73,7 @@ const EditPoll = (isOpen?: any, edit?: any, id?: any, pro?: any) => {
                     {optionShow()}
                 </form>
                 <div>
-                    <button className='btnModalClose' onClick={(e) => edit(e)}>Close</button>
+                    <button className={b('btn')} onClick={(e) => edit(e)}>Close</button>
                     {/* <button className='btnModalClose' onClick={handleSendPoll}>Submmit</button> */}
                 </div>
             </div>

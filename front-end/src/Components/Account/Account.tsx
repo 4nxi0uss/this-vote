@@ -1,11 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { ChangeEvent, FormEvent, MouseEvent } from 'react';
 
-import './Account.scss'
+import style from './Account.module.scss'
+import block from 'bem-css-modules'
 
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
 import { fetchUpdateInfo } from '../../Redux/Slice/userUpdateSlice';
 import { fetchGetUserData } from '../../Redux/Slice/GetUserDataSlice';
+
+const b = block(style);
 
 const Account = () => {
 
@@ -84,21 +87,21 @@ const Account = () => {
     }, [userData])
 
     return (
-        <section className="AccountSection">
+        <section className={b()}>
 
-            <h2 className='AcountTitle'> Hello {name} </h2>
+            <h2 className={b('title')}> Hello {name} </h2>
 
-            <button disabled={accountStatus === 1 ? true : false} className="AccountActivateBtn" onClick={handleActive}> Activate</button>
+            <button disabled={accountStatus === 1 ? true : false} className={b('activate-btn')} onClick={handleActive}> Activate</button>
 
-            <form className='AccountForm' onSubmit={handleSubmit} method="submit">
+            <form className={b('form')} onSubmit={handleSubmit} method="submit">
 
-                <label className="labelBefore">Name:</label>
+                <label >Name:</label>
                 <input type="text" required placeholder="Name" onChange={handleName} value={name} />
 
-                <label className="labelBefore">Surname:</label>
+                <label >Surname:</label>
                 <input type="text" required placeholder="Surname" onChange={handleSurname} value={surname} />
 
-                <label className="labelBefore">Date of birth:</label>
+                <label >Date of birth:</label>
                 <input type="date" max={`${TodayDate.getFullYear()}-${TodayDate.getMonth() + 1}-${TodayDate.getDate()}`} onChange={handleDate} value={date} />
 
                 <label >Type of account:</label>
@@ -107,7 +110,7 @@ const Account = () => {
                 <label >Account status:</label>
                 <input type="text" readOnly disabled value={accountStatus} />
 
-                <button className="AccountSubmitBtn" type="submit">Save</button>
+                <button className={b('submit-btn')} type="submit">Save</button>
             </form>
         </section>
     )

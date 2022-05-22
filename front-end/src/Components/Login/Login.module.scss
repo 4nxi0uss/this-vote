@@ -1,0 +1,65 @@
+// @media screen and (min-width: 1440px) {
+.login-section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__title {
+        margin: 10px 0px;
+        font-size: 2vw;
+
+    }
+
+    &__input {
+        margin-bottom: 0.5vw;
+        font-size: 1vw;
+        padding: 0.2vw;
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        transition: 300ms;
+
+    }
+
+    &__login-btn {
+        font-size: 1vw;
+        padding: 0.2vw;
+        background-color: rgba(0, 0, 255, 0.219);
+        border: none;
+        transition: 300ms;
+
+        &:hover {
+            font-size: 1.2vw;
+            color: rgba(0, 0, 255, 0.603);
+            background-color: white;
+            border: 1px solid rgba(0, 0, 255, 0.603);
+        }
+    }
+
+    &__paragraph {
+        font-size: 0.8vw;
+        margin-top: 1vw;
+
+        &_btn {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            color: rgba(0, 0, 255, 0.603);
+            transition: 300ms;
+
+            &:hover {
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                color: rgba(0, 0, 255, 0.603);
+                text-decoration: underline;
+                font-size: 0.85vw;
+            }
+        }
+    }
+}
+
+// }

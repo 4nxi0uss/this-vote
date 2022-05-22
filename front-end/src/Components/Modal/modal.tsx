@@ -1,14 +1,17 @@
 import ReactDOM from 'react-dom';
 
-import './Modal.scss'
+import style from './Modal.module.scss'
+import block from 'bem-css-modules'
 
 import { ModalProp } from '../../Types/Types';
+
+const b = block(style);
 
 const Modal = ({ children, isOpen }: ModalProp) => {
 
     return ReactDOM.createPortal((
-        <dialog className='modalBackground' open={isOpen} >
-            <div className='modalContent'>
+        <dialog className={b()} open={isOpen} >
+            <div className={b('content')}>
                 {children}
             </div>
         </dialog>

@@ -1,0 +1,10 @@
+.section-polls {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__add {
+        padding: .5vw;
+    }
+}

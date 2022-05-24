@@ -1,0 +1,42 @@
+.modal-add-poll {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    padding: 2vw;
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &__btn {
+        margin: .5vw;
+        padding: .5vw;
+        background-color: rgb(100, 100, 255);
+        color: white;
+        border: none;
+
+        &:hover {
+            padding: .5vw;
+            background-color: rgb(131, 131, 255);
+            color: rgb(14, 14, 14);
+        }
+    }
+
+    &__option {
+        display: flex;
+        flex-direction: row;
+        margin: .5vw 0;
+        justify-content: space-between;
+    }
+
+    &__color {
+        position: relative;
+        border-radius: 100%;
+        border: 5px solid;
+        height: 1vw;
+        width: 1vw;
+    }
+}

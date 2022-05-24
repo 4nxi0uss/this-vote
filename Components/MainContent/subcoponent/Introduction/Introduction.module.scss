@@ -1,0 +1,17 @@
+// @media screen and (min-width: 1440px) {
+.introduction-section {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    margin-top: 1vw;
+
+    &__title {
+        font-size: 3vw;
+    }
+
+    &__paragraph {
+        font-size: 1.5vw;
+    }
+}
+
+// }

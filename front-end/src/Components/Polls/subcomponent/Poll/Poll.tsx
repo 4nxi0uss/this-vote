@@ -85,8 +85,6 @@ const Poll = ({ id, name, question, options }: PollProp) => {
         return style
     }
 
-// console.log("to",infoGetPolls.data)
-
     const test = () => infoGetPolls.data.map((el) => id=== el.id && < EditPoll key={el.id} isOpen={isOpenEdit}  edit={handleEdit} pro={el}/>)
     return (
         <section className={b()}>

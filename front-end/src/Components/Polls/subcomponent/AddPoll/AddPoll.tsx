@@ -15,7 +15,7 @@ const b = block(style)
 
 let optionsList: optionListType[] = []
 
-const AddPoll = (show: any, modalFun: any, random: number) => {
+const AddPoll = (show: boolean, modalFun: any, random: number) => {
 
     const { infoLogin } = useAppSelector(state => state.usersLogin)
 

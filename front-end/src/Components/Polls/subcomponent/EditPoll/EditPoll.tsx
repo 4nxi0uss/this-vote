@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 
 import type { ChangeEvent } from "react";
 
@@ -15,24 +15,28 @@ const b = block(style);
 
 let optionsList: optionListType[] = [];
 
-const EditPoll = (isOpen?: any, edit?: any, id?: any, pro?: any) => {
+interface editt {
+    isOpen: boolean, edit: any,  pro: any
+}
+
+const EditPoll = ({isOpen, edit, pro}:editt) => {
     const { infoGetPolls } = useAppSelector(state => state.getPolls)
 
     // const [isShown, setIsShown] = useState<boolean>(true)
     const [optionText, setOptionText] = useState<string>();
-    const [nameText, setNameText] = useState<string>(infoGetPolls?.data[id]?.name);
-    const [questionText, setQuestionText] = useState<string>(infoGetPolls?.data[id]?.question);
+    const [nameText, setNameText] = useState<string>(pro?.name );
+    const [questionText, setQuestionText] = useState<string>(pro?.question);
     const [optionColor, setOptionColor] = useState<string>("#000000");
-    const [random, setRandom] = useState<number>(infoGetPolls?.data[id]?.number)
+    const [random, setRandom] = useState<number>(pro?.number)
 
-    // console.log(infoGetPolls, id)
-    // console.log(edit)
-    // console.log(pro)
-    // useMemo(() => {
-    //     setNameText(infoGetPolls?.data[id]?.name)
-    //     setQuestionText(infoGetPolls?.data[id]?.question);
-    //     setRandom(infoGetPolls?.data[id]?.number);
-    // }, [])
+// console.log(pro.options)
+
+try {
+    const ok = JSON.parse(pro.options)
+    console.log(ok)
+} catch (error) {
+    
+}
 
     const handleNameText = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
@@ -53,6 +57,7 @@ const EditPoll = (isOpen?: any, edit?: any, id?: any, pro?: any) => {
         event.preventDefault()
         setOptionColor(event.target.value)
     }
+    
 
     const optionShow = () => optionsList.map((option: any, index: number) => <p className={b('option')} key={index}>{option?.name} <span className={b('color')} style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
 

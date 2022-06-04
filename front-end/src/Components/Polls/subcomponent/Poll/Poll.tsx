@@ -85,13 +85,12 @@ const Poll = ({ id, name, question, options }: PollProp) => {
         return style
     }
 
-    const test = () => infoGetPolls.data.map((el) => EditPoll(id, handleEdit, el.id, el))
+    const test = () => infoGetPolls.data.map((el) => id=== el.id && < EditPoll key={el.id} isOpen={isOpenEdit}  edit={handleEdit} pro={el}/>)
     return (
         <section className={b()}>
             <button onClick={handlePollDelete}>del</button>
             <button onClick={handleEdit}>Edit</button>
-            {EditPoll(isOpenEdit, handleEdit, id)}
-            {/* {test} */}
+            {test()}
             <h2>{name}</h2>
             <h3>{question}</h3>
             <div className={b('circle-chart')} style={({ background: circleStyle() })}></div>

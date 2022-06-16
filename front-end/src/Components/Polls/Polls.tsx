@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { MouseEvent } from "react";
 
 import style from './Polls.module.scss';
@@ -6,21 +6,25 @@ import block from 'bem-css-modules';
 
 import Poll from './subcomponent/Poll/Poll';
 
-import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
 import { ObjectPushType, optionListType } from '../../Types/Types';
-import { fetchGetPolls } from '../../Redux/Slice/getPollSlice';
+
+import { pollApi, useGetPollsQuery } from '../../Redux/Services/PollApi';
 
 import AddPoll from './subcomponent/AddPoll/AddPoll';
+import { useUserLoginMutation } from '../../Redux/Services/UserApi';
 
 const b = block(style);
 
 let optionsList: optionListType[] = []
 
 const Polls = () => {
-    const dispatch = useAppDispatch();
+    const [loginApi, { data: dataLogin, isLoading: isLoging }] = useUserLoginMutation({
+        fixedCacheKey: "login"
+    });
 
-    const { infoLogin } = useAppSelector(state => state.usersLogin)
-    const { infoGetPolls } = useAppSelector(state => state.getPolls)
+    const { data: dataGetPollsApi, isLoading } = useGetPollsQuery(!isLoging && dataLogin?.rows[0]?.user_id);
+
+    const { refetch } = pollApi.endpoints.getPolls.useQuerySubscription(dataLogin?.rows[0]?.user_id)
 
     const [isShownAdd, setIsShownAdd] = useState<boolean>(false)
     const [randomNumber, setRandomNumber] = useState<number>(0);
@@ -40,14 +44,10 @@ const Polls = () => {
 
     const handleGetPoll = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
-        dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id))
+        refetch()
     }
-    const PollDisplay = () => infoGetPolls.data.map((el: any) => <Poll key={el.number} id={el.id} name={el.name} question={el.question} options={el.options} />)
 
-    useEffect(() => { dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id)) }, [dispatch, infoLogin])
-    useEffect(() => {
-        PollDisplay()
-    }, [infoGetPolls])
+    const PollDisplay = () => !isLoading && dataGetPollsApi.data.map((el: any) => <Poll key={el.number} id={el.id} name={el.name} question={el.question} options={el.options} />)
 
     return (
         <section className={b()}>

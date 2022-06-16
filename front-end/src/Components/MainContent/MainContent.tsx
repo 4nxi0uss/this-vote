@@ -9,21 +9,23 @@ import Login from '../Login/Login';
 import Account from '../Account/Account';
 import Polls from '../Polls/Polls';
 
-import { useAppSelector } from '../../Redux/Hooks/hooks';
+import { useUserLoginMutation } from '../../Redux/Services/UserApi';
 
 const b = block(style)
 
 const MainContent = () => {
 
-    const { infoLogin } = useAppSelector(state => state.usersLogin)
+    const [loginApi, { data: dataLogin, isLoading }] = useUserLoginMutation({
+        fixedCacheKey: "login"
+    });
 
     return (
         <main className={b()}>
             <Routes>
                 <Route path='/' element={<Introduction />} />
                 <Route path='/Login' element={<Login />} />
-                {<Route path='/Account' element={infoLogin.login ? <Account /> : <Navigate to='/' />} />}
-                {<Route path='/Polls' element={infoLogin.login ? <Polls /> : <Navigate to='/' />} />}
+                {<Route path='/Account' element={!isLoading && dataLogin?.login ? <Account /> : <Navigate to='/' />} />}
+                {<Route path='/Polls' element={!isLoading && dataLogin?.login ? <Polls /> : <Navigate to='/' />} />}
             </Routes>
 
         </main>

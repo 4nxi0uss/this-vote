@@ -5,34 +5,34 @@ import block from 'bem-css-modules'
 
 import { PollProp, VoteType } from '../../../../Types/Types';
 
-import { useAppDispatch, useAppSelector } from '../../../../Redux/Hooks/hooks';
-import { fetchPutPolls } from '../../../../Redux/Slice/voteSlice';
-import { fetchGetPolls } from '../../../../Redux/Slice/getPollSlice';
-import { deletePoll } from '../../../../Redux/Slice/deletingPollSlice';
+import { useDeletePollMutation, useGetPollsQuery, useUpdatePollValueMutation } from '../../../../Redux/Services/PollApi';
+
 import EditPoll from '../EditPoll/EditPoll';
+import { useUserLoginMutation } from '../../../../Redux/Services/UserApi';
 
 const b = block(style);
 
 const Poll = ({ id, name, question, options }: PollProp) => {
 
-    const dispatch = useAppDispatch()
-    const { infoLogin } = useAppSelector(state => state.usersLogin)
-    const { infoGetPolls } = useAppSelector(state => state.getPolls)
+    const [loginApi, { data: dataLogin, isLoading: isLoging }] = useUserLoginMutation({
+        fixedCacheKey: "login"
+    });
+
+    const { data: getPollsData, error, isLoading } = useGetPollsQuery(!isLoging && dataLogin?.rows[0].user_id)
+
+    const [updatePollOptionValueApi, { isLoading: isUpdating }] = useUpdatePollValueMutation()
+    const [deletePoolApi, { isLoading: isDeleting }] = useDeletePollMutation()
 
     const [isOpenEdit, setIsShownEdit] = useState<boolean>(false)
 
     let optionJsonParse: object = JSON.parse(options)
     const optionJsonParseValuses = Object.values(optionJsonParse)
 
-    const handleRefresh = () => {
-        dispatch<any>(fetchGetPolls(infoLogin.rows[0].user_id));
-    }
-
     const handlePollDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
 
-        const delData = { creatorId: String(infoLogin.rows[0].user_id), id: id }
+        const delData = { creatorId: String(!isLoging && dataLogin?.rows[0].user_id), id: id }
         console.log(id)
-        dispatch<any>(deletePoll(delData))
+        deletePoolApi(delData)
     }
 
     const handleBtnFunction = (event: any, vote?: any, index?: number) => {
@@ -40,8 +40,7 @@ const Poll = ({ id, name, question, options }: PollProp) => {
 
         const putOption = { id: Number(id), optionId: vote.id }
 
-        dispatch<any>(fetchPutPolls(putOption));
-        handleRefresh()
+        updatePollOptionValueApi(putOption)
     }
 
     const handleEdit = (event: any) => {
@@ -85,7 +84,7 @@ const Poll = ({ id, name, question, options }: PollProp) => {
         return style
     }
 
-    const test = () => infoGetPolls.data.map((el) => id=== el.id && < EditPoll key={el.id} isOpen={isOpenEdit}  edit={handleEdit} pro={el}/>)
+    const test = () => !isLoading && getPollsData.data.map((el: any) => id === el.id && < EditPoll key={el.id} isOpen={isOpenEdit} edit={handleEdit} pro={el} />)
     return (
         <section className={b()}>
             <button onClick={handlePollDelete}>del</button>

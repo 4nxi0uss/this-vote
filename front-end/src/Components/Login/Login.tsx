@@ -4,10 +4,10 @@ import type { ChangeEvent, FormEvent } from 'react';
 import style from './Login.module.scss'
 import block from 'bem-css-modules'
 
-import { fetchUsersLogin } from '../../Redux/Slice/usersLoginSlice';
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
 import { Navigate } from 'react-router-dom';
 import { fetchPostRegister } from '../../Redux/Slice/registerSlice';
+import { useUserLoginMutation } from '../../Redux/Services/UserApi';
 
 const b = block(style)
 
@@ -18,7 +18,9 @@ const Login = () => {
     const [password, setPassword] = useState<string>("1qaz@WSX");
     const [secondPassword, setSecondPassword] = useState<string>("");
 
-    const { infoLogin } = useAppSelector((state) => state.usersLogin);
+    const [loginApi, { data: dataLogin, isLoading }] = useUserLoginMutation({
+        fixedCacheKey: "login"
+    });
 
     const dispatch = useAppDispatch();
 
@@ -45,8 +47,7 @@ const Login = () => {
                 email,
                 password
             }
-            dispatch<any>(fetchUsersLogin(userLoginData))
-
+            loginApi(userLoginData)
             console.log('zalogowany')
             setEmail('');
             setPassword('');
@@ -98,7 +99,7 @@ const Login = () => {
                 <button className={b('login-btn')} type='submit'>{toggleRegistry ? "Register" : "Log in"}</button>
             </form>
             <p className={b('paragraph')}>{toggleRegistry ? "If you have account, please " : "If you don't have account, please"} <button className={b('paragraph', { btn: true })} onClick={handleToggleRegistry}> {!toggleRegistry ? "register now." : "log into it here."} </button></p>
-            {infoLogin.login ? <Navigate to="/Account" /> : null}
+            {(!isLoading && dataLogin?.login) ? <Navigate to="/Account" /> : null}
         </section>
     )
 }

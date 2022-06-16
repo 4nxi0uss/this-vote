@@ -1,6 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
 import usersLoginSlice from '../Slice/usersLoginSlice'
-import thunkMiddleware from 'redux-thunk';
 import postPollsSlice from '../Slice/postPollsSlice';
 import registerSlice from '../Slice/registerSlice';
 import usersGetPolls from '../Slice/getPollSlice';
@@ -9,6 +8,9 @@ import deletePoll from '../Slice/deletingPollSlice';
 import editPollSlice from '../Slice/editPollSlice';
 import GetUserDataSlice from '../Slice/GetUserDataSlice';
 import usersUpdateSlice from '../Slice/userUpdateSlice';
+import { pollApi } from '../Services/PollApi';
+import { setupListeners } from '@reduxjs/toolkit/dist/query';
+import { userApi } from '../Services/UserApi';
 
 export const store = configureStore({
   reducer: {
@@ -21,10 +23,19 @@ export const store = configureStore({
     putPoll: usersPutPoll,
     deletePoll: deletePoll,
     editPoll: editPollSlice,
+    [pollApi.reducerPath]: pollApi.reducer,
+    [userApi.reducerPath]: userApi.reducer,
   },
-  middleware: [thunkMiddleware]
-});
 
+  middleware: (getDefaultMiddleware) => (
+    getDefaultMiddleware().concat(
+      pollApi.middleware,
+      userApi.middleware
+    )
+  )
+
+});
+setupListeners(store.dispatch);
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>
 

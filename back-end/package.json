@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node .",
     "runer": "node .\\build\\server.js",
-    "start:dev": "nodenv ."
+    "start:dev": "nodenv .",
+    "nodemonStart" : " nodemon -r ./.env ./server.js"
   },
   "author": "Artur",
   "license": "MIT",

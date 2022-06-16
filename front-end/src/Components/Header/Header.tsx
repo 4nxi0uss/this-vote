@@ -1,23 +1,21 @@
 import { Link } from 'react-router-dom';
 
-import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
-import { clearInfo, clearStatus } from '../../Redux/Slice/usersLoginSlice';
 
 import style from './Header.module.scss'
 import block from 'bem-css-modules'
+import { useUserLoginMutation } from '../../Redux/Services/UserApi';
 
 const b = block(style);
 
 const Header = () => {
-    const dispatch = useAppDispatch();
-    const { infoLogin } = useAppSelector(state => state.usersLogin)
+    const [loginApi, { data: dataLogin, isLoading }] = useUserLoginMutation({
+        fixedCacheKey: "login"
+    });
 
     const handleLogout = () => {
         window.localStorage.clear();
         window.location.reload();
         window.location.replace('/');
-        dispatch(clearStatus);
-        dispatch(clearInfo);
     }
 
     return (
@@ -27,13 +25,13 @@ const Header = () => {
                 <Link to='/' className={b('nav-link')}>
                     Home
                 </Link>
-                {infoLogin.login ? <Link to='/Account' className={b('nav-link')}>
+                {!isLoading && dataLogin?.login ? <Link to='/Account' className={b('nav-link')}>
                     Account
                 </Link> : null}
-                {infoLogin.login ? <Link to='/Polls' className={b('nav-link')}>
+                {!isLoading && dataLogin?.login ? <Link to='/Polls' className={b('nav-link')}>
                     Polls
                 </Link> : null}
-                {!infoLogin.login ? <Link to='/login' className={b('nav-link')}>
+                {!isLoading && !dataLogin?.login ? <Link to='/login' className={b('nav-link')}>
                     Login/Registry
                 </Link> : <button className={b('nav-link')} onClick={handleLogout}>Logout</button>}
             </nav>

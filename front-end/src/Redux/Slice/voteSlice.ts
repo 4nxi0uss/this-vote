@@ -12,7 +12,7 @@ const initialState: putPollsInfo = {
 
 export const fetchPutPolls = createAsyncThunk("putPoll/putPoll", async (putOptions: putOptionType) => {
 
-    const { id, options, optionId } = putOptions;
+    const { id, optionId } = putOptions;
 
     try {
         const data = await fetch(`http://localhost:3022/users/putPoll`, {
@@ -22,8 +22,7 @@ export const fetchPutPolls = createAsyncThunk("putPoll/putPoll", async (putOptio
             },
             body: JSON.stringify({
                 id: id,
-                option: options,
-                optionID: optionId
+                optionId: optionId
             }),
             mode: "cors",
             cache: "default",

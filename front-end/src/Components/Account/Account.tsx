@@ -7,12 +7,16 @@ import block from 'bem-css-modules'
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
 import { fetchUpdateInfo } from '../../Redux/Slice/userUpdateSlice';
 import { fetchGetUserData } from '../../Redux/Slice/GetUserDataSlice';
+import { useUserLoginMutation } from '../../Redux/Services/UserApi';
 
 const b = block(style);
 
 const Account = () => {
 
-    const { infoLogin } = useAppSelector(state => state.usersLogin)
+    const [loginApi, { data: dataLogin, isLoading }] = useUserLoginMutation({
+        fixedCacheKey: "login"
+    });
+
     const { userData } = useAppSelector(state => state.userData)
     const { statusUpdateInfo } = useAppSelector(state => state.userUpdate)
 
@@ -46,7 +50,7 @@ const Account = () => {
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        const infoUpdates = { userId: infoLogin.rows[0].user_id, name, surname, dateOfBirth: date };
+        const infoUpdates = { userId: dataLogin?.rows[0].user_id, name, surname, dateOfBirth: date };
 
         try {
             dispatch<any>(fetchUpdateInfo(infoUpdates));
@@ -67,7 +71,7 @@ const Account = () => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                userId: infoLogin.rows[0].user_id,
+                userId: dataLogin?.rows[0].user_id,
             })
         }).then(res => res.json()).then(data => console.table(data))
 
@@ -75,7 +79,7 @@ const Account = () => {
     }
 
     useEffect(() => {
-        dispatch<any>(fetchGetUserData(infoLogin.rows[0].user_id));
+        !isLoading && dispatch<any>(fetchGetUserData(dataLogin?.rows[0].user_id));
     }, [])
 
     useMemo(() => {

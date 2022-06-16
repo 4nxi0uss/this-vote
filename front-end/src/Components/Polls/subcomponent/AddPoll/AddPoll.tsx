@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { ChangeEvent, MouseEvent } from "react"
 import Modal from '../../../Modal/Modal';
 
@@ -8,8 +8,8 @@ import block from 'bem-css-modules'
 import { ObjectPushType, optionListType } from '../../../../Types/Types';
 import { pollsData } from '../../../../Redux/ReduxTypes/reduxTypes';
 
-import { fetchPostPolls } from '../../../../Redux/Slice/postPollsSlice';
-import { useAppDispatch, useAppSelector } from '../../../../Redux/Hooks/hooks';
+import { useAddPollMutation } from '../../../../Redux/Services/PollApi';
+import { useUserLoginMutation } from '../../../../Redux/Services/UserApi';
 
 const b = block(style)
 
@@ -17,14 +17,17 @@ let optionsList: optionListType[] = []
 
 const AddPoll = (show: boolean, modalFun: any, random: number) => {
 
-    const { infoLogin } = useAppSelector(state => state.usersLogin)
+    const [loginApi, { data: dataLogin, isLoading: isLoging }] = useUserLoginMutation({
+        fixedCacheKey: "login"
+    });
+
 
     const [optionText, setOptionText] = useState<string>("");
     const [nameText, setNameText] = useState<string>("");
     const [questionText, setQuestionText] = useState<string>("");
     const [optionColor, setOptionColor] = useState<string>("#000000");
 
-    const dispatch = useAppDispatch();
+    const [addPollApi] = useAddPollMutation()
 
     const handleNameText = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
@@ -62,7 +65,7 @@ const AddPoll = (show: boolean, modalFun: any, random: number) => {
         question: questionText,
         number: random,
         option: optionObject,
-        id: infoLogin.rows[0].user_id
+        id: !isLoging && dataLogin?.rows[0].user_id
     }
 
     const handleClearInput = (event: MouseEvent<HTMLButtonElement>) => {
@@ -76,7 +79,7 @@ const AddPoll = (show: boolean, modalFun: any, random: number) => {
     const handleSendPoll = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         if (Boolean(questionText) && Boolean(nameText) && Boolean(optionsList.length >= 2)) {
-            dispatch<any>(fetchPostPolls(pollsObject));
+            addPollApi(pollsObject)
             handleClearInput(event);
         }
     }

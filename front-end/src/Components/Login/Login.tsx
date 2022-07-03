@@ -4,10 +4,8 @@ import type { ChangeEvent, FormEvent } from 'react';
 import style from './Login.module.scss'
 import block from 'bem-css-modules'
 
-import { useAppDispatch } from '../../Redux/Hooks/hooks';
 import { Navigate } from 'react-router-dom';
-import { fetchPostRegister } from '../../Redux/Slice/registerSlice';
-import { useUserLoginMutation } from '../../Redux/Services/UserApi';
+import { useUserLoginMutation, useUserRegisteryMutation } from '../../Redux/Services/UserApi';
 
 const b = block(style)
 
@@ -21,8 +19,7 @@ const Login = () => {
     const [loginApi, { data: dataLogin, isLoading }] = useUserLoginMutation({
         fixedCacheKey: "login"
     });
-
-    const dispatch = useAppDispatch();
+    const [registerApi, { isSuccess }] = useUserRegisteryMutation();
 
     const validatedEmail = (toVerified: string) => {
         const atCheck = toVerified.includes("@");
@@ -66,8 +63,7 @@ const Login = () => {
         }
 
         if (validatedEmail(email) && validatePassword(password) && (password === secondPassword)) {
-
-            dispatch<any>(fetchPostRegister(registerData))
+            registerApi(registerData)
             setEmail('');
             setPassword('');
             setSecondPassword('');
@@ -75,6 +71,8 @@ const Login = () => {
             console.log('nie zarejestrowano')
         }
     }
+
+    isSuccess && console.log('Rejestracja powiodła się!')
 
     const handleEmail = (e: ChangeEvent<HTMLInputElement>) => {
         setEmail(e.target.value.trim())
@@ -98,7 +96,7 @@ const Login = () => {
                 <button className={b('login-btn')} type='submit'>{toggleRegistry ? "Register" : "Log in"}</button>
             </form>
             <p className={b('paragraph')}>{toggleRegistry ? "If you have account, please " : "If you don't have account, please"} <button className={b('paragraph', { btn: true })} onClick={handleToggleRegistry}> {!toggleRegistry ? "register now." : "log into it here."} </button></p>
-            {(!isLoading && dataLogin?.login) ? <Navigate to="/Account" /> : null}
+            {(!isLoading && dataLogin?.login) && <Navigate to="/Account" />}
         </section>
     )
 }

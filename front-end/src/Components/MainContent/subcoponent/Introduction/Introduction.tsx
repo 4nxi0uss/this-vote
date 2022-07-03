@@ -2,7 +2,9 @@ import style from './Introduction.module.scss'
 import block from 'bem-css-modules'
 
 import { useGetAllPollsQuery } from '../../../../Redux/Services/PollApi';
+
 import Poll from '../../../Polls/subcomponent/Poll/Poll';
+import Loader from '../../../Loader/Loader';
 
 const b = block(style)
 
@@ -18,15 +20,7 @@ const Introduction = () => {
         <section className={b()}>
             {isSuccess
                 ? PollDisplay()
-                : (
-                    <>
-                        <h2 className={b('title')}>What is for?</h2>
-                        <p className={b('paragraph')}>This will be use for voting, users will be assigned to specific group by the code. Admin will be add and moderate votings. </p>
-                        <br />
-                        <br />
-                        <p className={b('paragraph')}>App in development ...</p>
-                    </>
-                )}
+                : <Loader />}
         </section>
     )
 }

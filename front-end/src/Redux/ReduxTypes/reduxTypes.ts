@@ -43,6 +43,7 @@ export interface userLoginInfo {
         error: any;
     };
 }
+
 export interface infoUpdate {
     userId: string;
     name: string;
@@ -54,8 +55,9 @@ export interface pollsData {
     name: string;
     question: string;
     number: number;
-    option: object
+    option: object;
     id: string;
+    token: string;
 }
 
 export interface postPollsInfo {

@@ -1,13 +1,18 @@
 const db = require('../Database/Database');
+
 const { v4: uid } = require('uuid');
 
-//checking email in database
+const jwt = require('jsonwebtoken')
+
+const { APP_ACCESS_TOKEN, APP_REFRESH_TOKEN } = process.env
+
+//checking email and password in database
 const checkEmail = (rows, usersEmail) => {
     return Boolean(rows.find((em) => em.email === usersEmail))
 }
 
-const ScrapOfEmail = (email) => {
-    return email.slice(String(email).indexOf('@') + 1, email.indexOf("."))
+const checkPass = (rows, password) => {
+    return Boolean(rows.find((pas) => pas.password === password))
 }
 
 // register user in database
@@ -16,7 +21,7 @@ exports.postRegisterUser = (req, res) => {
     try {
         const { usersEmail: email, pass } = req.body;
 
-        db.query("SELECT `email`,`password` FROM `login`", (err, rows, fields) => {
+        db.query("SELECT `email`,`password` FROM `login`", (err, rows) => {
             if (err) throw err;
 
             if (checkEmail(rows, email)) {
@@ -25,7 +30,7 @@ exports.postRegisterUser = (req, res) => {
                 })
 
             } else {
-                db.query('INSERT INTO `login` (`user_id`,`email`, `password`) VALUES ("' + uid() + '", "' + email + '", "' + pass + '");', (err, rows, fields) => {
+                db.query('INSERT INTO `login` (`user_id`,`email`, `password`) VALUES ("' + uid() + '", "' + email + '", "' + pass + '");', (err, rows) => {
 
                     try {
                         res.status(201).json({
@@ -53,33 +58,53 @@ exports.postRegisterUser = (req, res) => {
     }
 }
 
+let fakeDatabase = [
+]
+
 // login user 
 exports.postLoginUser = (req, res) => {
 
     try {
         const { password, email } = req.body;
 
-        db.query("SELECT * FROM `login` WHERE `email` LIKE  " + `'%${ScrapOfEmail(email)}%'`, (err, rows, fields) => {
+        db.query("SELECT * FROM `login` WHERE `email` = '" + email + "' AND `password` = '" + password + "' ", (err, rows) => {
             if (err) throw err;
 
-            if (!(checkEmail(rows, email))) {
-                res.status(406).json({
+            if (!(checkEmail(rows, email) && checkPass(rows, password))) {
+
+                res.status(401).json({
                     message: "Login or password is incorect.",
                     login: false,
                 })
 
             } else {
+
+                const payload = {
+                    message: 'Logged.',
+                    login: true,
+                    rows: rows,
+                }
+
+                const token = jwt.sign(payload, APP_ACCESS_TOKEN)
+                // const token = jwt.sign(payload, ACCESS_TOKEN, { expiresIn: '15m', })
+                const refreshToken = jwt.sign(payload, APP_REFRESH_TOKEN)
+                fakeDatabase.push(refreshToken);
+
                 res.status(201).json({
                     message: 'Logged.',
                     login: true,
                     rows: rows,
+                    token,
+                    refreshToken,
                 })
-
             }
         })
 
     } catch (err) {
-
+        res.status(500).json({
+            error: "Backend error with update user login.",
+            login: false,
+        })
     }
 }
 
@@ -88,12 +113,12 @@ exports.patchUserInfo = (req, res) => {
     try {
         const { userId, name, surname, dateOfBirth } = req.body
 
-        db.query("SELECT user_id FROM `users_data`", (err, rows, fields) => {
+        db.query("SELECT user_id FROM `users_data`", (err, rows) => {
             if (err) throw err;
             const userIdFinder = rows.some(id => id.user_id === userId);
 
             if (!Boolean(`${userIdFinder}`)) {
-                db.query("INSERT INTO `users_data` (`user_id`, `Name`, `Surname`, `date_of_birth`, `type_of_account`, `active`, `polls`) VALUES ('" + userId + "', '" + name + "', '" + surname + "', '" + dateOfBirth + "', '0', '0', '[]')", (err, rows, fields) => {
+                db.query("INSERT INTO `users_data` (`user_id`, `Name`, `Surname`, `date_of_birth`, `type_of_account`, `active`, `polls`) VALUES ('" + userId + "', '" + name + "', '" + surname + "', '" + dateOfBirth + "', '0', '0', '[]')", (err, rows) => {
                     if (err) throw err;
                     res.status(200).json({
                         message: 'Actualization and adding new information was succeeded.',
@@ -109,7 +134,6 @@ exports.patchUserInfo = (req, res) => {
                         message: 'Actualization succeseed.',
                         rows: rows,
                         error: err
-                        // error: err
                     })
 
                 })
@@ -179,11 +203,10 @@ exports.postPolls = (req, res) => {
     try {
         const { name, question, number, option, id } = req.body
 
-        db.query("INSERT INTO `polls` (`id`, `creator_id`, `name`, `question`, `number`, `options`) VALUES (NULL, '" + id + "', '" + name + "', '" + question + "', '" + number + "', '" + JSON.stringify(option) + "');", (err, rows, fields) => {
+        db.query("INSERT INTO `polls` (`id`, `creator_id`, `name`, `question`, `number`, `options`) VALUES (NULL, '" + id + "', '" + name + "', '" + question + "', '" + number + "', '" + JSON.stringify(option) + "');", (err, rows) => {
             if (err) throw err;
             res.status(200).json({
                 message: "Pool added sucesfuly.",
-                data: rows,
             })
         })
 

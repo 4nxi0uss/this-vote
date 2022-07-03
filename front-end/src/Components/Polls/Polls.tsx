@@ -5,12 +5,13 @@ import style from './Polls.module.scss';
 import block from 'bem-css-modules';
 
 import Poll from './subcomponent/Poll/Poll';
+import Loader from '../Loader/Loader';
+import AddPoll from './subcomponent/AddPoll/AddPoll';
 
 import { ObjectPushType, optionListType } from '../../Types/Types';
 
 import { useGetPollsQuery } from '../../Redux/Services/PollApi';
 
-import AddPoll from './subcomponent/AddPoll/AddPoll';
 import { useUserLoginMutation } from '../../Redux/Services/UserApi';
 
 const b = block(style);
@@ -47,10 +48,10 @@ const Polls = () => {
 
     return (
         <section className={b()}>
-            <button className={b('add')} onClick={handleModal}>Add poll</button>
+            {!isLoading && <button className={b('add')} onClick={handleModal}>Add poll</button>}
             {AddPoll(isShownAdd, handleModal, handleRandomNumber, randomNumber)}
 
-            {PollDisplay()}
+            {!isLoading ? PollDisplay() : <Loader />}
         </section>
     )
 }

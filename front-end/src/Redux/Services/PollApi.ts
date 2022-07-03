@@ -23,11 +23,16 @@ export const pollApi = createApi({
             providesTags: ["Poll"],
         }),
         addPoll: builder.mutation<any, any>({
-            query: (pollsData) => (
+            query: ({ name, question, number, option, id, token }) => (
                 {
                     url: "postPolls/",
                     method: "POST",
-                    body: pollsData,
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    },
+                    body: {
+                        name, question, number, option, id
+                    },
                 }),
             invalidatesTags: ["Poll"],
         }),

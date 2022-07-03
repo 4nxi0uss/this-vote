@@ -46,11 +46,14 @@ export const userApi = createApi({
             }),
         //registerInfo
         userRegistery: builder.mutation<registerInfo, registerDataType>({
-            query: (registerData) => (
+            query: ({ email, password }) => (
                 {
                     url: "register",
                     method: 'POST',
-                    body: registerData,
+                    body: {
+                        usersEmail: email,
+                        pass: password
+                    },
                 }),
         })
     }),

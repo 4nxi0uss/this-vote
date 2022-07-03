@@ -27,7 +27,8 @@ const AddPoll = (show: boolean, modalFun: any, modalRandom: any, random: number)
     const [questionText, setQuestionText] = useState<string>("");
     const [optionColor, setOptionColor] = useState<string>("#000000");
 
-    const [addPollApi] = useAddPollMutation()
+    // eslint-disable-next-line
+    const [addPollApi, { data: postPollData }] = useAddPollMutation()
 
     const handleNameText = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
@@ -65,7 +66,8 @@ const AddPoll = (show: boolean, modalFun: any, modalRandom: any, random: number)
         question: questionText,
         number: random,
         option: optionObject,
-        id: !isLoging && dataLogin?.rows[0].user_id
+        id: !isLoging && dataLogin?.rows[0].user_id,
+        token: !isLoging && dataLogin?.token
     }
 
     const handleClearInput = (event: MouseEvent<HTMLButtonElement>) => {

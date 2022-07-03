@@ -8,39 +8,50 @@ export const userApi = createApi({
     tagTypes: ['User'],
     endpoints: (builder) => ({
         //userData
-        getUserData: builder.query<any, number>({
-            query: (userId) => ({
-                url: `getUserData/${userId}`,
-                method: "GET"
+        getUserData: builder.query<any, number>(
+            {
+                query: (userId) => ({
+                    url: `getUserData/${userId}`,
+                    method: "GET"
+                }),
+                providesTags: ["User"],
             }),
-            providesTags: ["User"],
-        }),
         //infoUpdate
-        updateUserInfo: builder.mutation<any, infoUpdate>({
-            query: (infoUpdate) => ({
-                url: "infoUpdate",
-                method: 'PATCH',
-                body: infoUpdate,
+        updateUserInfo: builder.mutation<any, infoUpdate>(
+            {
+                query: (infoUpdate) => ({
+                    url: "infoUpdate",
+                    method: 'PATCH',
+                    body: infoUpdate,
+                }),
+                invalidatesTags: ["User"]
             }),
-            invalidatesTags: ["User"]
-        }),
         //infoLogin
-        userLogin: builder.mutation<any, infoLoginType>({
-            query: (loginData) => ({
-                url: "login",
-                method: 'POST',
-                body: loginData,
+        userLogin: builder.mutation<any, infoLoginType>(
+            {
+                query: (loginData) => ({
+                    url: "login",
+                    method: 'POST',
+                    body: loginData,
+                }),
             }),
-
-        }),
+        userLogin2: builder.query<any, infoLoginType>(
+            {
+                query: (loginData) => (
+                    {
+                        url: "login",
+                        method: 'POST',
+                        body: loginData,
+                    }),
+            }),
         //registerInfo
         userRegistery: builder.mutation<registerInfo, registerDataType>({
-            query: (registerData) => ({
-                url: "register",
-                method: 'POST',
-                body: registerData,
-            }),
-
+            query: (registerData) => (
+                {
+                    url: "register",
+                    method: 'POST',
+                    body: registerData,
+                }),
         })
     }),
 })

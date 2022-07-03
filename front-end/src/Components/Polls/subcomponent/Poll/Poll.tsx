@@ -12,18 +12,21 @@ import { useUserLoginMutation } from '../../../../Redux/Services/UserApi';
 
 const b = block(style);
 
-const Poll = ({ id, name, question, options }: PollProp) => {
+const Poll = ({ id, name, question, options, btn = true }: PollProp) => {
 
+    // eslint-disable-next-line
     const [loginApi, { data: dataLogin, isLoading: isLoging }] = useUserLoginMutation({
         fixedCacheKey: "login"
     });
 
-    const { data: getPollsData, error, isLoading } = useGetPollsQuery(!isLoging && dataLogin?.rows[0].user_id)
+    const { data: getPollsData, error, isLoading, isError } = useGetPollsQuery(!isLoging && dataLogin?.rows[0].user_id)
 
-    const [updatePollOptionValueApi, { isLoading: isUpdating }] = useUpdatePollValueMutation()
-    const [deletePoolApi, { isLoading: isDeleting }] = useDeletePollMutation()
+    const [updatePollOptionValueApi] = useUpdatePollValueMutation()
+    const [deletePoolApi] = useDeletePollMutation()
 
     const [isOpenEdit, setIsShownEdit] = useState<boolean>(false)
+
+    isError && console.warn(error);
 
     let optionJsonParse: object = JSON.parse(options)
     const optionJsonParseValuses = Object.values(optionJsonParse)
@@ -48,7 +51,7 @@ const Poll = ({ id, name, question, options }: PollProp) => {
         setIsShownEdit(!isOpenEdit)
     }
 
-    const buttonOfChoose = () => optionJsonParseValuses.map((valueOfJsonData: any, index: number) => !Boolean(typeof (valueOfJsonData.name) === String(undefined)) && <button key={valueOfJsonData.id} className='addedBtn' onClick={(event: any) => handleBtnFunction(event, valueOfJsonData, index)}>{valueOfJsonData.name}--{valueOfJsonData.vote}</button>);
+    const buttonOfChoose = () => optionJsonParseValuses.map((valueOfJsonData: any, index: number) => !Boolean(typeof (valueOfJsonData.name) === String(undefined)) && <button key={valueOfJsonData.id} onClick={(event: any) => handleBtnFunction(event, valueOfJsonData, index)}>{valueOfJsonData.name}--{valueOfJsonData.vote} </button>);
 
     const circleStyle = () => {
 
@@ -87,8 +90,8 @@ const Poll = ({ id, name, question, options }: PollProp) => {
     const test = () => !isLoading && getPollsData.data.map((el: any) => id === el.id && < EditPoll key={el.id} isOpen={isOpenEdit} edit={handleEdit} pro={el} />)
     return (
         <section className={b()}>
-            <button onClick={handlePollDelete}>del</button>
-            <button onClick={handleEdit}>Edit</button>
+            {btn && <button onClick={handlePollDelete}>del</button>}
+            {btn && <button onClick={handleEdit}>Edit</button>}
             {test()}
             <h2>{name}</h2>
             <h3>{question}</h3>

@@ -23,16 +23,7 @@ const EditPoll = ({ isOpen, edit, pro }: editt) => {
     const [nameText, setNameText] = useState<string>(pro?.name);
     const [questionText, setQuestionText] = useState<string>(pro?.question);
     const [optionColor, setOptionColor] = useState<string>("#000000");
-    const [random, setRandom] = useState<number>(pro?.number)
-
-    // console.log(pro.options)
-
-    try {
-        // const ok = JSON.parse(pro.options)
-        // console.log(ok)
-    } catch (error) {
-
-    }
+    const [random] = useState<number>(pro?.number)
 
     const handleNameText = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
@@ -53,7 +44,6 @@ const EditPoll = ({ isOpen, edit, pro }: editt) => {
         event.preventDefault()
         setOptionColor(event.target.value)
     }
-
 
     const optionShow = () => optionsList.map((option: any, index: number) => <p className={b('option')} key={index}>{option?.name} <span className={b('color')} style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
 

@@ -37,6 +37,7 @@ export interface PollProp {
   name: string,
   question: string,
   options: string,
+  btn?: boolean
 }
 
 export interface ObjectPushType {

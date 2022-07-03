@@ -6,19 +6,29 @@ export const pollApi = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3022/users/' }),
     tagTypes: ['Poll'],
     endpoints: (builder) => ({
+        getAllPolls: builder.query<any, void>({
+            query: () => (
+                {
+                    url: `getAllPolls`,
+                    method: "GET"
+                }),
+            providesTags: ["Poll"],
+        }),
         getPolls: builder.query<any, number>({
-            query: (creatorId) => ({
-                url: `getPolls/${creatorId}`,
-                method: "GET"
-            }),
+            query: (creatorId) => (
+                {
+                    url: `getPolls/${creatorId}`,
+                    method: "GET"
+                }),
             providesTags: ["Poll"],
         }),
         addPoll: builder.mutation<any, any>({
-            query: (pollsData) => ({
-                url: "postPolls/",
-                method: "POST",
-                body: pollsData,
-            }),
+            query: (pollsData) => (
+                {
+                    url: "postPolls/",
+                    method: "POST",
+                    body: pollsData,
+                }),
             invalidatesTags: ["Poll"],
         }),
         updatePollValue: builder.mutation<any, any>({
@@ -34,11 +44,12 @@ export const pollApi = createApi({
             invalidatesTags: ["Poll"],
         }),
         deletePoll: builder.mutation<any, any>({
-            query: (delData) => ({
-                url: "deletePoll",
-                method: "DELETE",
-                body: delData,
-            }),
+            query: (delData) => (
+                {
+                    url: "deletePoll",
+                    method: "DELETE",
+                    body: delData,
+                }),
             invalidatesTags: ["Poll"],
         })
     }),
@@ -46,4 +57,4 @@ export const pollApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetPollsQuery, useAddPollMutation, useDeletePollMutation, useUpdatePollValueMutation } = pollApi
+export const { useGetPollsQuery, useAddPollMutation, useGetAllPollsQuery, useDeletePollMutation, useUpdatePollValueMutation } = pollApi

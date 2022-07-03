@@ -5,20 +5,23 @@ import style from './Account.module.scss'
 import block from 'bem-css-modules'
 
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
-import { fetchUpdateInfo } from '../../Redux/Slice/userUpdateSlice';
 import { fetchGetUserData } from '../../Redux/Slice/GetUserDataSlice';
-import { useUserLoginMutation } from '../../Redux/Services/UserApi';
+import { useUpdateUserInfoMutation, useUserLoginMutation } from '../../Redux/Services/UserApi';
 
 const b = block(style);
 
 const Account = () => {
 
+    // eslint-disable-next-line
     const [loginApi, { data: dataLogin, isLoading }] = useUserLoginMutation({
         fixedCacheKey: "login"
     });
 
+    const [updateUserInfo, { isError, error }] = useUpdateUserInfoMutation();
+
+    isError && console.warn(error)
+
     const { userData } = useAppSelector(state => state.userData)
-    const { statusUpdateInfo } = useAppSelector(state => state.userUpdate)
 
     const betterDate = (date: string) => date.slice(0, 10)
 
@@ -53,13 +56,10 @@ const Account = () => {
         const infoUpdates = { userId: dataLogin?.rows[0].user_id, name, surname, dateOfBirth: date };
 
         try {
-            dispatch<any>(fetchUpdateInfo(infoUpdates));
+            updateUserInfo(infoUpdates)
         } catch (error) {
             console.warn(error)
         }
-
-        console.log("udalo sie");
-        console.log('status: ', statusUpdateInfo);
     }
 
     const handleActive = (e: MouseEvent<HTMLButtonElement>) => {
@@ -80,6 +80,7 @@ const Account = () => {
 
     useEffect(() => {
         !isLoading && dispatch<any>(fetchGetUserData(dataLogin?.rows[0].user_id));
+        // eslint-disable-next-line
     }, [])
 
     useMemo(() => {

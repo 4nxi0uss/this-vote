@@ -8,8 +8,8 @@ import deletePoll from '../Slice/deletingPollSlice';
 import editPollSlice from '../Slice/editPollSlice';
 import GetUserDataSlice from '../Slice/GetUserDataSlice';
 import usersUpdateSlice from '../Slice/userUpdateSlice';
-import { pollApi } from '../Services/PollApi';
 import { setupListeners } from '@reduxjs/toolkit/dist/query';
+import { pollApi } from '../Services/PollApi';
 import { userApi } from '../Services/UserApi';
 
 export const store = configureStore({

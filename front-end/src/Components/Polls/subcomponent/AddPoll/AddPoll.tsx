@@ -15,12 +15,12 @@ const b = block(style)
 
 let optionsList: optionListType[] = []
 
-const AddPoll = (show: boolean, modalFun: any, random: number) => {
+const AddPoll = (show: boolean, modalFun: any, modalRandom: any, random: number) => {
 
+    // eslint-disable-next-line
     const [loginApi, { data: dataLogin, isLoading: isLoging }] = useUserLoginMutation({
         fixedCacheKey: "login"
     });
-
 
     const [optionText, setOptionText] = useState<string>("");
     const [nameText, setNameText] = useState<string>("");
@@ -79,6 +79,7 @@ const AddPoll = (show: boolean, modalFun: any, random: number) => {
     const handleSendPoll = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         if (Boolean(questionText) && Boolean(nameText) && Boolean(optionsList.length >= 2)) {
+            modalRandom();
             addPollApi(pollsObject)
             handleClearInput(event);
         }

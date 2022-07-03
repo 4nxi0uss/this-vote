@@ -195,6 +195,25 @@ exports.postPolls = (req, res) => {
     }
 }
 
+exports.getAllPolls = (req, res) => {
+    try {
+
+        db.query(" SELECT * FROM `polls`", (err, rows) => {
+            if (err) throw err;
+            res.status(200).json({
+                message: "fetch all polls.",
+                data: rows,
+            })
+        })
+
+    } catch (err) {
+        res.status(500).json({
+            message: "Backend error with geting all polls.",
+            error: err
+        })
+    }
+}
+
 exports.getPolls = (req, res) => {
     try {
 

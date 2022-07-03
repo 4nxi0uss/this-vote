@@ -4,7 +4,7 @@ import type { ChangeEvent, FormEvent } from 'react';
 import style from './Login.module.scss'
 import block from 'bem-css-modules'
 
-import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
+import { useAppDispatch } from '../../Redux/Hooks/hooks';
 import { Navigate } from 'react-router-dom';
 import { fetchPostRegister } from '../../Redux/Slice/registerSlice';
 import { useUserLoginMutation } from '../../Redux/Services/UserApi';
@@ -57,7 +57,6 @@ const Login = () => {
         }
     }
 
-
     const handleRegistry = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
@@ -68,7 +67,7 @@ const Login = () => {
 
         if (validatedEmail(email) && validatePassword(password) && (password === secondPassword)) {
 
-            console.log(dispatch<any>(fetchPostRegister(registerData)))
+            dispatch<any>(fetchPostRegister(registerData))
             setEmail('');
             setPassword('');
             setSecondPassword('');
@@ -95,7 +94,7 @@ const Login = () => {
             <form onSubmit={toggleRegistry ? handleRegistry : handleLogin} className={b('form')}>
                 <input required type="email" placeholder='e-mail' onChange={handleEmail} value={email} className={b('input')} />
                 <input required type="password" placeholder='password' onChange={handlePassword} value={password} className={b('input')} />
-                {!toggleRegistry ? null : <input type='password' placeholder='repeat password' onChange={handleSecondPassword} value={secondPassword} />}
+                {!toggleRegistry ? null : <input type='password' placeholder='repeat password' onChange={handleSecondPassword} value={secondPassword} className={b('input')} />}
                 <button className={b('login-btn')} type='submit'>{toggleRegistry ? "Register" : "Log in"}</button>
             </form>
             <p className={b('paragraph')}>{toggleRegistry ? "If you have account, please " : "If you don't have account, please"} <button className={b('paragraph', { btn: true })} onClick={handleToggleRegistry}> {!toggleRegistry ? "register now." : "log into it here."} </button></p>

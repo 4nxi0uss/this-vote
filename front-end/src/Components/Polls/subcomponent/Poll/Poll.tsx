@@ -51,8 +51,6 @@ const Poll = ({ id, name, question, options, btn = true }: PollProp) => {
         setIsShownEdit(!isOpenEdit)
     }
 
-    const buttonOfChoose = () => optionJsonParseValuses.map((valueOfJsonData: any, index: number) => !Boolean(typeof (valueOfJsonData.name) === String(undefined)) && <button key={valueOfJsonData.id} onClick={(event: any) => handleBtnFunction(event, valueOfJsonData, index)}>{valueOfJsonData.name}--{valueOfJsonData.vote} </button>);
-
     const circleStyle = () => {
 
         let percentArr: number[] = []
@@ -87,19 +85,38 @@ const Poll = ({ id, name, question, options, btn = true }: PollProp) => {
         return style
     }
 
-    const test = () => !isLoading && getPollsData.data.map((el: any) => id === el.id && < EditPoll key={el.id} isOpen={isOpenEdit} edit={handleEdit} pro={el} />)
+    const votePercent = (sum: number, count: number) => {
+        if (!isNaN(((count / sum) * 100))) {
+            return ((count / sum) * 100).toFixed(2)
+        } else {
+            return 0;
+        }
+
+    }
+
+    const buttonsForVote = () => {
+        let count = 0;
+        optionJsonParseValuses.forEach((c) => { count += c.vote })
+        return optionJsonParseValuses.map((valueOfJsonData: any, index: number) => {
+            return !Boolean(typeof (valueOfJsonData.name) === String(undefined)) && <button className={b('btn-vote')} key={valueOfJsonData.id} onClick={(event: any) => handleBtnFunction(event, valueOfJsonData, index)}>{valueOfJsonData.name} -- {votePercent(count, valueOfJsonData.vote)}% -- <span className={b('color-dot')} style={{ background: valueOfJsonData.color }}></span> </button>
+        })
+    };
+
+    const editMode = () => !isLoading && getPollsData.data.map((el: any) => id === el.id && < EditPoll key={el.id} isOpen={isOpenEdit} edit={handleEdit} pro={el} />)
+
     return (
         <section className={b()}>
-            {btn && <button onClick={handlePollDelete}>del</button>}
-            {btn && <button onClick={handleEdit}>Edit</button>}
-            {test()}
+            <div className={b('option')}>
+                {btn && <button onClick={handlePollDelete} className={b('btn-option', { delete: true })}>Delete</button>}
+                {btn && <button onClick={handleEdit} className={b('btn-option', { edit: true })}>Edit</button>}
+            </div>
+            {editMode()}
             <h2>{name}</h2>
-            <h3>{question}</h3>
+            <h4>{question}</h4>
             <div className={b('circle-chart')} style={({ background: circleStyle() })}></div>
             <div className={b('btns')}>
-                {buttonOfChoose()}
+                {buttonsForVote()}
             </div>
-            <p>{id}</p>
         </section>
     )
 }

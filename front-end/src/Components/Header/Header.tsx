@@ -22,8 +22,8 @@ const Header = () => {
 
     return (
         <header className={b()}>
-            <h1 className={b('title')}>ThisVote!!</h1>
-            <nav>
+            <h1 className={b('title')} > <Link to='/' className={b('link')}>ThisVote!!</Link></h1>
+            <nav className={b('nav')}>
                 <Link to='/' className={b('nav-link')}>
                     Home
                 </Link>

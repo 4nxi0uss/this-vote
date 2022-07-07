@@ -1,9 +1,11 @@
 import { useState } from 'react';
 
+import type { MouseEvent } from 'react';
+
 import style from './Poll.module.scss'
 import block from 'bem-css-modules'
 
-import { PollProp, VoteType } from '../../../../Types/Types';
+import { editProp, optionValueJson, PollProp, VoteType } from '../../../../Types/Types';
 
 import { useDeletePollMutation, useGetPollsQuery, useUpdatePollValueMutation } from '../../../../Redux/Services/PollApi';
 
@@ -19,7 +21,9 @@ const Poll = ({ id, name, question, options, btn = true }: PollProp) => {
         fixedCacheKey: "login"
     });
 
-    const { data: getPollsData, error, isLoading, isError } = useGetPollsQuery(!isLoging && dataLogin?.rows[0].user_id)
+    const { data: getPollsData, error, isLoading, isError } = useGetPollsQuery(!isLoging && dataLogin?.rows[0].user_id, {
+        pollingInterval: 5000
+    })
 
     const [updatePollOptionValueApi] = useUpdatePollValueMutation()
     const [deletePoolApi] = useDeletePollMutation()
@@ -38,15 +42,15 @@ const Poll = ({ id, name, question, options, btn = true }: PollProp) => {
         deletePoolApi(delData)
     }
 
-    const handleBtnFunction = (event: any, vote?: any, index?: number) => {
+    const handleBtnFunction = (event: MouseEvent<HTMLButtonElement>, vote?: { id: number }) => {
         event.preventDefault();
 
-        const putOption = { id: Number(id), optionId: vote.id }
+        const putOption = { id: Number(id), optionId: vote?.id }
 
         updatePollOptionValueApi(putOption)
     }
 
-    const handleEdit = (event: any) => {
+    const handleEdit = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         setIsShownEdit(!isOpenEdit)
     }
@@ -97,12 +101,12 @@ const Poll = ({ id, name, question, options, btn = true }: PollProp) => {
     const buttonsForVote = () => {
         let count = 0;
         optionJsonParseValuses.forEach((c) => { count += c.vote })
-        return optionJsonParseValuses.map((valueOfJsonData: any, index: number) => {
-            return !Boolean(typeof (valueOfJsonData.name) === String(undefined)) && <button className={b('btn-vote')} key={valueOfJsonData.id} onClick={(event: any) => handleBtnFunction(event, valueOfJsonData, index)}>{valueOfJsonData.name} -- {votePercent(count, valueOfJsonData.vote)}% -- <span className={b('color-dot')} style={{ background: valueOfJsonData.color }}></span> </button>
+        return optionJsonParseValuses.map((valueOfJsonData: optionValueJson) => {
+            return !Boolean(typeof (valueOfJsonData.name) === String(undefined)) && <button className={b('btn-vote')} key={valueOfJsonData.id} onClick={(event: MouseEvent<HTMLButtonElement>) => handleBtnFunction(event, valueOfJsonData)}>{valueOfJsonData.name} -- {votePercent(count, valueOfJsonData.vote)}% -- <span className={b('color-dot')} style={{ background: valueOfJsonData.color }}></span> </button>
         })
     };
 
-    const editMode = () => !isLoading && getPollsData.data.map((el: any) => id === el.id && < EditPoll key={el.id} isOpen={isOpenEdit} edit={handleEdit} pro={el} />)
+    const editMode = () => !isLoading && getPollsData.data.map((el: editProp) => id === el.id && < EditPoll key={el.id} isOpen={isOpenEdit} edit={handleEdit} pro={el} />)
 
     return (
         <section className={b()}>

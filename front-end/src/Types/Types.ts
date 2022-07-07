@@ -37,6 +37,7 @@ export interface PollProp {
   name: string,
   question: string,
   options: string,
+  number?: number,
   btn?: boolean
 }
 
@@ -47,4 +48,25 @@ export interface ObjectPushType {
 export interface VoteType {
   vote: number,
   color?: string
+}
+
+export interface editProp {
+  id: number,
+  name: string,
+  question: string,
+  number: number,
+  options: string,
+}
+
+export interface editArg {
+  isOpen: boolean,
+  edit: any,
+  pro: editProp
+}
+
+export interface optionValueJson {
+  name: string,
+  id: number,
+  vote: number,
+  color: string
 }

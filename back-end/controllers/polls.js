@@ -4,7 +4,7 @@ exports.patchUpdatePoll = (req, res) => {
     try {
         const { name, question, number, option, id } = req.body
 
-        db.query("UPDATE `polls` SET `name` = '" + name + "', `question` = '" + question + "', `number` = '" + number + "', `options` = '" + option + "' WHERE `polls`.`id` = " + id + "",
+        db.query("UPDATE `polls` SET `name` = '" + name + "', `question` = '" + question + "', `number` = '" + number + "', `options` = '" + JSON.stringify(option) + "' WHERE `polls`.`id` = " + id + "",
             (err, rows) => {
                 if (err) throw err;
                 res.status(200).json({

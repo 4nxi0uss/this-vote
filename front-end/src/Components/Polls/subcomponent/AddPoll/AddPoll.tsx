@@ -59,7 +59,7 @@ const AddPoll = (show: boolean, modalFun: any, modalRandom: any, random: number)
     }
 
     let optionObject: ObjectPushType = {};
-    optionsList.forEach((option, index) => optionObject[`option${index}`] = { id: index, ...option })
+    optionsList?.forEach((option, index) => optionObject[`option${index}`] = { id: index, ...option })
 
     const pollsObject: pollsData = {
         name: nameText,
@@ -87,7 +87,7 @@ const AddPoll = (show: boolean, modalFun: any, modalRandom: any, random: number)
         }
     }
 
-    const optionShow = () => optionsList.map((option: any, index: number) => <p className={b('option')} key={index}>{option?.name} <span className={b('color')} style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
+    const optionShow = () => optionsList.map((option: { name: string, color: string }, index: number) => <p className={b('option')} key={index}>{option?.name} <span className={b('color')} style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
 
     return (
         <>

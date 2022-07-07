@@ -1,41 +1,38 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import type { ChangeEvent } from "react";
+import type { ChangeEvent, MouseEvent } from "react";
 
 import style from "./EditPoll.module.scss";
 import block from 'bem-css-modules';
 
 import Modal from '../../../Modal/Modal';
 
-import { optionListType } from "../../../../Types/Types";
+import { editArg, ObjectPushType } from "../../../../Types/Types";
 import { useUpdatePollInfoMutation } from "../../../../Redux/Services/PollApi";
 
 const b = block(style);
 
-interface editt {
-    isOpen: boolean, edit: any, pro: any
-}
+const EditPoll = ({ isOpen, edit, pro }: editArg) => {
 
-const EditPoll = ({ isOpen, edit, pro }: editt) => {
-
+    const [optionText, setOptionText] = useState<string>('');
     const [nameText, setNameText] = useState<string>(pro?.name);
     const [questionText, setQuestionText] = useState<string>(pro?.question);
+    const [optionColor, setOptionColor] = useState<string>("#000000");
     const [random] = useState<number>(pro?.number)
-
-    let optionsList: optionListType[] = [];
+    const [optionsList, setOptionsList] = useState<Array<object>>([]);
 
     const [updatePoll] = useUpdatePollInfoMutation()
 
-    try {
+    useEffect(() => {
+        let arr: Array<object> = []
         const optionsParse = JSON.parse(pro.options)
 
-        const arrOptinsValue = Object.values(optionsParse)
+        const arrOptinsValue: Array<object> = Object.values(optionsParse)
 
-        arrOptinsValue.forEach((el: any) => optionsList = [...optionsList, { name: el.name, color: el.color, vote: el.vote }])
+        arrOptinsValue.forEach((el: any) => arr = [...arr, { name: el.name, color: el.color, vote: el.vote }])
 
-    } catch (error) {
-        console.warn(error)
-    }
+        setOptionsList(arr)
+    }, [pro.options])
 
     const handleNameText = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
@@ -47,12 +44,38 @@ const EditPoll = ({ isOpen, edit, pro }: editt) => {
         setQuestionText(e.target.value)
     }
 
-    const handleUpdatePoll = (e: any) => {
-        e.preventDefault()
-        updatePoll({ name: nameText.trim(), question: questionText, number: random, option: pro.options, id: pro.id })
+    const handleOptionText = (event: ChangeEvent<HTMLInputElement>) => {
+        event.preventDefault()
+        setOptionText((event.target.value))
     }
 
-    const optionShow = () => optionsList?.map((option: any, index: number) => <div className={b('option')} key={index}>{option?.name} <span className={b('color')} style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span>
+    const handleOptionColor = (event: ChangeEvent<HTMLInputElement>) => {
+        event.preventDefault()
+        setOptionColor(event.target.value)
+    }
+
+    const handleAddOption = (event: MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault()
+        if (!Boolean(optionText === "") && optionsList?.length < 6) {
+            setOptionsList([...optionsList, { name: optionText.trim(), color: optionColor, vote: 0 }])
+            setOptionText("")
+        }
+    }
+
+    const handleDelOption = (event: MouseEvent<HTMLButtonElement>, index: number) => {
+        event.preventDefault()
+        setOptionsList((state: any) => state.filter((t: Array<object>, ind: number) => ind !== index))
+    }
+
+    let optionObject: ObjectPushType = {};
+    optionsList?.forEach((option: object, index: number) => optionObject[`option${index}`] = { id: index, ...option })
+
+    const handleUpdatePoll = (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault()
+        updatePoll({ name: nameText.trim(), question: questionText, number: random, option: optionObject, id: pro.id })
+    }
+
+    const optionShow = () => optionsList?.map((option: any, index: number) => <div className={b('option')} key={index}>{option?.name} <span className={b('color')} style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span> <button onClick={(e) => { handleDelOption(e, index) }}>X</button>
     </div>)
 
     return (
@@ -65,6 +88,10 @@ const EditPoll = ({ isOpen, edit, pro }: editt) => {
                     <input type="text" onChange={handleQuestionText} value={questionText} />
                     <label >Number:</label>
                     <input type="number" readOnly disabled value={random} />
+                    <label>Option to choose in poll (max 6):</label>
+                    <input type="text" value={optionText} onChange={handleOptionText} />
+                    <input type="color" onChange={handleOptionColor} value={optionColor} />
+                    <button onClick={handleAddOption}>+</button>
                     {optionShow()}
                 </form>
                 <div>

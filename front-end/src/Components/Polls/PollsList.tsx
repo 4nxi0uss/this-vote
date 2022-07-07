@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { MouseEvent } from "react";
 
-import style from './Polls.module.scss';
+import style from './PollsList.module.scss';
 import block from 'bem-css-modules';
 
 import Poll from './subcomponent/Poll/Poll';
@@ -18,7 +18,7 @@ const b = block(style);
 
 let optionsList: optionListType[] = []
 
-const Polls = () => {
+const PollsList = () => {
 
     // eslint-disable-next-line
     const [loginApi, { data: dataLogin, isLoading: isLoging }] = useUserLoginMutation({
@@ -56,4 +56,4 @@ const Polls = () => {
     )
 }
 
-export default Polls
+export default PollsList

@@ -95,7 +95,6 @@ const Poll = ({ id, name, question, options, btn = true }: PollProp) => {
         } else {
             return 0;
         }
-
     }
 
     const buttonsForVote = () => {

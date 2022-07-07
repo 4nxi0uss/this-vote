@@ -7,9 +7,9 @@ import block from 'bem-css-modules'
 import Introduction from './subcoponent/Introduction/Introduction';
 import Login from '../Login/Login';
 import Account from '../Account/Account';
-import Polls from '../Polls/Polls';
 
 import { useUserLoginMutation } from '../../Redux/Services/UserApi';
+import PollsList from '../Polls/PollsList';
 
 const b = block(style)
 
@@ -26,7 +26,7 @@ const MainContent = () => {
                 <Route path='/' element={<Introduction />} />
                 <Route path='/Login' element={<Login />} />
                 {<Route path='/Account' element={!isLoading && dataLogin?.login ? <Account /> : <Navigate to='/' />} />}
-                {<Route path='/Polls' element={!isLoading && dataLogin?.login ? <Polls /> : <Navigate to='/' />} />}
+                {<Route path='/Polls' element={!isLoading && dataLogin?.login ? <PollsList /> : <Navigate to='/' />} />}
             </Routes>
 
         </main>

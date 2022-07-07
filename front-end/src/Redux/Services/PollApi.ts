@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 // Define a service using a base URL and expected endpoints
 export const pollApi = createApi({
     reducerPath: 'pollApi',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3022/users/' }),
+    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3022/polls/' }),
     tagTypes: ['Poll'],
     endpoints: (builder) => ({
         getAllPolls: builder.query<any, void>({
@@ -48,6 +48,21 @@ export const pollApi = createApi({
                 }),
             invalidatesTags: ["Poll"],
         }),
+        updatePollInfo: builder.mutation<any, any>({
+            query: ({ name, question, number, option, id }) => (
+                {
+                    url: "pollUpdate",
+                    method: "PATCH",
+                    body: {
+                        name,
+                        question,
+                        number,
+                        option,
+                        id
+                    }
+                }),
+            invalidatesTags: ["Poll"],
+        }),
         deletePoll: builder.mutation<any, any>({
             query: (delData) => (
                 {
@@ -62,4 +77,4 @@ export const pollApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetPollsQuery, useAddPollMutation, useGetAllPollsQuery, useDeletePollMutation, useUpdatePollValueMutation } = pollApi
+export const { useGetPollsQuery, useAddPollMutation, useGetAllPollsQuery, useDeletePollMutation, useUpdatePollValueMutation, useUpdatePollInfoMutation } = pollApi

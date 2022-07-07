@@ -135,17 +135,14 @@ exports.patchUserInfo = (req, res) => {
                         rows: rows,
                         error: err
                     })
-
                 })
             }
         })
-
     } catch (err) {
 
         res.status(500).json({
             error: err,
             message: "Backend error with update user info."
-
         })
     }
 }
@@ -165,9 +162,7 @@ exports.patchActiveUser = (req, res) => {
                     })
                 })
             }
-
         })
-
     } catch (error) {
         res.status(500).json({
             error: err,
@@ -194,84 +189,6 @@ exports.getUserData = (req, res) => {
     } catch (err) {
         res.status(500).json({
             message: "Backend error with geting user data.",
-            error: err
-        })
-    }
-}
-
-exports.postPolls = (req, res) => {
-    try {
-        const { name, question, number, option, id } = req.body
-
-        db.query("INSERT INTO `polls` (`id`, `creator_id`, `name`, `question`, `number`, `options`) VALUES (NULL, '" + id + "', '" + name + "', '" + question + "', '" + number + "', '" + JSON.stringify(option) + "');", (err, rows) => {
-            if (err) throw err;
-            res.status(200).json({
-                message: "Pool added sucesfuly.",
-            })
-        })
-
-    } catch (err) {
-        res.status(500).json({
-            message: "Backend error with adding poll.",
-            error: err
-        })
-    }
-}
-
-exports.getAllPolls = (req, res) => {
-    try {
-
-        db.query(" SELECT * FROM `polls`", (err, rows) => {
-            if (err) throw err;
-            res.status(200).json({
-                message: "fetch all polls.",
-                data: rows,
-            })
-        })
-
-    } catch (err) {
-        res.status(500).json({
-            message: "Backend error with geting all polls.",
-            error: err
-        })
-    }
-}
-
-exports.getPolls = (req, res) => {
-    try {
-
-        const { creatorId } = req.params
-
-        db.query(" SELECT * FROM `polls` WHERE `creator_id` = '" + creatorId + "' ", (err, rows, fields) => {
-            if (err) throw err;
-            res.status(200).json({
-                message: "download polls.",
-                data: rows,
-            })
-        })
-
-    } catch (err) {
-        res.status(500).json({
-            message: "Backend error with geting polls.",
-            error: err
-        })
-    }
-}
-
-exports.deletePoll = (req, res) => {
-    try {
-        const { creatorId, id } = req.body
-
-        db.query("DELETE FROM `polls` WHERE id=" + id + " and creator_id='" + creatorId + "'", (err, rows, fields) => {
-            if (err) throw err
-            res.status(200).json({
-                message: "delating polls succesful.",
-            })
-        })
-
-    } catch (err) {
-        res.status(500).json({
-            message: "Backend error with deleting polls.",
             error: err
         })
     }

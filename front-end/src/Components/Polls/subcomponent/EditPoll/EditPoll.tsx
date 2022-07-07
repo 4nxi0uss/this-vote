@@ -8,10 +8,9 @@ import block from 'bem-css-modules';
 import Modal from '../../../Modal/Modal';
 
 import { optionListType } from "../../../../Types/Types";
+import { useUpdatePollInfoMutation } from "../../../../Redux/Services/PollApi";
 
 const b = block(style);
-
-let optionsList: optionListType[] = [];
 
 interface editt {
     isOpen: boolean, edit: any, pro: any
@@ -19,11 +18,24 @@ interface editt {
 
 const EditPoll = ({ isOpen, edit, pro }: editt) => {
 
-    const [optionText, setOptionText] = useState<string>();
     const [nameText, setNameText] = useState<string>(pro?.name);
     const [questionText, setQuestionText] = useState<string>(pro?.question);
-    const [optionColor, setOptionColor] = useState<string>("#000000");
     const [random] = useState<number>(pro?.number)
+
+    let optionsList: optionListType[] = [];
+
+    const [updatePoll] = useUpdatePollInfoMutation()
+
+    try {
+        const optionsParse = JSON.parse(pro.options)
+
+        const arrOptinsValue = Object.values(optionsParse)
+
+        arrOptinsValue.forEach((el: any) => optionsList = [...optionsList, { name: el.name, color: el.color, vote: el.vote }])
+
+    } catch (error) {
+        console.warn(error)
+    }
 
     const handleNameText = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault()
@@ -35,17 +47,13 @@ const EditPoll = ({ isOpen, edit, pro }: editt) => {
         setQuestionText(e.target.value)
     }
 
-    const handleOptionText = (event: ChangeEvent<HTMLInputElement>) => {
-        event.preventDefault()
-        setOptionText((event.target.value))
+    const handleUpdatePoll = (e: any) => {
+        e.preventDefault()
+        updatePoll({ name: nameText.trim(), question: questionText, number: random, option: pro.options, id: pro.id })
     }
 
-    const handleOptionColor = (event: ChangeEvent<HTMLInputElement>) => {
-        event.preventDefault()
-        setOptionColor(event.target.value)
-    }
-
-    const optionShow = () => optionsList.map((option: any, index: number) => <p className={b('option')} key={index}>{option?.name} <span className={b('color')} style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
+    const optionShow = () => optionsList?.map((option: any, index: number) => <div className={b('option')} key={index}>{option?.name} <span className={b('color')} style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span>
+    </div>)
 
     return (
         <Modal isOpen={isOpen}  >
@@ -57,15 +65,11 @@ const EditPoll = ({ isOpen, edit, pro }: editt) => {
                     <input type="text" onChange={handleQuestionText} value={questionText} />
                     <label >Number:</label>
                     <input type="number" readOnly disabled value={random} />
-                    <label>Option to choose in poll (max 6):</label>
-                    <input type="text" value={optionText} onChange={handleOptionText} />
-                    <input type="color" onChange={handleOptionColor} value={optionColor} />
-                    {/* <button onClick={handleAddOption}>+</button> */}
                     {optionShow()}
                 </form>
                 <div>
                     <button className={b('btn')} onClick={(e) => edit(e)}>Close</button>
-                    {/* <button className='btnModalClose' onClick={handleSendPoll}>Submmit</button> */}
+                    <button className={b('btn')} onClick={handleUpdatePoll}>Submmit</button>
                 </div>
             </div>
         </Modal>

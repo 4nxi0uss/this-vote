@@ -1,21 +1,13 @@
 const express = require('express');
 
-const { incrementPoll } = require('../controllers/function');
+const { getUserData, patchUserInfo, patchActiveUser, postRegisterUser, postLoginUser } = require('../controllers/users')
 
-const { postRegisterUser, postLoginUser, patchUserInfo, getUserData, patchActiveUser, postPolls, getPolls, deletePoll, getAllPolls } = require('../controllers/users');
-const { authMiddleware } = require('../Middleware/Middleware');
+const userRouter = express.Router();
+userRouter.get('/getUserData/:id', getUserData);
+userRouter.patch('/infoUpdate', patchUserInfo);
+userRouter.patch('/active', patchActiveUser);
+userRouter.post('/register', postRegisterUser);
+userRouter.post('/login', postLoginUser);
+userRouter.use((req, res) => res.status(404).end());
 
-const router = express.Router();
-router.delete('/deletePoll', deletePoll)
-router.get('/getUserData/:id', getUserData);
-router.get('/getPolls/:creatorId', getPolls);
-router.get('/getAllPolls', getAllPolls);
-router.patch('/infoUpdate', patchUserInfo);
-router.patch('/active', patchActiveUser);
-router.post('/register', postRegisterUser);
-router.post('/login', postLoginUser);
-router.post('/postPolls', authMiddleware, postPolls);
-router.put('/putPoll', incrementPoll)
-router.use((req, res) => res.status(404).end());
-
-module.exports = router;
+module.exports = userRouter;

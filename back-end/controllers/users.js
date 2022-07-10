@@ -2,9 +2,13 @@ const db = require('../Database/Database');
 
 const { v4: uid } = require('uuid');
 
+const bcrypt = require('bcrypt')
+
 const jwt = require('jsonwebtoken')
 
 const { APP_ACCESS_TOKEN, APP_REFRESH_TOKEN } = process.env
+
+const APP_SALT_ROUNDS = 10;
 
 //checking email and password in database
 const checkEmail = (rows, usersEmail) => {
@@ -12,7 +16,21 @@ const checkEmail = (rows, usersEmail) => {
 }
 
 const checkPass = (rows, password) => {
-    return Boolean(rows.find((pas) => pas.password === password))
+    return bcrypt.compareSync(password, rows[0].password)
+}
+
+const hashPass = () => {
+    db.query("SELECT * FROM `login`", async (err, rows) => {
+        if (err) throw err
+        rows.forEach((el) => {
+            bcrypt.hash(el.password, APP_SALT_ROUNDS, (err, hash) => {
+                if (err) throw err;
+                db.query("UPDATE `login` SET `password`='" + hash + "' WHERE `user_id` = '" + el.user_id + "'", (err, rows) => {
+                    if (err) throw err;
+                })
+            })
+        });
+    })
 }
 
 // register user in database
@@ -30,27 +48,31 @@ exports.postRegisterUser = (req, res) => {
                 })
 
             } else {
-                const userId = uid();
-                db.query('INSERT INTO `login` (`user_id`,`email`, `password`) VALUES ("' + userId + '", "' + email + '", "' + pass + '")', (erro, rows) => {
-                    db.query("INSERT INTO `users_data` (`id`, `user_id`, `name`, `surname`, `date_of_birth`, `type_of_account`, `active`) VALUES (NULL, '" + userId + "', 'John', 'Doe', '1960-01-01', '0', '0');", (error, row) => {
-                        if (erro || error) throw { erro, error }
-                        try {
-                            res.status(201).json({
-                                message: "Successfully registered new user.",
-                                error: erro,
-                                errorInsertData: error,
-                            })
 
-                        } catch (err) {
-                            res.status(402).json({
-                                err: err,
-                                error: erro,
-                                errorInsertData: error,
-                                message: "Error with registering."
+                try {
+                    const userId = uid();
+
+                    bcrypt.hash(pass, APP_SALT_ROUNDS, (err, hash) => {
+                        if (err) throw err
+
+                        db.query('INSERT INTO `login` (`user_id`,`email`, `password`) VALUES ("' + userId + '", "' + email + '", "' + hash + '")', (erro, rows) => {
+                            if (erro) throw erro
+
+                            db.query("INSERT INTO `users_data` (`id`, `user_id`, `name`, `surname`, `date_of_birth`, `type_of_account`, `active`) VALUES (NULL, '" + userId + "', 'John', 'Doe', '1960-01-01', '0', '0');", (error, row) => {
+                                if (error) throw error
+
+                                res.status(201).json({
+                                    message: "Successfully registered new user.",
+                                })
                             })
-                        }
+                        })
                     })
-                });
+                } catch (err) {
+                    res.status(401).json({
+                        error: err,
+                        message: "Error with registering."
+                    })
+                }
             }
         })
 
@@ -72,7 +94,7 @@ exports.postLoginUser = (req, res) => {
     try {
         const { password, email } = req.body;
 
-        db.query("SELECT * FROM `login` WHERE `email` = '" + email + "' AND `password` = '" + password + "' ", (err, rows) => {
+        db.query("SELECT * FROM `login` WHERE `email` = '" + email + "' ", (err, rows) => {
             if (err) throw err;
 
             if (!(checkEmail(rows, email) && checkPass(rows, password))) {
@@ -97,6 +119,7 @@ exports.postLoginUser = (req, res) => {
 
                 const accesToken = jwt.sign(payload, APP_ACCESS_TOKEN)
                 const refreshToken = jwt.sign(payload, APP_REFRESH_TOKEN)
+
                 fakeDatabase.push(refreshToken);
 
                 res.cookie('JWT', accesToken, {

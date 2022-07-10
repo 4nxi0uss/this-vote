@@ -18,7 +18,7 @@ const EditPoll = ({ isOpen, edit, pro }: editArg) => {
     const [nameText, setNameText] = useState<string>(pro?.name);
     const [questionText, setQuestionText] = useState<string>(pro?.question);
     const [optionColor, setOptionColor] = useState<string>("#000000");
-    const [random] = useState<number>(pro?.number)
+    const [random] = useState<number>(pro.number)
     const [optionsList, setOptionsList] = useState<Array<object>>([]);
 
     const [updatePoll] = useUpdatePollInfoMutation()

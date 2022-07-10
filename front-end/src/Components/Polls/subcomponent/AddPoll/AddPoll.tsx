@@ -66,7 +66,7 @@ const AddPoll = (show: boolean, modalFun: any, modalRandom: any, random: number)
         question: questionText,
         number: random,
         option: optionObject,
-        id: !isLoging && dataLogin?.rows[0].user_id,
+        userId: !isLoging && dataLogin?.rows[0].user_id,
         token: !isLoging && dataLogin?.token
     }
 
@@ -99,7 +99,7 @@ const AddPoll = (show: boolean, modalFun: any, modalRandom: any, random: number)
                         <label>Question:</label>
                         <input type="text" onChange={handleQuestionText} value={questionText} />
                         <label >Number:</label>
-                        <input type="number" readOnly disabled value={random} />
+                        <input type="number" readOnly className={b('number-poll')} disabled value={random} />
                         <label>Option to choose in poll (max 6):</label>
                         <input type="text" value={optionText} onChange={handleOptionText} />
                         <input type="color" onChange={handleOptionColor} value={optionColor} />

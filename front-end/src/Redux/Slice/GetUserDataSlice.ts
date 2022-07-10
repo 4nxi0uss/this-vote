@@ -26,6 +26,7 @@ export const fetchGetUserData = createAsyncThunk("users/getUserData", async (use
     try {
         const data = await fetch(`http://localhost:3022/users/getUserData/${userId}`, {
             method: 'GET',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },

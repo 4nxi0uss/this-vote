@@ -13,7 +13,7 @@ const initialState: postPollsInfo = {
 
 export const fetchPostPolls = createAsyncThunk("postPolls/postPolls", async (pollsData: pollsData) => {
 
-    const { name, question, number, option, id } = pollsData;
+    const { name, question, number, option, userId } = pollsData;
 
     try {
         const data = await fetch(`http://localhost:3022/users/postPolls`, {
@@ -26,7 +26,7 @@ export const fetchPostPolls = createAsyncThunk("postPolls/postPolls", async (pol
                 question,
                 number,
                 option,
-                id,
+                userId,
             }),
             mode: "cors",
             cache: "default",

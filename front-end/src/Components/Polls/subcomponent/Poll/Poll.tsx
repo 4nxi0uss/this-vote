@@ -5,40 +5,39 @@ import type { MouseEvent } from 'react';
 import style from './Poll.module.scss'
 import block from 'bem-css-modules'
 
-import { editProp, optionValueJson, PollProp, VoteType } from '../../../../Types/Types';
+import { optionValueJson, PollProp, VoteType } from '../../../../Types/Types';
 
-import { useDeletePollMutation, useGetPollsQuery, useUpdatePollValueMutation } from '../../../../Redux/Services/PollApi';
+import { useDeletePollMutation, useUpdatePollValueMutation } from '../../../../Redux/Services/PollApi';
 
 import EditPoll from '../EditPoll/EditPoll';
 import { useUserLoginMutation } from '../../../../Redux/Services/UserApi';
 
 const b = block(style);
 
-const Poll = ({ id, name, question, options, btn = true }: PollProp) => {
+const Poll = ({ id, name, question, options, number, btn = true }: PollProp) => {
 
     // eslint-disable-next-line
     const [loginApi, { data: dataLogin, isLoading: isLoging }] = useUserLoginMutation({
         fixedCacheKey: "login"
     });
 
-    const { data: getPollsData, error, isLoading, isError } = useGetPollsQuery(!isLoging && dataLogin?.rows[0].user_id, {
-        pollingInterval: 5000
-    })
-
     const [updatePollOptionValueApi] = useUpdatePollValueMutation()
     const [deletePoolApi] = useDeletePollMutation()
 
     const [isOpenEdit, setIsShownEdit] = useState<boolean>(false)
 
-    isError && console.warn(error);
+    let optionJsonParse: object = {}
+    try {
+        optionJsonParse = JSON.parse(options)
+    } catch (error) {
+        console.warn(error)
+    }
 
-    let optionJsonParse: object = JSON.parse(options)
     const optionJsonParseValuses = Object.values(optionJsonParse)
 
     const handlePollDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
 
         const delData = { creatorId: String(!isLoging && dataLogin?.rows[0].user_id), id: id }
-        console.log(id)
         deletePoolApi(delData)
     }
 
@@ -105,15 +104,13 @@ const Poll = ({ id, name, question, options, btn = true }: PollProp) => {
         })
     };
 
-    const editMode = () => !isLoading && getPollsData.data.map((el: editProp) => id === el.id && < EditPoll key={el.id} isOpen={isOpenEdit} edit={handleEdit} pro={el} />)
-
     return (
         <section className={b()}>
             <div className={b('option')}>
                 {btn && <button onClick={handlePollDelete} className={b('btn-option', { delete: true })}>Delete</button>}
                 {btn && <button onClick={handleEdit} className={b('btn-option', { edit: true })}>Edit</button>}
             </div>
-            {editMode()}
+            < EditPoll key={id + 18} isOpen={isOpenEdit} edit={handleEdit} pro={{ id, name, question, number, options }} />
             <h2>{name}</h2>
             <h4>{question}</h4>
             <div className={b('circle-chart')} style={({ background: circleStyle() })}></div>

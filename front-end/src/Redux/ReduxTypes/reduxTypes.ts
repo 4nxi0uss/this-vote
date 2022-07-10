@@ -56,7 +56,7 @@ export interface pollsData {
     question: string;
     number: number;
     option: object;
-    id: string;
+    userId: string;
     token: string;
 }
 

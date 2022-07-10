@@ -9,6 +9,15 @@
     &__form {
         display: flex;
         flex-direction: column;
+        gap: .3rem;
+    }
+
+    &__number-poll {
+        cursor: text;
+    }
+
+    input {
+        padding: .1rem;
     }
 
     &__btn {

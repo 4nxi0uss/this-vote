@@ -1,5 +1,5 @@
 const express = require('express')
-const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser')
 const cors = require('cors')
 
 const userRoutes = require('./routes/users');
@@ -11,8 +11,12 @@ const port = 3022
 const hostname = 'localhost';
 
 
-app.use(bodyParser.json());
-app.use(cors());
+app.use(express.json());
+app.use(cookieParser());
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
 
 app.use('/users', userRoutes);
 app.use('/polls', pollsRouter);

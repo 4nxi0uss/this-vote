@@ -3,12 +3,14 @@
 # dependencies
 /front-end/node_modules
 /front-end/build
+/front-end/**/*copy.tsx
 /back-end/node_modules
 /back-end/build
+/back-end/**/*copy.js
 /back-end/.env
 /.pnp
 .pnp.js
-
+/back-end/*.rest
 # testing
 /coverage
 

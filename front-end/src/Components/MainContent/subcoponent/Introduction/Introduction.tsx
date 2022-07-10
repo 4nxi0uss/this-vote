@@ -15,7 +15,7 @@ const Introduction = () => {
         pollingInterval: 5000,
     });
 
-    const PollDisplay = () => !isLoading && data.data.map((el: PollProp) => <Poll key={el.number} id={el.id} name={el.name} question={el.question} options={el.options} btn={false} />)
+    const PollDisplay = () => !isLoading && data.data.map((el: PollProp) => <Poll key={el.number} id={el.id} name={el.name} number={el.number} question={el.question} options={el.options} btn={false} />)
 
     isError && console.warn(error)
 

@@ -5,10 +5,10 @@ const { deletePoll, getPolls, getAllPolls, patchUpdatePoll, postPolls, increment
 const { authMiddleware } = require('../Middleware/Middleware');
 
 const pollsRouter = express.Router();
-pollsRouter.delete('/deletePoll', deletePoll)
-pollsRouter.get('/getPolls/:creatorId', getPolls);
+pollsRouter.delete('/deletePoll', authMiddleware, deletePoll)
+pollsRouter.get('/getPolls/:creatorId', authMiddleware, getPolls);
 pollsRouter.get('/getAllPolls', getAllPolls);
-pollsRouter.patch('/pollUpdate', patchUpdatePoll);
+pollsRouter.patch('/pollUpdate', authMiddleware, patchUpdatePoll);
 pollsRouter.post('/postPolls', authMiddleware, postPolls);
 pollsRouter.put('/putPoll', incrementPoll)
 pollsRouter.use((req, res) => res.status(404).end());

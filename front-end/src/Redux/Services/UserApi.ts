@@ -12,7 +12,8 @@ export const userApi = createApi({
             {
                 query: (userId) => ({
                     url: `getUserData/${userId}`,
-                    method: "GET"
+                    method: "GET",
+                    credentials: "include",
                 }),
                 providesTags: ["User"],
             }),
@@ -22,7 +23,19 @@ export const userApi = createApi({
                 query: (infoUpdate) => ({
                     url: "infoUpdate",
                     method: 'PATCH',
+                    credentials: "include",
                     body: infoUpdate,
+                }),
+                invalidatesTags: ["User"]
+            }),
+        //active user account
+        userActive: builder.mutation<any, string>(
+            {
+                query: (userId) => ({
+                    url: "active",
+                    method: 'PATCH',
+                    credentials: 'include',
+                    body: { userId },
                 }),
                 invalidatesTags: ["User"]
             }),
@@ -32,17 +45,9 @@ export const userApi = createApi({
                 query: (loginData) => ({
                     url: "login",
                     method: 'POST',
+                    credentials: 'include',
                     body: loginData,
                 }),
-            }),
-        userLogin2: builder.query<any, infoLoginType>(
-            {
-                query: (loginData) => (
-                    {
-                        url: "login",
-                        method: 'POST',
-                        body: loginData,
-                    }),
             }),
         //registerInfo
         userRegistery: builder.mutation<registerInfo, registerDataType>({
@@ -61,4 +66,4 @@ export const userApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetUserDataQuery, useUpdateUserInfoMutation, useUserLoginMutation, useUserRegisteryMutation } = userApi
+export const { useGetUserDataQuery, useUpdateUserInfoMutation, useUserLoginMutation, useUserRegisteryMutation, useUserActiveMutation } = userApi

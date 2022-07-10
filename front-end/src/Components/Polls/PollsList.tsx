@@ -11,7 +11,6 @@ import AddPoll from './subcomponent/AddPoll/AddPoll';
 import { ObjectPushType, optionListType } from '../../Types/Types';
 
 import { useGetPollsQuery } from '../../Redux/Services/PollApi';
-
 import { useUserLoginMutation } from '../../Redux/Services/UserApi';
 
 const b = block(style);
@@ -25,8 +24,9 @@ const PollsList = () => {
         fixedCacheKey: "login"
     });
 
-    const { data: dataGetPollsApi, isLoading } = useGetPollsQuery(!isLoging && dataLogin?.rows[0]?.user_id);
-
+    const { data: dataGetPollsApi, isLoading: isGetting } = useGetPollsQuery(!isLoging && dataLogin?.rows[0]?.user_id, {
+        pollingInterval: 5000
+    });
 
     const [isShownAdd, setIsShownAdd] = useState<boolean>(false)
     const [randomNumber, setRandomNumber] = useState<number>(0);
@@ -44,14 +44,14 @@ const PollsList = () => {
     let optionObject: ObjectPushType = {};
     optionsList.forEach((option, index) => optionObject[`option${index}`] = { id: index, ...option })
 
-    const PollDisplay = () => !isLoading && dataGetPollsApi.data.map((el: any) => <Poll key={el.number} id={el.id} name={el.name} question={el.question} options={el.options} />)
+    const PollDisplay = () => !isGetting && dataGetPollsApi?.data?.map((el: any) => <Poll key={el.number} id={el.id} name={el.name} number={el.number} question={el.question} options={el.options} />)
 
     return (
         <section className={b()}>
-            {!isLoading && <button className={b('add')} onClick={handleModal}>Add poll</button>}
+            {!isGetting && <button className={b('add')} onClick={handleModal}>Add poll +</button>}
             {AddPoll(isShownAdd, handleModal, handleRandomNumber, randomNumber)}
 
-            {!isLoading ? PollDisplay() : <Loader />}
+            {!isGetting ? PollDisplay() : <Loader />}
         </section>
     )
 }

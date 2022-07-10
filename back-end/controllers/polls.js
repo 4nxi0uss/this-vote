@@ -21,9 +21,9 @@ exports.patchUpdatePoll = (req, res) => {
 
 exports.postPolls = (req, res) => {
     try {
-        const { name, question, number, option, id } = req.body
+        const { name, question, number, option, userId } = req.body
 
-        db.query("INSERT INTO `polls` (`id`, `creator_id`, `name`, `question`, `number`, `options`) VALUES (NULL, '" + id + "', '" + name + "', '" + question + "', '" + number + "', '" + JSON.stringify(option) + "');", (err, rows) => {
+        db.query("INSERT INTO `polls` (`id`, `creator_id`, `name`, `question`, `number`, `options`) VALUES (NULL, '" + userId + "', '" + name + "', '" + question + "', '" + number + "', '" + JSON.stringify(option) + "');", (err, rows) => {
             if (err) throw err;
             res.status(200).json({
                 message: "Pool added sucesfuly.",

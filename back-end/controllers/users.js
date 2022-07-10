@@ -26,25 +26,30 @@ exports.postRegisterUser = (req, res) => {
 
             if (checkEmail(rows, email)) {
                 res.status(406).json({
-                    message: "User with this E-mail does not exist."
+                    message: "User with this E-mail does exist."
                 })
 
             } else {
-                db.query('INSERT INTO `login` (`user_id`,`email`, `password`) VALUES ("' + uid() + '", "' + email + '", "' + pass + '");', (err, rows) => {
+                const userId = uid();
+                db.query('INSERT INTO `login` (`user_id`,`email`, `password`) VALUES ("' + userId + '", "' + email + '", "' + pass + '")', (erro, rows) => {
+                    db.query("INSERT INTO `users_data` (`id`, `user_id`, `name`, `surname`, `date_of_birth`, `type_of_account`, `active`) VALUES (NULL, '" + userId + "', 'John', 'Doe', '1960-01-01', '0', '0');", (error, row) => {
+                        if (erro || error) throw { erro, error }
+                        try {
+                            res.status(201).json({
+                                message: "Successfully registered new user.",
+                                error: erro,
+                                errorInsertData: error,
+                            })
 
-                    try {
-                        res.status(201).json({
-                            message: "Successfully registered new user.",
-                            error: err,
-                            data: rows
-                        })
-
-                    } catch (err) {
-                        res.status(402).json({
-                            err,
-                            message: "Error with registering."
-                        })
-                    }
+                        } catch (err) {
+                            res.status(402).json({
+                                err: err,
+                                error: erro,
+                                errorInsertData: error,
+                                message: "Error with registering."
+                            })
+                        }
+                    })
                 });
             }
         })
@@ -63,7 +68,7 @@ let fakeDatabase = [
 
 // login user 
 exports.postLoginUser = (req, res) => {
-
+    // 401 nie autoryzowany
     try {
         const { password, email } = req.body;
 
@@ -82,19 +87,33 @@ exports.postLoginUser = (req, res) => {
                 const payload = {
                     message: 'Logged.',
                     login: true,
-                    rows: rows,
+                    rows: [
+                        {
+                            id: rows[0].id,
+                            user_id: rows[0].user_id
+                        }
+                    ],
                 }
 
-                const token = jwt.sign(payload, APP_ACCESS_TOKEN)
-                // const token = jwt.sign(payload, ACCESS_TOKEN, { expiresIn: '15m', })
+                const accesToken = jwt.sign(payload, APP_ACCESS_TOKEN)
                 const refreshToken = jwt.sign(payload, APP_REFRESH_TOKEN)
                 fakeDatabase.push(refreshToken);
+
+                res.cookie('JWT', accesToken, {
+                    maxAge: 300000,
+                    httpOnly: true
+                });
 
                 res.status(201).json({
                     message: 'Logged.',
                     login: true,
-                    rows: rows,
-                    token,
+                    rows: [
+                        {
+                            id: rows[0].id,
+                            user_id: rows[0].user_id
+                        }
+                    ],
+                    token: accesToken,
                     refreshToken,
                 })
             }
@@ -115,28 +134,15 @@ exports.patchUserInfo = (req, res) => {
 
         db.query("SELECT user_id FROM `users_data`", (err, rows) => {
             if (err) throw err;
-            const userIdFinder = rows.some(id => id.user_id === userId);
 
-            if (!Boolean(`${userIdFinder}`)) {
-                db.query("INSERT INTO `users_data` (`user_id`, `Name`, `Surname`, `date_of_birth`, `type_of_account`, `active`, `polls`) VALUES ('" + userId + "', '" + name + "', '" + surname + "', '" + dateOfBirth + "', '0', '0', '[]')", (err, rows) => {
-                    if (err) throw err;
-                    res.status(200).json({
-                        message: 'Actualization and adding new information was succeeded.',
-                        rows: rows,
-                        error: err,
-                    })
+            db.query("UPDATE `users_data` SET `Name` = '" + name + "', `Surname` = '" + surname + "', `date_of_birth` = '" + dateOfBirth + "' WHERE `users_data`.`user_id` ='" + userId + "'", (err, rows, fields) => {
+                if (err) throw err;
+                res.status(200).json({
+                    message: 'Actualization succeseed.',
+                    rows: rows,
+                    error: err
                 })
-
-            } else {
-                db.query("UPDATE `users_data` SET `Name` = '" + name + "', `Surname` = '" + surname + "', `date_of_birth` = '" + dateOfBirth + "' WHERE `users_data`.`user_id` ='" + userId + "'", (err, rows, fields) => {
-                    if (err) throw err;
-                    res.status(200).json({
-                        message: 'Actualization succeseed.',
-                        rows: rows,
-                        error: err
-                    })
-                })
-            }
+            })
         })
     } catch (err) {
 
@@ -152,6 +158,7 @@ exports.patchActiveUser = (req, res) => {
         const { userId } = req.body
         db.query("SELECT user_id, `active` FROM `users_data`", (err, rows, fields) => {
             if (err) throw err;
+
             const userIdFinder = rows.some(id => id.user_id === userId);
             const activeFinder = rows.some(row => row.active === 0);
 

@@ -37,7 +37,7 @@ export interface PollProp {
   name: string,
   question: string,
   options: string,
-  number?: number,
+  number: number,
   btn?: boolean
 }
 

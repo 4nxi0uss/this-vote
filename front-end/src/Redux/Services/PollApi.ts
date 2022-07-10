@@ -12,26 +12,31 @@ export const pollApi = createApi({
                     url: `getAllPolls`,
                     method: "GET"
                 }),
-            providesTags: ["Poll"],
         }),
         getPolls: builder.query<any, number>({
             query: (creatorId) => (
                 {
                     url: `getPolls/${creatorId}`,
-                    method: "GET"
+                    method: "GET",
+                    credentials: "include",
                 }),
             providesTags: ["Poll"],
         }),
         addPoll: builder.mutation<any, any>({
-            query: ({ name, question, number, option, id, token }) => (
+            query: ({ name, question, number, option, userId, token }) => (
                 {
                     url: "postPolls/",
                     method: "POST",
+                    credentials: "include",
                     headers: {
                         "Authorization": `Bearer ${token}`
                     },
                     body: {
-                        name, question, number, option, id
+                        name,
+                        question,
+                        number,
+                        option,
+                        userId
                     },
                 }),
             invalidatesTags: ["Poll"],
@@ -41,6 +46,7 @@ export const pollApi = createApi({
                 {
                     url: "putPoll",
                     method: "PUT",
+                    credentials: "include",
                     body: {
                         id,
                         optionId,
@@ -53,6 +59,7 @@ export const pollApi = createApi({
                 {
                     url: "pollUpdate",
                     method: "PATCH",
+                    credentials: "include",
                     body: {
                         name,
                         question,
@@ -68,6 +75,7 @@ export const pollApi = createApi({
                 {
                     url: "deletePoll",
                     method: "DELETE",
+                    credentials: "include",
                     body: delData,
                 }),
             invalidatesTags: ["Poll"],

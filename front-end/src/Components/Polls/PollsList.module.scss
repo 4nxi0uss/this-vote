@@ -1,10 +1,28 @@
+@use '../_lib' as lib;
+
 .section-polls {
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-top: 1.5rem;
 
     &__add {
         padding: .5vw;
+        font-size: medium;
+        background-color: transparent;
+        border-radius: 20px;
+        border: 2px solid lib.$main-clr;
+        transition: .3s;
+
+        &:hover {
+            background-color: lib.$main-clr;
+            border: 2px solid transparent;
+        }
+
+        &:active {
+            background-color: lib.$main-font-active-clr;
+            border: 2px solid transparent;
+        }
     }
 }

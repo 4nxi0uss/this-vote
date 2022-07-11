@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import style from './Header.module.scss'
 import block from 'bem-css-modules'
-import { useUserLoginMutation } from '../../Redux/Services/UserApi';
+import { useUserLoginMutation, useUserLogoutMutation } from '../../Redux/Services/UserApi';
 
 const b = block(style);
 
@@ -14,10 +14,13 @@ const Header = () => {
         fixedCacheKey: "login"
     });
 
+    const [logout] = useUserLogoutMutation()
+
     const handleLogout = () => {
         window.localStorage.clear();
         window.location.reload();
         window.location.replace('/');
+        logout(dataLogin?.rows[0].user_id)
     }
 
     return (

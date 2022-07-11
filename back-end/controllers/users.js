@@ -85,9 +85,6 @@ exports.postRegisterUser = (req, res) => {
     }
 }
 
-let fakeDatabase = [
-]
-
 // login user 
 exports.postLoginUser = (req, res) => {
     // 401 nie autoryzowany
@@ -117,13 +114,20 @@ exports.postLoginUser = (req, res) => {
                     ],
                 }
 
-                const accesToken = jwt.sign(payload, APP_ACCESS_TOKEN)
-                const refreshToken = jwt.sign(payload, APP_REFRESH_TOKEN)
+                const accesToken = jwt.sign(payload, APP_ACCESS_TOKEN, { expiresIn: '5min' })
+                const refreshToken = jwt.sign(payload, APP_REFRESH_TOKEN, { expiresIn: '1day' })
 
-                fakeDatabase.push(refreshToken);
+                db.query("UPDATE `login` SET `refresh_token` = '" + refreshToken + "' WHERE `login`.`user_id` = '" + rows[0].user_id + "'", (err, rows) => {
+                    if (err) throw err;
+                })
 
                 res.cookie('JWT', accesToken, {
                     maxAge: 300000,
+                    httpOnly: true
+                });
+
+                res.cookie('JWT_REFRESH', refreshToken, {
+                    maxAge: 30000000,
                     httpOnly: true
                 });
 
@@ -136,16 +140,98 @@ exports.postLoginUser = (req, res) => {
                             user_id: rows[0].user_id
                         }
                     ],
-                    token: accesToken,
-                    refreshToken,
+                    // token: accesToken,
                 })
             }
         })
 
     } catch (err) {
         res.status(500).json({
-            error: "Backend error with update user login.",
+            message: "Backend error with update user login.",
+            error: err,
             login: false,
+        })
+    }
+}
+
+//refresh acces token
+exports.postRefreshToken = (req, res) => {
+    try {
+        let payload = {}
+
+        const refreshToken = req.cookies.JWT_REFRESH
+        const { userId } = req.body
+
+        if (!refreshToken) return res.status(401)
+
+        db.query("SELECT `refresh_token` FROM `login` WHERE `user_id`='" + userId + "'", (err, rows) => {
+            if (err) throw err
+
+            if (rows[0].refresh_token === refreshToken) {
+
+                try {
+                    jwt.verify(refreshToken, APP_REFRESH_TOKEN, (err, data) => {
+                        if (err) (res.sendStatus(403));
+                        payload = data;
+                    })
+
+                } catch (error) {
+                    console.warn(error)
+                    return res.sendStatus(403)
+                }
+
+                const accesToken = jwt.sign({ message: payload.message, login: payload.login, rows: payload.rows }, APP_ACCESS_TOKEN, { expiresIn: '5min' })
+                payload = {};
+                res.cookie('JWT', accesToken, {
+                    maxAge: 300000,
+                    httpOnly: true
+                });
+
+                res.status(200).json({
+                    message: "New acces token generated succesfuly",
+                })
+
+            } else {
+                res.sendStatus(403)
+            }
+        })
+
+    } catch (err) {
+        res.status(500).json({
+            message: "Backend error with refresh token.",
+            error: err
+        })
+    }
+}
+
+//logout
+exports.postLogoutUser = (req, res) => {
+    try {
+        const userId = req.body.userId;
+        console.log(userId)
+        console.warn(userId)
+        db.query("UPDATE `login` SET `refresh_token` = '' WHERE `login`.`user_id` = '" + userId + "'", (err, rows) => {
+            if (err) throw err
+
+            res.cookie('JWT', false, {
+                maxAge: 100,
+                httpOnly: true
+            });
+            res.cookie('JWT_REFRESH', false, {
+                maxAge: 100,
+                httpOnly: true
+            });
+
+            res.status(200).json({
+                message: "Logout succeful.",
+            })
+        })
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            error,
+            message: "Backend error with logout.",
         })
     }
 }
@@ -195,7 +281,7 @@ exports.patchActiveUser = (req, res) => {
         })
     } catch (error) {
         res.status(500).json({
-            error: err,
+            error,
             message: "Backend error with activation you account."
 
         })
@@ -207,8 +293,12 @@ exports.getUserData = (req, res) => {
         const { id } = req.params
 
         db.query("SELECT * FROM `users_data` WHERE user_id = '" + id + "' ", (err, rows, fields) => {
+            // console.log(rows)
+            // console.log(rows[0].date_of_birth + 1)
+            // console.log(typeof (rows[0].date_of_birth))
 
             if (err) throw err;
+
             res.status(200).json({
                 message: "user data fetch succesfuly.",
                 data: rows,

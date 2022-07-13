@@ -16,7 +16,7 @@ function App() {
   useEffect(() => {
     try {
 
-      const storage = sessionStorage.getItem('user')
+      const storage = localStorage.getItem('user')
       const dataToLogin = JSON.parse(`${storage}`)
 
       if (!dataLogin?.login && Boolean(dataToLogin)) {

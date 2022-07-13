@@ -41,7 +41,7 @@ const Login = () => {
         e.preventDefault();
 
         if (validatedEmail(email) && validatePassword(password)) {
-            sessionStorage.setItem('user', JSON.stringify({ email, password }))
+            localStorage.setItem('user', JSON.stringify({ email, password }))
             const userLoginData = {
                 email,
                 password

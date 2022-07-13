@@ -19,6 +19,7 @@ const Login = () => {
     const [loginApi, { data: dataLogin, isLoading }] = useUserLoginMutation({
         fixedCacheKey: "login"
     });
+
     const [registerApi, { isSuccess }] = useUserRegisteryMutation();
 
     const validatedEmail = (toVerified: string) => {
@@ -40,6 +41,7 @@ const Login = () => {
         e.preventDefault();
 
         if (validatedEmail(email) && validatePassword(password)) {
+            sessionStorage.setItem('user', JSON.stringify({ email, password }))
             const userLoginData = {
                 email,
                 password

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 
 import style from './Header.module.scss'
@@ -6,6 +6,14 @@ import block from 'bem-css-modules'
 import { useUserLoginMutation, useUserLogoutMutation } from '../../Redux/Services/UserApi';
 
 const b = block(style);
+
+export const handleLogoutConfig = (logout: any, userId: string) => {
+    window.sessionStorage.clear();
+    window.localStorage.clear();
+    window.location.reload();
+    window.location.replace('/');
+    logout(userId)
+}
 
 const Header = () => {
 
@@ -17,10 +25,7 @@ const Header = () => {
     const [logout] = useUserLogoutMutation()
 
     const handleLogout = () => {
-        window.localStorage.clear();
-        window.location.reload();
-        window.location.replace('/');
-        logout(dataLogin?.rows[0].user_id)
+        handleLogoutConfig(logout, dataLogin?.rows[0].user_id)
     }
 
     return (

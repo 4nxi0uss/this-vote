@@ -140,7 +140,6 @@ exports.postLoginUser = (req, res) => {
                             user_id: rows[0].user_id
                         }
                     ],
-                    // token: accesToken,
                 })
             }
         })
@@ -208,8 +207,7 @@ exports.postRefreshToken = (req, res) => {
 exports.postLogoutUser = (req, res) => {
     try {
         const userId = req.body.userId;
-        console.log(userId)
-        console.warn(userId)
+
         db.query("UPDATE `login` SET `refresh_token` = '' WHERE `login`.`user_id` = '" + userId + "'", (err, rows) => {
             if (err) throw err
 
@@ -293,9 +291,6 @@ exports.getUserData = (req, res) => {
         const { id } = req.params
 
         db.query("SELECT * FROM `users_data` WHERE user_id = '" + id + "' ", (err, rows, fields) => {
-            // console.log(rows)
-            // console.log(rows[0].date_of_birth + 1)
-            // console.log(typeof (rows[0].date_of_birth))
 
             if (err) throw err;
 

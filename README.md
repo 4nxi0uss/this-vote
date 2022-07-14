@@ -1,4 +1,5 @@
-Create and write file .env in back-end directory
+STEP #1 
+Create .env file in back-end directory
 
 APP_SERVER=`server domain`
 APP_DATABASE=`databse name`
@@ -9,19 +10,21 @@ APP_ACCESS_TOKEN = `unique string of characters, longer = better`
 
 APP_REFRESH_TOKEN = `unique string of characters, longer = better`
 
-STEP #1 
+STEP #2
 npm install
 
-Step #2 
+Step #3 
 
 chose backend directory
 cd back-end
 
-npm run NS // to start with nodemon 
+// to start with nodemon automatically will start with .env
+npm run NS 
 or 
-npm run start:dev // to start just node server with .env file
+// to start just node server with .env file
+npm run start:dev 
 
-setp #3 
+setp #4 
 
 chose fontend dierctory 
 

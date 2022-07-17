@@ -19,25 +19,13 @@ const checkPass = (rows, password) => {
     return bcrypt.compareSync(password, rows[0].password)
 }
 
-const hashPass = () => {
-    db.query("SELECT * FROM `login`", async (err, rows) => {
-        if (err) throw err
-        rows.forEach((el) => {
-            bcrypt.hash(el.password, APP_SALT_ROUNDS, (err, hash) => {
-                if (err) throw err;
-                db.query("UPDATE `login` SET `password`='" + hash + "' WHERE `user_id` = '" + el.user_id + "'", (err, rows) => {
-                    if (err) throw err;
-                })
-            })
-        });
-    })
-}
-
 // register user in database
 exports.postRegisterUser = (req, res) => {
 
     try {
         const { usersEmail: email, pass } = req.body;
+
+        if (!Boolean(email) || !Boolean(pass)) return res.status(401)
 
         db.query("SELECT `email`,`password` FROM `login`", (err, rows) => {
             if (err) throw err;
@@ -161,7 +149,7 @@ exports.postRefreshToken = (req, res) => {
         const refreshToken = req.cookies.JWT_REFRESH
         const { userId } = req.body
 
-        if (!refreshToken) return res.status(401)
+        if (!Boolean(userId) || !refreshToken) return res.status(401)
 
         db.query("SELECT `refresh_token` FROM `login` WHERE `user_id`='" + userId + "'", (err, rows) => {
             if (err) throw err
@@ -208,6 +196,8 @@ exports.postLogoutUser = (req, res) => {
     try {
         const userId = req.body.userId;
 
+        if (!Boolean(userId)) return res.status(401)
+
         db.query("UPDATE `login` SET `refresh_token` = '' WHERE `login`.`user_id` = '" + userId + "'", (err, rows) => {
             if (err) throw err
 
@@ -251,8 +241,8 @@ exports.patchUserInfo = (req, res) => {
                 })
             })
         })
-    } catch (err) {
 
+    } catch (err) {
         res.status(500).json({
             error: err,
             message: "Backend error with update user info."
@@ -263,6 +253,9 @@ exports.patchUserInfo = (req, res) => {
 exports.patchActiveUser = (req, res) => {
     try {
         const { userId } = req.body
+
+        if (!Boolean(userId)) return res.status(401)
+
         db.query("SELECT user_id, `active` FROM `users_data`", (err, rows, fields) => {
             if (err) throw err;
 
@@ -289,6 +282,8 @@ exports.patchActiveUser = (req, res) => {
 exports.getUserData = (req, res) => {
     try {
         const { id } = req.params
+
+        if (!Boolean(id)) return res.status(401)
 
         db.query("SELECT * FROM `users_data` WHERE user_id = '" + id + "' ", (err, rows, fields) => {
 

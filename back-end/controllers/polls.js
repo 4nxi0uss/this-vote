@@ -59,9 +59,11 @@ exports.getAllPolls = (req, res) => {
 
 exports.getPolls = (req, res) => {
     try {
-        const { creatorId } = req.params
+        const { userId } = req.params
 
-        db.query(" SELECT * FROM `polls` WHERE `creator_id` = '" + creatorId + "' ", (err, rows, fields) => {
+        if (!Boolean(userId)) return res.status(401)
+
+        db.query(" SELECT * FROM `polls` WHERE `creator_id` = '" + userId + "' ", (err, rows) => {
             if (err) throw err;
             res.status(200).json({
                 message: "download polls.",
@@ -80,6 +82,8 @@ exports.getPolls = (req, res) => {
 exports.deletePoll = (req, res) => {
     try {
         const { creatorId, id } = req.body
+
+        if (!Boolean(creatorId) || !Boolean(id)) return res.status(401)
 
         db.query("DELETE FROM `polls` WHERE id=" + id + " and creator_id='" + creatorId + "'", (err, rows, fields) => {
             if (err) throw err
@@ -100,7 +104,9 @@ exports.incrementPoll = (req, res) => {
     try {
 
         const { id, optionId } = req.body
+
         if (Boolean(id) && Boolean(optionId >= 0)) {
+
             db.query("SELECT options FROM `polls` where id = " + id + "", (err, rows, fields) => {
                 if (err) throw err;
                 const info = JSON.parse(rows[0].options)
@@ -115,7 +121,7 @@ exports.incrementPoll = (req, res) => {
                 })
             })
         } else {
-            res.status(202).json({
+            res.status(401).json({
                 error: "id or optionId is incorect"
             })
         }

@@ -84,7 +84,7 @@ export interface getPollsInfo {
         message: string,
         data: [{
             id: number,
-            creator_id: string,
+            userId: string,
             name: string,
             question: string,
             number: number,
@@ -113,7 +113,7 @@ export interface registerDataType {
 }
 
 export interface deletingDataType {
-    creatorId: string,
+    userId: string,
     id: number
 }
 

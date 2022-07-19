@@ -1,9 +1,14 @@
 import * as React from 'react';
 
-export const userAcountType = {
-  0: 'Standar user',
+export const userAcountType: UsersStatusType = {
+  0: "Standar user",
   1: "Admin",
   2: "Super Admin"
+}
+
+export const userAcountActivated: UsersStatusType = {
+  0: "Unactivated",
+  1: "Activated",
 }
 
 export interface dataTypes {
@@ -43,6 +48,10 @@ export interface PollProp {
 
 export interface ObjectPushType {
   [key: string]: any;
+}
+
+export interface UsersStatusType {
+  [key: number]: any;
 }
 
 export interface VoteType {

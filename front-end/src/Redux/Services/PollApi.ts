@@ -3,11 +3,11 @@ import { Mutex } from 'async-mutex'
 
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query'
 
-let userIdD = ''
+let localUserId = ''
 
 const mutex = new Mutex()
 
-const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
+const baseQueryWithReauthPoll: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
     const baseQuery = fetchBaseQuery({ baseUrl: 'http://localhost:3022/polls/' })
     // wait until the mutex is available without locking it
 
@@ -19,29 +19,34 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
     const previousApi = api
     const previousExtraOptions = extraOptions
 
-    if (result.error && result.error.status === 401) {
+    if (result?.error?.status === 401) {
+        // if (result.error && result.error.status === 401) {
         // checking whether the mutex is locked
         if (!mutex.isLocked()) {
             const release = await mutex.acquire()
 
             try {
-                const refreshResult = await baseQuery(
-                    args = {
-                        url: 'http://localhost:3022/users/refreshToken',
-                        method: 'POST',
-                        credentials: 'include',
-                        body: { userId: userIdD }
-                    },
-                    api,
-                    extraOptions
-                )
+                let refreshResult
+                if (Boolean(localUserId)) {
+                    refreshResult = await baseQuery(
+                        args = {
+                            url: 'http://localhost:3022/users/refreshToken',
+                            method: 'POST',
+                            credentials: 'include',
+                            body: { userId: localUserId }
+                        },
+                        api,
+                        extraOptions
+                    )
+                }
 
-                if (refreshResult.data) {
+                if (Boolean(localUserId) && Boolean(refreshResult?.data)) {
                     // retry the initial query
                     result = await baseQuery(previousArgs, previousApi, previousExtraOptions)
-                } else {
-                    console.warn('re auth api else', refreshResult.error)
                 }
+                //  else {
+                //     console.warn('re auth error polls', refreshResult.error)
+                // }
             } catch (err) {
                 console.warn(err)
             } finally {
@@ -54,27 +59,29 @@ const baseQueryWithReauth: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQue
             result = await baseQuery(args, api, extraOptions)
         }
     }
+    // console.log(88, result)
     return result
 }
 
 // Define a service using a base URL and expected endpoints
 export const pollApi = createApi({
     reducerPath: 'pollApi',
-    baseQuery: baseQueryWithReauth,
+    baseQuery: baseQueryWithReauthPoll,
     tagTypes: ['Poll'],
     endpoints: (builder) => ({
         getAllPolls: builder.query<any, void>({
-            query: () => (
-                {
+            query: () => {
+                return {
                     url: `getAllPolls`,
                     method: "GET"
-                }),
+                }
+            },
         }),
         getPolls: builder.query<any, number>({
-            query: (creatorId) => {
-                userIdD = `${creatorId}`;
+            query: (userId) => {
+                localUserId = `${userId}`;
                 return {
-                    url: `getPolls/${creatorId}`,
+                    url: `getPolls/${userId}`,
                     method: "GET",
                     credentials: "include",
                 }

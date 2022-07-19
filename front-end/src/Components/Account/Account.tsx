@@ -6,10 +6,11 @@ import block from 'bem-css-modules'
 
 import { useGetUserDataQuery, useUpdateUserInfoMutation, useUserActiveMutation, useUserLoginMutation } from '../../Redux/Services/UserApi';
 
+import { userAcountActivated, userAcountType } from '../../Types/Types';
+
 const b = block(style);
 
 const Account = () => {
-
     // eslint-disable-next-line
     const [loginApi, { data: dataLogin, isLoading }] = useUserLoginMutation({
         fixedCacheKey: "login"
@@ -97,10 +98,10 @@ const Account = () => {
                 <input type="date" max={`${TodayDate.getFullYear()}-${TodayDate.getMonth() + 1}-${TodayDate.getDate()}`} onChange={handleDate} value={date ?? '1234-11-22'} />
 
                 <label >Type of account:</label>
-                <input type="text" readOnly disabled value={typeOfAccount ?? 0} />
+                <input type="text" readOnly disabled value={userAcountType[typeOfAccount ?? 0]} />
 
                 <label >Account status:</label>
-                <input type="text" readOnly disabled value={accountStatus ?? 0} />
+                <input type="text" readOnly disabled value={userAcountActivated[accountStatus ?? 0]} />
 
                 <button className={b('submit-btn')} type="submit">Save</button>
             </form>

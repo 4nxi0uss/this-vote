@@ -16,11 +16,17 @@ const Login = () => {
     const [password, setPassword] = useState<string>("1qaz@WSX");
     const [secondPassword, setSecondPassword] = useState<string>("");
 
-    const [loginApi, { data: dataLogin, isLoading }] = useUserLoginMutation({
+    const [loginApi, { data: dataLogin, isLoading, isSuccess: isLoginSucces, error, isError }] = useUserLoginMutation({
         fixedCacheKey: "login"
     });
 
     const [registerApi, { isSuccess }] = useUserRegisteryMutation();
+
+    const errorStatus = () => {
+        if (error && isError) {
+            if ('status' in error) return error?.status === 401 && error?.status
+        }
+    }
 
     const validatedEmail = (toVerified: string) => {
         const atCheck = toVerified.includes("@");
@@ -41,20 +47,18 @@ const Login = () => {
         e.preventDefault();
 
         if (validatedEmail(email) && validatePassword(password)) {
-            localStorage.setItem('user', JSON.stringify({ email, password }))
             const userLoginData = {
                 email,
                 password
             }
             loginApi(userLoginData)
             console.log('zalogowany')
-            setEmail('');
-            setPassword('');
-
         } else {
             console.log('nie zalogowany')
         }
     }
+
+    isLoginSucces && localStorage.setItem('user', JSON.stringify({ email, password }))
 
     const handleRegistry = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -91,11 +95,21 @@ const Login = () => {
     return (
         <section className={b()}>
             <h2 className={b('title')}>{!toggleRegistry ? "Sing in" : "Register"}</h2>
+            {isError && errorStatus() && <h4 className={b('info')}>Login or password is incorect.</h4>}
             <form onSubmit={toggleRegistry ? handleRegistry : handleLogin} className={b('form')}>
-                <input required type="email" placeholder='e-mail' onChange={handleEmail} value={email} className={b('input')} />
-                <input required type="password" placeholder='password' onChange={handlePassword} value={password} className={b('input')} />
-                {!toggleRegistry ? null : <input type='password' placeholder='repeat password' onChange={handleSecondPassword} value={secondPassword} className={b('input')} />}
-                <button className={b('login-btn')} type='submit'>{toggleRegistry ? "Register" : "Log in"}</button>
+                <input required type="email" autoComplete='email' placeholder='e-mail' onChange={handleEmail} value={email} className={b('form__input')} />
+                {toggleRegistry && <div className={b('form__password-info')}>
+                    <p className={b('form__password-info__title')}>Password should have</p>
+                    <ul className={b('form__password-info__list')}>
+                        <li className={b('form__password-info__list__list-element')}>at least one digit</li>
+                        <li className={b('form__password-info__list__list-element')}>at least one capital letter</li>
+                        <li className={b('form__password-info__list__list-element')}>one special sign</li>
+                        <li className={b('form__password-info__list__list-element')}>small letters</li>
+                    </ul>
+                </div>}
+                <input required type="password" placeholder='password' autoComplete='current-password' onChange={handlePassword} value={password} className={b('form__input')} />
+                {toggleRegistry && <input type='password' autoComplete='new-password' placeholder='repeat password' onChange={handleSecondPassword} value={secondPassword} className={b('form__input')} />}
+                <button className={b('form__login-btn')} type='submit'>{toggleRegistry ? "Register" : "Log in"}</button>
             </form>
             <p className={b('paragraph')}>{toggleRegistry ? "If you have account, please " : "If you don't have account, please"} <button className={b('paragraph', { btn: true })} onClick={handleToggleRegistry}> {!toggleRegistry ? "register now." : "log into it here."} </button></p>
             {(!isLoading && dataLogin?.login) && <Navigate to="/Account" />}

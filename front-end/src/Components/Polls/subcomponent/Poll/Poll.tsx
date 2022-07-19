@@ -37,7 +37,7 @@ const Poll = ({ id, name, question, options, number, btn = true }: PollProp) => 
 
     const handlePollDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
 
-        const delData = { creatorId: String(!isLoging && dataLogin?.rows[0].user_id), id: id }
+        const delData = { userId: String(!isLoging && dataLogin?.rows[0].user_id), id: id }
         deletePoolApi(delData)
     }
 

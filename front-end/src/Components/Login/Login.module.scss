@@ -12,33 +12,69 @@
         font-size: 2vw;
     }
 
-    &__input {
-        margin-bottom: 0.5vw;
-        font-size: 1vw;
-        padding: 0.2vw;
+    &__info {
+        color: red;
+        margin: .6rem;
+        padding: .2rem;
+        border: 1px solid red;
+        animation: warnig-bg 1s ease-in;
+    }
+
+    @keyframes warnig-bg {
+        0% {
+            background-color: white;
+            color: red;
+        }
+
+        50% {
+            background-color: rgb(255, 112, 112);
+            color: white;
+        }
     }
 
     &__form {
         display: flex;
         flex-direction: column;
         transition: 300ms;
-    }
 
-    &__login-btn {
-        font-size: 1vw;
-        padding: 0.2vw;
-        background-color: lib.$main-font-clr;
-        border: 1px solid transparent;
-        transition: 300ms;
-
-        &:hover {
-            color: lib.$main-font-clr;
-            background-color: white;
-            border: 1px solid lib.$main-font-clr;
+        &__input {
+            margin-bottom: 0.5vw;
+            font-size: 1vw;
+            padding: 0.2vw;
         }
 
-        &:active {
-            background-color: lib.$main-font-active-clr;
+        &__login-btn {
+            font-size: 1vw;
+            padding: 0.2vw;
+            background-color: lib.$main-font-clr;
+            border: 1px solid transparent;
+            transition: 300ms;
+
+            &:hover {
+                color: lib.$main-font-clr;
+                background-color: white;
+                border: 1px solid lib.$main-font-clr;
+            }
+
+            &:active {
+                background-color: lib.$main-font-active-clr;
+            }
+        }
+
+        &__password-info {
+            margin: .5rem 0;
+
+            &__list {
+                list-style: disc;
+
+                &__list-element {
+                    margin-left: 1.5rem;
+                }
+            }
+
+            &__title {
+                margin-bottom: .7rem;
+            }
         }
     }
 

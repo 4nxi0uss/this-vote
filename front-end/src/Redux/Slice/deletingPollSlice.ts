@@ -12,7 +12,7 @@ const initialState: deletingInfo = {
 };
 
 export const deletePoll = createAsyncThunk("deleting/pollDeleting", async (delData: deletingDataType) => {
-    const { creatorId, id } = delData
+    const { userId, id } = delData
     try {
         const data = await fetch('http://localhost:3022/users/deletePoll', {
             method: 'DELETE',
@@ -20,7 +20,7 @@ export const deletePoll = createAsyncThunk("deleting/pollDeleting", async (delDa
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                creatorId: creatorId,
+                userId: userId,
                 id: id,
             })
         })

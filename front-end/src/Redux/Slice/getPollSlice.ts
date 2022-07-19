@@ -8,7 +8,7 @@ const initialState: getPollsInfo = {
         message: 'Próba wysłania ankiety',
         data: [{
             id: 0,
-            creator_id: "creatorId",
+            userId: "userId",
             name: "ANton",
             question: "question",
             number: 0,

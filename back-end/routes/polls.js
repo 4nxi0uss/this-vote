@@ -6,7 +6,7 @@ const { authMiddleware } = require('../Middleware/Middleware');
 
 const pollsRouter = express.Router();
 pollsRouter.delete('/deletePoll', authMiddleware, deletePoll)
-pollsRouter.get('/getPolls/:creatorId', authMiddleware, getPolls);
+pollsRouter.get('/getPolls/:userId', authMiddleware, getPolls);
 pollsRouter.get('/getAllPolls', getAllPolls);
 pollsRouter.patch('/pollUpdate', authMiddleware, patchUpdatePoll);
 pollsRouter.post('/postPolls', authMiddleware, postPolls);

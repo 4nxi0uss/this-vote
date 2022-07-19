@@ -65,6 +65,7 @@ exports.getPolls = (req, res) => {
 
         db.query(" SELECT * FROM `polls` WHERE `creator_id` = '" + userId + "' ", (err, rows) => {
             if (err) throw err;
+
             res.status(200).json({
                 message: "download polls.",
                 data: rows,
@@ -81,11 +82,11 @@ exports.getPolls = (req, res) => {
 
 exports.deletePoll = (req, res) => {
     try {
-        const { creatorId, id } = req.body
+        const { userId, id } = req.body
 
-        if (!Boolean(creatorId) || !Boolean(id)) return res.status(401)
+        if (!Boolean(userId) || !Boolean(id)) return res.status(401)
 
-        db.query("DELETE FROM `polls` WHERE id=" + id + " and creator_id='" + creatorId + "'", (err, rows, fields) => {
+        db.query("DELETE FROM `polls` WHERE id=" + id + " and creator_id='" + userId + "'", (err) => {
             if (err) throw err
             res.status(200).json({
                 message: "delating polls succesful.",

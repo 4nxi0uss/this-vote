@@ -10,10 +10,10 @@
         display: flex;
         flex-direction: column;
         gap: .3rem;
-    }
 
-    &__number-poll {
-        cursor: text;
+        &__number-poll {
+            cursor: text;
+        }
     }
 
     input {
@@ -25,10 +25,13 @@
         padding: .5vw;
         background-color: rgb(100, 100, 255);
         color: white;
-        border: none;
+        border: 1px solid transparent;
+        border-radius: 15px;
 
         &:hover {
             padding: .5vw;
+            border: 1px solid white;
+            box-shadow: inset .1rem .1rem .2rem white;
             background-color: rgb(131, 131, 255);
             color: rgb(14, 14, 14);
         }
@@ -39,13 +42,18 @@
         flex-direction: row;
         margin: .5vw 0;
         justify-content: space-between;
-    }
 
-    &__color {
-        position: relative;
-        border-radius: 100%;
-        border: 5px solid;
-        height: 1vw;
-        width: 1vw;
+        &:last-child {
+            padding-bottom: .3rem;
+            border-bottom: 1px solid black;
+        }
+
+        &__color {
+            position: relative;
+            border-radius: 100%;
+            border: 5px solid;
+            height: 1vw;
+            width: 1vw;
+        }
     }
 }

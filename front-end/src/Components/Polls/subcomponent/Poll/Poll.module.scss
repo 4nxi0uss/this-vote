@@ -32,9 +32,10 @@
     }
 
     &__btn-vote {
-        padding: .4rem;
+        margin: 0 .4rem .4rem 0;
+        padding: .5rem;
         border: 1px solid transparent;
-        margin: .1rem;
+        border-radius: 10px;
 
         &:hover {
             background-color: lib.$second-btn-clr;
@@ -53,7 +54,8 @@
     }
 
     &__btn-option {
-        padding: .1rem .3rem;
+        padding: .2rem .4rem;
+        border-radius: 8px;
 
         &_delete {
             background-color: rgb(255, 36, 36);

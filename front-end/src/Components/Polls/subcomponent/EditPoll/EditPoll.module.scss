@@ -16,10 +16,13 @@
         padding: .5vw;
         background-color: rgb(100, 100, 255);
         color: white;
-        border: none;
+        border: 1px solid transparent;
+        border-radius: 15px;
 
         &:hover {
             padding: .5vw;
+            border: 1px solid white;
+            box-shadow: inset .1rem .1rem .2rem white;
             background-color: rgb(131, 131, 255);
             color: rgb(14, 14, 14);
         }
@@ -31,13 +34,29 @@
         margin: .5vw 0;
         justify-content: space-between;
 
-    }
+        &:last-child {
+            padding-bottom: .3rem;
+            border-bottom: 1px solid black;
+        }
 
-    &__color {
-        position: relative;
-        border-radius: 100%;
-        border: 5px solid;
-        height: 1vw;
-        width: 1vw;
+        &__color {
+            position: relative;
+            border-radius: 100%;
+            border: 5px solid;
+            height: 1vw;
+            width: 1vw;
+        }
+
+        &__x-btn {
+            background-color: transparent;
+            color: red;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            padding: .15rem;
+
+            &:hover {
+                background-color: rgb(255, 187, 187);
+            }
+        }
     }
 }

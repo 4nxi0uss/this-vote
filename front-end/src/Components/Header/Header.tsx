@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import style from './Header.module.scss'
 import block from 'bem-css-modules'
@@ -16,6 +16,8 @@ export const handleLogoutConfig = (logout: any, userId: string) => {
 
 const Header = () => {
 
+    const location = useLocation();
+
     // eslint-disable-next-line
     const [loginApi, { data: dataLogin, isLoading, isSuccess }] = useUserLoginMutation({
         fixedCacheKey: "login"
@@ -31,16 +33,16 @@ const Header = () => {
         <header className={b()}>
             <h1 className={b('title')} > <Link to='/' className={b('title__link')}>ThisVote!!</Link></h1>
             <nav className={b('nav')}>
-                <Link to='/' className={b('nav__link')}>
+                <Link to='/' className={b('nav__link', { mark: location.pathname === '/' })}>
                     Home
                 </Link>
-                {!isLoading && dataLogin?.login && <Link to='/Account' className={b('nav__link', { mark: true })}>
+                {!isLoading && dataLogin?.login && <Link to='/Account' className={b('nav__link', { mark: location.pathname === '/Account' })}>
                     Account
                 </Link>}
-                {!isLoading && dataLogin?.login && <Link to='/Polls' className={b('nav__link')}>
+                {!isLoading && dataLogin?.login && <Link to='/Polls' className={b('nav__link', { mark: location.pathname === '/Polls' })}>
                     Polls
                 </Link>}
-                {!isSuccess && !dataLogin?.login ? <Link to='/login' className={b('nav__link')}>
+                {!isSuccess && !dataLogin?.login ? <Link to='/login' className={b('nav__link', { mark: location.pathname === '/login' })}>
                     Login/Registry
                 </Link> : <button className={b('nav__link')} onClick={handleLogout}>Logout</button>}
             </nav>

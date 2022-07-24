@@ -1,6 +1,5 @@
 @use '../_lib' as lib;
 
-// @media screen and (min-width: 1440px) {
 .login-section {
     position: relative;
     display: flex;
@@ -39,8 +38,9 @@
 
         &__input {
             margin-bottom: 0.5vw;
-            font-size: 1vw;
             padding: 0.2vw;
+            width: 15rem;
+            font-size: 1vw;
         }
 
         &__login-btn {
@@ -101,4 +101,169 @@
     }
 }
 
-// }
+@media screen and (max-width: 320px) {
+    .login-section {
+
+        &__title {
+            margin: 1rem 0;
+            font-size: 2rem;
+        }
+
+        &__form {
+            &__input {
+                margin-bottom: 1rem;
+                padding: 0.5rem;
+                width: 18rem;
+                font-size: 1.5rem;
+            }
+
+            &__login-btn {
+                font-size: 1.5rem;
+                margin-top: 1rem;
+                padding: .4rem;
+
+            }
+
+            &__password-info {
+                margin: 1rem 0;
+
+                &__list {
+                    list-style: disc;
+
+                    &__list-element {
+                        margin-left: 1.5rem;
+                        font-size: 1.3rem;
+                    }
+                }
+
+                &__title {
+                    font-size: 1.3rem;
+                    margin-bottom: .7rem;
+                }
+            }
+
+        }
+
+        &__paragraph {
+            font-size: 1.2rem;
+            margin-top: .7rem;
+            text-align: center;
+
+            &_btn {
+                &:hover {
+                    font-size: 1.2rem;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 321px) {
+    .login-section {
+
+        &__title {
+            margin: 1rem 0;
+            font-size: 2rem;
+        }
+
+        &__form {
+            &__input {
+                margin-bottom: 1rem;
+                padding: 0.5rem;
+                width: 18rem;
+                font-size: 1.5rem;
+            }
+
+            &__login-btn {
+                font-size: 1.5rem;
+                margin-top: 1rem;
+                padding: .4rem;
+            }
+
+            &__password-info {
+                margin: .8rem 0;
+
+                &__list {
+                    list-style: disc;
+
+                    &__list-element {
+                        margin-left: 1.5rem;
+                        font-size: 1.3rem;
+                    }
+                }
+
+                &__title {
+                    margin-bottom: .7rem;
+                    font-size: 1.3rem;
+                }
+            }
+        }
+
+        &__paragraph {
+            font-size: 1.2rem;
+            margin-top: .7rem;
+            text-align: center;
+
+            &_btn {
+                &:hover {
+                    font-size: 1.2rem;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .login-section {
+
+        &__title {
+            margin: 1rem 0;
+            font-size: 2rem;
+        }
+
+        &__form {
+            &__input {
+                margin-bottom: 1rem;
+                padding: 0.5rem;
+                width: 18rem;
+                font-size: 1.5rem;
+            }
+
+            &__login-btn {
+                font-size: 1.5rem;
+                margin-top: 1rem;
+                padding: .3rem;
+            }
+
+            &__password-info {
+                margin: .8rem 0;
+
+                &__list {
+                    list-style: disc;
+
+                    &__list-element {
+                        margin-left: 1.5rem;
+                        font-size: 1.3rem;
+                    }
+                }
+
+                &__title {
+                    margin-bottom: .7rem;
+                    font-size: 1.3rem;
+                }
+            }
+        }
+
+        &__paragraph {
+            font-size: 1rem;
+            margin-top: .7rem;
+            text-align: center;
+
+            &_btn {
+                &:hover {
+                    font-size: 1.2rem;
+                }
+            }
+        }
+    }
+}

@@ -1,7 +1,5 @@
 @use '../_lib' as lib;
 
-// @media screen and (min-width: 1440px) {
-
 .header {
     position: fixed;
     display: flex;
@@ -9,7 +7,7 @@
     justify-content: space-between;
     background-color: lib.$second-clr;
     width: 100vw;
-    height: 3vw;
+    height: lib.$header-hight-default;
     z-index: 5;
 
     &__title {
@@ -22,10 +20,16 @@
         }
     }
 
+    &__nav-mobile {
+        display: none;
+    }
+
     &__nav {
+        display: block;
         margin-right: 2rem;
 
         &__link {
+            display: inline;
             margin-right: 1vw;
             padding: 0.5vw;
             border: 2px solid white;
@@ -53,4 +57,240 @@
     }
 }
 
-// }
+@media screen and (max-width: 320px) {
+
+    .header {
+        height: lib.$header-hight-320;
+
+        &__nav {
+            display: none;
+        }
+
+        &__nav-mobile {
+            margin-right: 1.5rem;
+            display: flex;
+            position: relative;
+            cursor: pointer;
+            justify-content: center;
+            content: " ";
+            width: 1%;
+            border-radius: 50px;
+            border: 4px solid white;
+            background-color: white;
+
+            &::before {
+                position: absolute;
+                content: " ";
+                border-radius: 50px;
+                border: 4px solid white;
+                background-color: white;
+                transform: translateY(-180%);
+            }
+
+            &::after {
+                position: absolute;
+                content: " ";
+                border-radius: 50px;
+                border: 4px solid white;
+                background-color: white;
+                transform: translateY(80%);
+            }
+
+            &__menu {
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+                position: fixed;
+                flex-direction: column;
+                width: 100vw;
+                height: 60vw;
+                left: 0vw;
+                top: 25vw;
+                background-color: white;
+                border: 1px solid black;
+
+                &__link {
+                    border: 1px solid transparent;
+                    font-weight: 600;
+                    font-size: 1.5rem;
+                    font-family: 'Times New Roman', Times, serif;
+                    cursor: pointer;
+                    transition: .3s;
+                    color: black;
+                    text-align: center;
+                    background-color: white;
+                    text-decoration: none;
+                    width: 100%;
+
+                    &:hover {
+                        background-color: lib.$main-font-clr;
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 321px) {
+
+    .header {
+        height: lib.$header-hight-321;
+
+        &__nav {
+            display: none;
+        }
+
+        &__nav-mobile {
+            margin-right: 2rem;
+            display: flex;
+            position: relative;
+            cursor: pointer;
+            justify-content: center;
+            content: " ";
+            width: 1%;
+            border-radius: 50px;
+            border: 4px solid white;
+            background-color: white;
+
+            &::before {
+                position: absolute;
+                content: " ";
+                border-radius: 50px;
+                border: 4px solid white;
+                background-color: white;
+                transform: translateY(-180%);
+            }
+
+            &::after {
+                position: absolute;
+                content: " ";
+                border-radius: 50px;
+                border: 4px solid white;
+                background-color: white;
+                transform: translateY(80%);
+            }
+
+            &__menu {
+                display: flex;
+                justify-content: space-evenly;
+                align-items: center;
+                position: fixed;
+                flex-direction: column;
+                width: 20rem;
+                height: 20rem;
+                right: 3vw;
+                top: 5rem;
+                background-color: white;
+                border: 1px solid black;
+
+                &__link {
+                    border: 1px solid transparent;
+                    font-weight: 600;
+                    font-size: 2.4rem;
+                    font-family: 'Times New Roman', Times, serif;
+                    cursor: pointer;
+                    transition: .3s;
+                    color: black;
+                    text-align: center;
+                    background-color: white;
+                    text-decoration: none;
+                    width: 100%;
+
+                    &:hover {
+                        background-color: lib.$main-font-clr;
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 769px) {
+
+    .header {
+
+        height: lib.$header-hight-768;
+
+        &__nav {
+            display: block;
+            margin-right: 2rem;
+
+            &__link {
+                display: inline;
+                margin-right: 1vw;
+                padding: .6rem;
+                border: 2px solid white;
+                border-radius: 20px;
+                font-weight: 600;
+                font-size: 1rem;
+                cursor: pointer;
+                transition: .3s;
+                color: black;
+                text-decoration: none;
+
+                &_mark {
+                    background-color: rgba(255, 255, 255, 0.521);
+                }
+
+                &:hover {
+                    background-color: rgb(255, 255, 255);
+                    color: lib.$main-font-clr;
+                }
+
+                &:active {
+                    background-color: lib.$main-font-active-clr;
+                }
+            }
+        }
+
+        &__nav-mobile {
+            display: none;
+        }
+    }
+}
+
+@media screen and (min-width: 1201px) {
+
+    .header {
+
+        height: lib.$header-hight-default;
+
+        &__nav {
+            display: block;
+            margin-right: 2rem;
+
+            &__link {
+                display: inline;
+                margin-right: 1vw;
+                padding: .6rem;
+                border: 2px solid white;
+                border-radius: 20px;
+                font-weight: 600;
+                font-size: 1rem;
+                cursor: pointer;
+                transition: .3s;
+                color: black;
+                text-decoration: none;
+
+                &_mark {
+                    background-color: rgba(255, 255, 255, 0.521);
+                }
+
+                &:hover {
+                    background-color: rgb(255, 255, 255);
+                    color: lib.$main-font-clr;
+                }
+
+                &:active {
+                    background-color: lib.$main-font-active-clr;
+                }
+            }
+        }
+
+        &__nav-mobile {
+            display: none;
+        }
+    }
+}

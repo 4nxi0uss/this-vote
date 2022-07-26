@@ -1,3 +1,5 @@
+@use '../../../_lib' as lib;
+
 .modal-edit-poll {
     display: flex;
     flex-direction: column;
@@ -6,9 +8,31 @@
     background-color: white;
     padding: 2vw;
 
+    label {
+        font-size: 1.2rem;
+        margin-bottom: .2rem;
+    }
+
     &__form {
         display: flex;
         flex-direction: column;
+
+        &__number-poll {
+            padding: .3rem;
+            cursor: text;
+        }
+
+        &__input {
+            padding: .3rem;
+        }
+
+        &__input-color {
+            padding: 0%;
+        }
+
+        &__btn-plus {
+            font-size: xx-large;
+        }
     }
 
     &__btn {
@@ -20,7 +44,6 @@
         border-radius: 15px;
 
         &:hover {
-            padding: .5vw;
             border: 1px solid white;
             box-shadow: inset .1rem .1rem .2rem white;
             background-color: rgb(131, 131, 255);
@@ -53,10 +76,110 @@
             border: 1px solid transparent;
             border-radius: 5px;
             padding: .15rem;
+        }
+    }
+}
 
-            &:hover {
-                background-color: rgb(255, 187, 187);
+@media screen and (max-width: 320px) {
+    .modal-edit-poll {
+
+        label {
+            font-size: 1.2rem;
+            margin-bottom: .2rem;
+        }
+
+        &__form {
+            &__input {
+                padding: .5rem;
+            }
+
+            &__number-poll {
+                padding: .5rem;
+            }
+
+            &__input-color {
+                width: 100%;
+                padding: .0rem;
+            }
+
+            &__btn-plus {
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+                background-color: transparent;
+            }
+        }
+
+        &__btn {
+
+            margin: .6rem 1rem;
+            padding: .6rem 1rem;
+        }
+
+        &__option {
+            font-size: 1.3rem;
+
+
+            &__color {
+                height: 1.2rem;
+                width: 1.2rem;
+            }
+
+            &__x-btn {
+                font-size: 1.2rem;
             }
         }
     }
+
+}
+
+@media screen and (min-width: 321px) {
+    .modal-edit-poll {
+
+        label {
+            font-size: 1.2rem;
+            margin-bottom: .2rem;
+        }
+
+        &__form {
+            &__input {
+                padding: .5rem;
+            }
+
+            &__number-poll {
+                padding: .5rem;
+            }
+
+            &__input-color {
+                width: 100%;
+                padding: .0rem;
+            }
+
+            &__btn-plus {
+                font-size: 1.5rem;
+                margin-bottom: 1rem;
+                background-color: transparent;
+            }
+        }
+
+        &__btn {
+
+            margin: .6rem 1rem;
+            padding: .6rem 1rem;
+        }
+
+        &__option {
+            font-size: 1.3rem;
+
+
+            &__color {
+                height: 1.2rem;
+                width: 1.2rem;
+            }
+
+            &__x-btn {
+                font-size: 1.2rem;
+            }
+        }
+    }
+
 }

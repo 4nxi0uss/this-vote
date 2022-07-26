@@ -96,15 +96,15 @@ const AddPoll = (show: boolean, modalFun: any, modalRandom: any, random: number)
                 <div className={b()}>
                     <form className={b('form')}>
                         <label>Name:</label>
-                        <input type="text" onChange={handleNameText} value={nameText} />
+                        <input type="text" className={b('form__input')} onChange={handleNameText} value={nameText} />
                         <label>Question:</label>
-                        <input type="text" onChange={handleQuestionText} value={questionText} />
+                        <input type="text" className={b('form__input')} onChange={handleQuestionText} value={questionText} />
                         <label >Number:</label>
                         <input type="number" readOnly className={b('form__number-poll')} disabled value={random} />
                         <label>Option to choose in poll (max 6):</label>
-                        <input type="text" value={optionText} onChange={handleOptionText} />
-                        <input type="color" onChange={handleOptionColor} value={optionColor} />
-                        <button onClick={handleAddOption}>+</button>
+                        <input type="text" className={b('form__input')} value={optionText} onChange={handleOptionText} />
+                        <input type="color" className={b('form__input-color')} onChange={handleOptionColor} value={optionColor} />
+                        <button className={b('form__btn-plus')} onClick={handleAddOption}>+</button>
                         {optionShow()}
                     </form>
                     <div>

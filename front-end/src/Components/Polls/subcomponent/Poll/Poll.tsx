@@ -108,8 +108,8 @@ const Poll = ({ id, name, question, options, number, btn = true }: PollProp) => 
     return (
         <section className={b()}>
             <div className={b('option')}>
-                {btn && <button onClick={handlePollDelete} className={b('btn-option', { delete: true })}>Delete</button>}
-                {btn && <button onClick={handleEdit} className={b('btn-option', { edit: true })}>Edit</button>}
+                {btn && <button onClick={handlePollDelete} className={b('option__btn-option', { delete: true })}>Delete</button>}
+                {btn && <button onClick={handleEdit} className={b('option__btn-option', { edit: true })}>Edit</button>}
             </div>
             < EditPoll key={id + 18} isOpen={isOpenEdit} edit={handleEdit} pro={{ id, name, question, number, options }} />
             <h2>{name}</h2>

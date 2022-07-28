@@ -39,13 +39,40 @@ exports.postPolls = (req, res) => {
 }
 
 exports.getAllPolls = (req, res) => {
-    try {
 
-        db.query(" SELECT * FROM `polls`", (err, rows) => {
+    try {
+        const page = parseInt(req.query.page);
+        const limit = parseInt(req.query.limit);
+
+        if (!(page > 0 && limit > 0)) return res.status(401).json({ message: 'The page number or limit must not be less than 0' })
+
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit
+
+        db.query("SELECT COUNT(*) FROM `polls`", (err, countRows) => {
             if (err) throw err;
-            res.status(200).json({
-                message: "fetch all polls.",
-                data: rows,
+
+            db.query("SELECT * FROM `polls`", (err, rows) => {
+                if (err) throw err;
+
+                const numberOfPages = Math.ceil(countRows[0]['COUNT(*)'] / limit)
+
+                if (page > numberOfPages) return res.status(204).json({
+                    message: "No content",
+                    page,
+                    limit,
+                    numberOfPages,
+                })
+
+                const resData = rows.slice(startIndex, endIndex)
+
+                res.status(200).json({
+                    message: "fetched all polls.",
+                    page,
+                    limit,
+                    numberOfPages,
+                    data: resData,
+                })
             })
         })
 
@@ -60,15 +87,40 @@ exports.getAllPolls = (req, res) => {
 exports.getPolls = (req, res) => {
     try {
         const { userId } = req.params
+        const page = parseInt(req.query.page);
+        const limit = parseInt(req.query.limit);
 
         if (!Boolean(userId)) return res.status(401)
+        if (!(page > 0 && limit > 0)) return res.status(401).json({ message: 'The page number or limit must not be less than 0' })
 
-        db.query(" SELECT * FROM `polls` WHERE `creator_id` = '" + userId + "' ", (err, rows) => {
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit
+
+
+        db.query("SELECT COUNT(*) FROM `polls`  WHERE `creator_id` = ? ", [userId], (err, countRows) => {
             if (err) throw err;
 
-            res.status(200).json({
-                message: "download polls.",
-                data: rows,
+            db.query(" SELECT * FROM `polls` WHERE `creator_id` = ? ", [userId], (err, rows) => {
+                if (err) throw err;
+
+                const numberOfPages = Math.ceil(countRows[0]['COUNT(*)'] / limit)
+
+                if (page > numberOfPages) return res.status(204).json({
+                    message: "No content",
+                    page,
+                    limit,
+                    numberOfPages,
+                })
+
+                const resData = rows.slice(startIndex, endIndex)
+
+                res.status(200).json({
+                    message: "download polls.",
+                    page,
+                    limit,
+                    numberOfPages,
+                    data: resData,
+                })
             })
         })
 

@@ -83,7 +83,7 @@ const Account = () => {
                 <label >Date of birth:</label>
                 <input type="date" max={`${TodayDate.getFullYear()}-${TodayDate.getMonth() + 1}-${TodayDate.getDate()}`} onChange={handleDate} value={date ?? '1234-11-22'} />
 
-                <label >Type of account:</label>
+                <label className={b('of-label')}>Type of account:</label>
                 <input type="text" readOnly disabled value={userAcountType[typeOfAccount ?? 0]} />
 
                 <button className={b('form__submit-btn')} type="submit">Save</button>

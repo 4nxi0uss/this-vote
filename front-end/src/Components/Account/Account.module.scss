@@ -25,7 +25,6 @@
         padding: 0.5vw;
         height: 50vh;
 
-
         &__submit-btn {
             margin-top: 1vw;
             padding: 0.2vw;
@@ -56,6 +55,12 @@
         &::before {
             content: "* ";
             color: red;
+        }
+    }
+
+    &__of-label {
+        &::before {
+            display: none;
         }
     }
 }
@@ -97,6 +102,12 @@
             font-weight: 800;
             margin-bottom: .2rem;
             font-size: 1.3rem;
+        }
+
+        &__of-label {
+            &::before {
+                display: none;
+            }
         }
     }
 }
@@ -140,6 +151,12 @@
             margin-bottom: .2rem;
             font-size: 1.3rem;
         }
+
+        &__of-label {
+            &::before {
+                display: none;
+            }
+        }
     }
 }
 
@@ -161,7 +178,6 @@
             width: 20rem;
             padding: 1rem 0;
 
-
             &__submit-btn {
                 margin-top: 2rem;
                 padding: .3rem;
@@ -178,6 +194,12 @@
         label {
             font-weight: 800;
             margin-bottom: .2rem;
+        }
+
+        &__of-label {
+            &::before {
+                display: none;
+            }
         }
     }
 }

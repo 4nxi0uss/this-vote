@@ -1,14 +1,8 @@
-import * as React from 'react';
 
 export const userAcountType: UsersStatusType = {
-  0: "Standar user",
-  1: "Admin",
-  2: "Super Admin"
-}
-
-export const userAcountActivated: UsersStatusType = {
-  0: "Unactivated",
-  1: "Activated",
+  0: "User",
+  1: "Editor",
+  2: "Admin"
 }
 
 export interface dataTypes {

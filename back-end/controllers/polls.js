@@ -4,7 +4,7 @@ exports.patchUpdatePoll = (req, res) => {
     try {
         const { name, question, number, option, id } = req.body
 
-        db.query("UPDATE `polls` SET `name` = '" + name + "', `question` = '" + question + "', `number` = '" + number + "', `options` = '" + JSON.stringify(option) + "' WHERE `polls`.`id` = " + id + "",
+        db.query("UPDATE `polls` SET `name` = ? , `question` = ? , `number` = ? , `options` = ?  WHERE `polls`.`id` = ? ", [name, question, number, JSON.stringify(option), id],
             (err, rows) => {
                 if (err) throw err;
                 res.status(200).json({
@@ -23,7 +23,7 @@ exports.postPolls = (req, res) => {
     try {
         const { name, question, number, option, userId } = req.body
 
-        db.query("INSERT INTO `polls` (`id`, `creator_id`, `name`, `question`, `number`, `options`) VALUES (NULL, '" + userId + "', '" + name + "', '" + question + "', '" + number + "', '" + JSON.stringify(option) + "');", (err, rows) => {
+        db.query("INSERT INTO `polls` (`id`, `user_id`, `name`, `question`, `number`, `options`) VALUES (NULL, ? , ? , ? , ? , ? )", [userId, name, question, number, JSON.stringify(option)], (err, rows) => {
             if (err) throw err;
             res.status(200).json({
                 message: "Pool added sucesfuly.",
@@ -97,10 +97,10 @@ exports.getPolls = (req, res) => {
         const endIndex = page * limit
 
 
-        db.query("SELECT COUNT(*) FROM `polls`  WHERE `creator_id` = ? ", [userId], (err, countRows) => {
+        db.query("SELECT COUNT(*) FROM `polls`  WHERE `user_id` = ? ", [userId], (err, countRows) => {
             if (err) throw err;
 
-            db.query(" SELECT * FROM `polls` WHERE `creator_id` = ? ", [userId], (err, rows) => {
+            db.query(" SELECT * FROM `polls` WHERE `user_id` = ? ", [userId], (err, rows) => {
                 if (err) throw err;
 
                 const numberOfPages = Math.ceil(countRows[0]['COUNT(*)'] / limit)
@@ -138,7 +138,7 @@ exports.deletePoll = (req, res) => {
 
         if (!Boolean(userId) || !Boolean(id)) return res.status(401)
 
-        db.query("DELETE FROM `polls` WHERE id=" + id + " and creator_id='" + userId + "'", (err) => {
+        db.query("DELETE FROM `polls` WHERE id= ? and user_id= ? ", [id, userId], (err) => {
             if (err) throw err
             res.status(200).json({
                 message: "delating polls succesful.",
@@ -160,13 +160,13 @@ exports.incrementPoll = (req, res) => {
 
         if (Boolean(id) && Boolean(optionId >= 0)) {
 
-            db.query("SELECT options FROM `polls` where id = " + id + "", (err, rows, fields) => {
+            db.query("SELECT options FROM `polls` where id = ? ", [id], (err, rows, fields) => {
                 if (err) throw err;
                 const info = JSON.parse(rows[0].options)
 
                 Object.keys(info).forEach((el) => { if (info[el].id === optionId) { return info[el].vote = info[el].vote + 1 } })
 
-                db.query("UPDATE `polls` SET `options` = '" + JSON.stringify(info) + "' WHERE `polls`.`id` = " + id + "", (err, rows, fields) => {
+                db.query("UPDATE `polls` SET `options` = ?  WHERE `polls`.`id` = ? ", [JSON.stringify(info), id], (err, rows, fields) => {
                     if (err) throw err
                     res.status(200).json({
                         message: "Incremet was succes"

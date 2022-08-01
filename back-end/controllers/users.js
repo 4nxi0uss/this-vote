@@ -75,7 +75,6 @@ exports.postRegisterUser = (req, res) => {
 
 // login user 
 exports.postLoginUser = (req, res) => {
-    // 401 nie autoryzowany
     try {
         const { password, email } = req.body;
 
@@ -152,9 +151,8 @@ exports.postRefreshToken = (req, res) => {
         if (!Boolean(userId) || !Boolean(refreshToken)) return res.status(401)
 
         db.query("SELECT `refresh_token` FROM `login` WHERE `user_id`= ? ", [userId], (err, rows) => {
-            // console.log(rows[0].refresh_token)
-            // if (err) { console.log(err) }
             if (err) throw err
+
             try {
 
                 if (rows[0].refresh_token === refreshToken) {
@@ -186,7 +184,7 @@ exports.postRefreshToken = (req, res) => {
                 }
 
             } catch (error) {
-                console.log('asd', error)
+                console.log('refresh error: ', error)
             }
         })
 
@@ -258,7 +256,7 @@ exports.getUserData = (req, res) => {
 
         if (!Boolean(id)) return res.status(401)
 
-        db.query("SELECT * FROM `users_data` WHERE user_id = ? ", [id], (err, rows, fields) => {
+        db.query("SELECT * FROM `users_data` WHERE user_id = ? ", [id], (err, rows) => {
 
             if (err) throw err;
 

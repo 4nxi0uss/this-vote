@@ -11,13 +11,10 @@ import { decrementPage, incrementByAmountPage, incrementPage } from '../../Redux
 const b = block(style);
 
 const Pagination = (numberOfPages: any, pass?: boolean, page?: number,) => {
-    // const Pagination = (increment: any, incrementByAmount: any, decrement: any, numberOfPages: any, pass?: boolean, page?: number,) => {
 
     const dispach = useAppDispatch()
 
     let [searchParams, setSearchParams] = useSearchParams();
-
-    // console.log(searchParams.get('page'))
 
     const amountBtn = () => {
         let pageArr = [];
@@ -29,6 +26,7 @@ const Pagination = (numberOfPages: any, pass?: boolean, page?: number,) => {
 
     useEffect(() => {
         setSearchParams({ page: String(page) })
+        // eslint-disable-next-line
     }, [page])
 
     return pass && <div className={b()}>

@@ -21,7 +21,7 @@ const Introduction = () => {
     const page = useAppSelector((state) => state.pagination.initialPage)
     const dispach = useAppDispatch()
 
-    let [searchParams, setSearchParams] = useSearchParams();
+    let [searchParams] = useSearchParams();
 
     const { data, error, isLoading, isError, isSuccess } = useGetAllPollsQuery({ page }, {
         pollingInterval: 5000,
@@ -32,10 +32,10 @@ const Introduction = () => {
     isError && console.warn(error)
 
     useEffect(() => {
-        // setSearchParams({ page: String(page) })
         const chekingPage = Number(searchParams.get('page')) > 0 ? Number(searchParams.get('page')) : 1;
 
         dispach(incrementByAmountPage(chekingPage))
+        // eslint-disable-next-line
     }, [])
 
     return (

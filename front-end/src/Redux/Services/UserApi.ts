@@ -96,17 +96,6 @@ export const userApi = createApi({
                 }),
                 invalidatesTags: ["User"]
             }),
-        //active user account
-        userActive: builder.mutation<any, string>(
-            {
-                query: (userId) => ({
-                    url: "active",
-                    method: 'PATCH',
-                    credentials: 'include',
-                    body: { userId },
-                }),
-                invalidatesTags: ["User"]
-            }),
         //infoLogin
         userLogin: builder.mutation<any, infoLoginType>(
             {
@@ -153,4 +142,4 @@ export const userApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetUserDataQuery, useUpdateUserInfoMutation, useUserLoginMutation, useUserRegisteryMutation, useUserActiveMutation, useUserLogoutMutation, useUserRefreshTokenMutation } = userApi
+export const { useGetUserDataQuery, useUpdateUserInfoMutation, useUserLoginMutation, useUserRegisteryMutation, useUserLogoutMutation, useUserRefreshTokenMutation } = userApi

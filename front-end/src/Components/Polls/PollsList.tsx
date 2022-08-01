@@ -15,6 +15,7 @@ import { useUserLoginMutation } from '../../Redux/Services/UserApi';
 import Pagination from '../Pagination/Pagination';
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
 import { incrementByAmountPage } from '../../Redux/Slice/PaginationSlice';
+import { useSearchParams } from 'react-router-dom';
 
 const b = block(style);
 
@@ -25,6 +26,8 @@ const PollsList = () => {
     const page = useAppSelector((state) => state.pagination.initialPage)
     const dispach = useAppDispatch()
 
+    let [searchParams] = useSearchParams();
+
     // eslint-disable-next-line
     const [loginApi, { data: dataLogin, isLoading: isLoging }] = useUserLoginMutation({
         fixedCacheKey: "login"
@@ -33,7 +36,6 @@ const PollsList = () => {
     const { data: dataGetPollsApi, isLoading: isGetting, isSuccess } = useGetPollsQuery({ userId: dataLogin?.rows[0]?.user_id, page }, {
         pollingInterval: 5000
     });
-    console.log(dataGetPollsApi?.numberOfPages)
 
     const [isShownAdd, setIsShownAdd] = useState<boolean>(false)
     const [randomNumber, setRandomNumber] = useState<number>(0);
@@ -54,7 +56,10 @@ const PollsList = () => {
     const PollDisplay = () => !isGetting && dataGetPollsApi?.data?.map((el: any) => <Poll key={el.number} id={el.id} name={el.name} number={el.number} question={el.question} options={el.options} />)
 
     useEffect(() => {
-        dispach(incrementByAmountPage(1))
+        const chekingPage = Number(searchParams.get('page')) > 0 ? Number(searchParams.get('page')) : 1;
+
+        dispach(incrementByAmountPage(chekingPage))
+        // eslint-disable-next-line
     }, [])
 
     return (

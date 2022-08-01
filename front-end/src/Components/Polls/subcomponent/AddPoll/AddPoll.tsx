@@ -86,6 +86,7 @@ const AddPoll = (show: boolean, modalFun: any, modalRandom: any, random: number)
             addPollApi(pollsObject);
             handleClearInput(event);
         }
+        modalFun()
     }
 
     const optionShow = () => optionsList.map((option: { name: string, color: string }, index: number) => <p className={b('option')} key={index}>{index + 1}.  {option?.name} <span className={b('option__color')} style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)

@@ -16,7 +16,7 @@ const Account = () => {
         fixedCacheKey: "login"
     });
 
-    const [updateUserInfo, { isError, error }] = useUpdateUserInfoMutation();
+    const [updateUserInfo, { data: dataUpdate, isSuccess, isError, error }] = useUpdateUserInfoMutation();
 
     const { data: userData, isError: isUserDataError, error: userDataError } = useGetUserDataQuery(!isLoading && dataLogin?.rows[0]?.user_id)
 
@@ -29,6 +29,7 @@ const Account = () => {
     const [surname, setSurname] = useState<string>(userData?.data[0]?.surname);
     const [date, setDate] = useState<string>(betterDate(userData?.data[0]?.date_of_birth));
     const [typeOfAccount, setTypeOfAccount] = useState<number>(userData?.data[0]?.type_of_account);
+    const [timeing, setTiming] = useState<boolean>(false);
 
     const TodayDate = new Date();
 
@@ -49,7 +50,6 @@ const Account = () => {
 
     const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-
         const infoUpdates = { userId: dataLogin?.rows[0]?.user_id, name, surname, dateOfBirth: date };
 
         try {
@@ -57,6 +57,9 @@ const Account = () => {
         } catch (error) {
             console.warn(error)
         }
+
+        setTiming(true)
+        setTimeout(() => { setTiming(false) }, 3000)
     }
 
     useMemo(() => {
@@ -71,6 +74,8 @@ const Account = () => {
         <section className={b()}>
 
             <h2 className={b('title')}> Hello {name} </h2>
+
+            {isSuccess && timeing && <h4 className={b('message-info')}>{dataUpdate?.message}</h4>}
 
             <form className={b('form')} onSubmit={handleSubmit} method="submit">
 
@@ -87,6 +92,7 @@ const Account = () => {
                 <input type="text" readOnly disabled value={userAcountType[typeOfAccount ?? 0]} />
 
                 <button className={b('form__submit-btn')} type="submit">Save</button>
+
             </form>
         </section>
     )

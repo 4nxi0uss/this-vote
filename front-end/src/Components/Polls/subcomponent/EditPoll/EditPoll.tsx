@@ -73,6 +73,7 @@ const EditPoll = ({ isOpen, edit, pro }: editArg) => {
     const handleUpdatePoll = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         updatePoll({ name: nameText.trim(), question: questionText, number: random, option: optionObject, id: pro.id });
+        edit()
     };
 
     const optionShow = () => optionsList?.map((option: any, index: number) => <div className={b('option')} key={index}>{index + 1}.  {option?.name} <span className={b('option__color')} style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span> <button className={b('option__x-btn')} onClick={(e) => { handleDelOption(e, index) }}>X</button>

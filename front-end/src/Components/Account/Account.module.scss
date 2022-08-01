@@ -12,6 +12,17 @@
         text-align: center;
     }
 
+    &__message-info {
+        position: relative;
+        padding: .7rem;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+        border: 1px solid green;
+        background-color: rgb(78, 209, 78);
+        width: 15rem;
+    }
+
     &__form {
         margin-top: 0.5vw;
         position: relative;

@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Mutex } from 'async-mutex'
 
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query'
+import { paginationType, paginationTypeForUser } from '../ReduxTypes/reduxTypes'
 
 let localUserId = ''
 
@@ -69,19 +70,19 @@ export const pollApi = createApi({
     baseQuery: baseQueryWithReauthPoll,
     tagTypes: ['Poll'],
     endpoints: (builder) => ({
-        getAllPolls: builder.query<any, void>({
-            query: () => {
+        getAllPolls: builder.query<any, paginationType>({
+            query: ({ page }) => {
                 return {
-                    url: `getAllPolls`,
+                    url: `getAllPolls?page=${page}&limit=${5}`,
                     method: "GET"
                 }
             },
         }),
-        getPolls: builder.query<any, number>({
-            query: (userId) => {
+        getPolls: builder.query<any, paginationTypeForUser>({
+            query: ({ userId, page }) => {
                 localUserId = `${userId}`;
                 return {
-                    url: `getPolls/${userId}`,
+                    url: `getPolls/${userId}?page=${page}&limit=${5}`,
                     method: "GET",
                     credentials: "include",
                 }

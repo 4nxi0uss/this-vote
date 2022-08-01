@@ -8,6 +8,7 @@ import deletePoll from '../Slice/deletingPollSlice';
 import editPollSlice from '../Slice/editPollSlice';
 import GetUserDataSlice from '../Slice/GetUserDataSlice';
 import usersUpdateSlice from '../Slice/userUpdateSlice';
+import PaginationSlice from '../Slice/PaginationSlice';
 import { setupListeners } from '@reduxjs/toolkit/dist/query';
 import { pollApi } from '../Services/PollApi';
 import { userApi } from '../Services/UserApi';
@@ -23,6 +24,7 @@ export const store = configureStore({
     putPoll: usersPutPoll,
     deletePoll: deletePoll,
     editPoll: editPollSlice,
+    pagination: PaginationSlice,
     [pollApi.reducerPath]: pollApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
   },

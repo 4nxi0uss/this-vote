@@ -129,3 +129,12 @@ export interface deletingInfo {
 export interface editSlice {
     isOpenEdit: boolean
 }
+
+export interface paginationType {
+    page: number,
+}
+
+export interface paginationTypeForUser {
+    userId: number,
+    page: number,
+}

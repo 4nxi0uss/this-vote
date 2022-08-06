@@ -34,7 +34,6 @@ exports.postRegisterUser = (req, res) => {
                 res.status(406).json({
                     message: "User with this E-mail does exist."
                 })
-
             } else {
 
                 try {
@@ -146,7 +145,7 @@ exports.postRefreshToken = (req, res) => {
         let payload = {}
 
         const refreshToken = req.cookies.JWT_REFRESH
-        const { userId } = req.body
+        const userId = req.body.userId
 
         if (!Boolean(userId) || !Boolean(refreshToken)) return res.status(401)
 
@@ -155,7 +154,7 @@ exports.postRefreshToken = (req, res) => {
 
             try {
 
-                if (rows[0].refresh_token === refreshToken) {
+                if (rows[0]?.refresh_token === refreshToken) {
 
                     try {
                         jwt.verify(refreshToken, APP_REFRESH_TOKEN, (err, data) => {
@@ -184,7 +183,11 @@ exports.postRefreshToken = (req, res) => {
                 }
 
             } catch (error) {
+                console.log('refresh token: ', refreshToken)
+                console.log('refresh row: ', rows[0])
+                console.log('refresh row token: ', rows[0]?.refresh_token)
                 console.log('refresh error: ', error)
+                postRefreshToken()
             }
         })
 
@@ -234,11 +237,10 @@ exports.patchUserInfo = (req, res) => {
     try {
         const { userId, name, surname, dateOfBirth } = req.body
 
-        db.query("UPDATE `users_data` SET `Name` = ? , `Surname` = ? , `date_of_birth` = ? WHERE `users_data`.`user_id` = ? ", [name, surname, dateOfBirth, userId], (err, rows, fields) => {
+        db.query("UPDATE `users_data` SET `Name` = ? , `Surname` = ? , `date_of_birth` = ? WHERE `users_data`.`user_id` = ? ", [name, surname, dateOfBirth, userId], (err, rows) => {
             if (err) throw err;
             res.status(200).json({
                 message: 'Actualization succeseed.',
-                error: err
             })
         })
 
@@ -246,6 +248,38 @@ exports.patchUserInfo = (req, res) => {
         res.status(500).json({
             error: err,
             message: "Backend error with update user info."
+        })
+    }
+}
+
+exports.patchUserTypeAccount = (req, res) => {
+    try {
+
+        const { typeAccount, email } = req.body
+
+        if (!Boolean(typeAccount === 0 ? true : typeAccount) && !Boolean(email)) return res.status(401)
+
+        db.query("SELECT user_id  FROM `login` WHERE email = ? ", [email], (err, rows) => {
+            if (err) throw err;
+
+            if (!Boolean(rows[0]?.user_id)) {
+                return res.status(401).json({
+                    message: 'Wrong user email.'
+                })
+            }
+
+            db.query("UPDATE `users_data` SET `type_of_account` = ? WHERE user_id = ? ", [typeAccount, rows[0].user_id], (err) => {
+                if (err) throw err;
+                res.status(200).json({
+                    message: 'Type account changed succesfuly.'
+                })
+            })
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            error,
+            message: "Backend error with update user type account."
         })
     }
 }
@@ -263,7 +297,6 @@ exports.getUserData = (req, res) => {
             res.status(200).json({
                 message: "user data fetch succesfuly.",
                 data: rows,
-                error: err
             })
         })
 

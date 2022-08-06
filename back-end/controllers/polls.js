@@ -8,13 +8,12 @@ exports.patchUpdatePoll = (req, res) => {
             (err, rows) => {
                 if (err) throw err;
                 res.status(200).json({
-                    error: err,
                     message: "Poll updated succefuly."
                 })
             })
     } catch (error) {
         res.status(500).json({
-            message: "Poll updated unsuccefuly."
+            message: "Backend error with Poll updating."
         })
     }
 }
@@ -136,7 +135,9 @@ exports.deletePoll = (req, res) => {
     try {
         const { userId, id } = req.body
 
-        if (!Boolean(userId) || !Boolean(id)) return res.status(401)
+        if (!Boolean(userId) || !Boolean(id)) return res.status(401).json({
+            message: "No poll ID or user ID"
+        })
 
         db.query("DELETE FROM `polls` WHERE id= ? and user_id= ? ", [id, userId], (err) => {
             if (err) throw err

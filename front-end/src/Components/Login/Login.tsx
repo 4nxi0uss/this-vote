@@ -15,18 +15,16 @@ const Login = () => {
     const [email, setEmail] = useState<string>("qwe@qwe.pl");
     const [password, setPassword] = useState<string>("1qaz@WSX");
     const [secondPassword, setSecondPassword] = useState<string>("");
+    const [errorRegister, setErrorRegister] = useState<string>("");
+    const [errorLogin, setErrorLogin] = useState<string>("");
+    const [timeLogin, setTimeLogin] = useState<boolean>(false);
+    const [timeRegister, setTimeRegister] = useState<boolean>(false);
 
-    const [loginApi, { data: dataLogin, isLoading, isSuccess: isLoginSucces, error, isError }] = useUserLoginMutation({
+    const [loginApi, { data: dataLogin, isLoading, isSuccess: isLoginSucces, isError }] = useUserLoginMutation({
         fixedCacheKey: "login"
     });
 
-    const [registerApi, { isSuccess }] = useUserRegisteryMutation();
-
-    const errorStatus = () => {
-        if (error && isError) {
-            if ('status' in error) return error?.status === 401 && error?.status
-        }
-    }
+    const [registerApi, { isSuccess, isError: isErr }] = useUserRegisteryMutation();
 
     const validatedEmail = (toVerified: string) => {
         const atCheck = toVerified.includes("@");
@@ -52,6 +50,12 @@ const Login = () => {
                 password
             }
             loginApi(userLoginData)
+                .unwrap()
+                .catch((res) => {
+                    setErrorLogin(res.data.message)
+                    setTimeLogin(true)
+                    setTimeout(() => { setTimeLogin(false) }, 5000)
+                })
             console.log('zalogowany')
         } else {
             console.log('nie zalogowany')
@@ -70,6 +74,12 @@ const Login = () => {
 
         if (validatedEmail(email) && validatePassword(password) && (password === secondPassword)) {
             registerApi(registerData)
+                .unwrap()
+                .catch((res) => {
+                    setErrorRegister(res.data.message)
+                    setTimeRegister(true)
+                    setTimeout(() => { setTimeRegister(false) }, 5000)
+                })
             setEmail('');
             setPassword('');
             setSecondPassword('');
@@ -95,7 +105,10 @@ const Login = () => {
     return (
         <section className={b()}>
             <h2 className={b('title')}>{!toggleRegistry ? "Sing in" : "Register"}</h2>
-            {isError && errorStatus() && <h4 className={b('info')}>Login or password is incorect.</h4>}
+
+            {isError && timeLogin && <h4 className={b('info')}>{errorLogin}</h4>}
+            {isErr && timeRegister && <h4 className={b('info')}>{errorRegister}</h4>}
+
             <form onSubmit={toggleRegistry ? handleRegistry : handleLogin} className={b('form')}>
                 <input required type="email" autoComplete='email' placeholder='e-mail' onChange={handleEmail} value={email} className={b('form__input')} />
                 {toggleRegistry && <div className={b('form__password-info')}>

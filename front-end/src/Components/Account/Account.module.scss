@@ -7,36 +7,47 @@
 
     &__title {
         position: relative;
+        display: block;
         font-size: 2vw;
         padding: 0.3vw;
         text-align: center;
     }
 
-    &__message-info {
+    &__info {
         position: relative;
+        display: block;
         padding: .7rem;
         left: 50%;
         transform: translateX(-50%);
         text-align: center;
-        border: 1px solid green;
-        background-color: rgb(78, 209, 78);
+
         width: 15rem;
+
+        &_message {
+            border: 1px solid green;
+            background-color: rgb(78, 209, 78);
+        }
+
+        &_warning {
+            border: 1px solid red;
+            background-color: rgb(209, 78, 78);
+        }
+
     }
 
     &__form {
-        margin-top: 0.5vw;
         position: relative;
-        grid-row: 2;
-        grid-column: 2;
         display: flex;
         flex-direction: column;
+        margin-top: 0.5vw;
         width: 30%;
         left: 50%;
         transform: translateX(-50%);
         padding: 0.5vw;
-        height: 50vh;
+        height: auto;
 
         &__submit-btn {
+            display: block;
             margin-top: 1vw;
             padding: 0.2vw;
             width: 5vw;
@@ -45,6 +56,7 @@
             border: 1px solid black;
             border-radius: 20px;
             font-weight: 600;
+            transition: .3s;
 
             &:hover {
                 background: rgb(35, 255, 255);
@@ -54,12 +66,50 @@
         }
     }
 
-    input {
+    &__change-type-account {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 20rem;
+        margin-top: 1rem;
+        padding: 1rem 0;
+
+        &__submit-btn {
+            display: block;
+            margin-top: 2rem;
+            padding: .3rem;
+            width: 20rem;
+            align-self: center;
+            background: lightcyan;
+            border: 1px solid black;
+            border-radius: 20px;
+            font-weight: 600;
+            transition: .3s;
+
+            &:hover {
+                background: rgb(35, 255, 255);
+                border: 1px solid black;
+                border-radius: 20px;
+            }
+        }
+
+        &__title {
+            margin: 1rem 0 2rem 0;
+            text-align: center;
+        }
+    }
+
+    input,
+    select {
+        display: block;
         padding: 0.5vw;
         margin-bottom: 0.5vw;
     }
 
     label {
+        display: block;
         font-weight: 800;
         margin-bottom: .2rem;
 
@@ -89,10 +139,11 @@
         }
 
         &__form {
+            position: relative;
             margin-top: 1rem;
-            width: 80%;
+            width: 80vw;
             padding: 1.5vw 0;
-            height: 70vh;
+            height: auto;
 
             &__submit-btn {
                 margin-top: 2rem;
@@ -103,7 +154,27 @@
             }
         }
 
-        input {
+        &__change-type-account {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80vw;
+            margin-top: 1rem;
+            padding: 1rem 0;
+
+            &__submit-btn {
+                margin-top: 2rem;
+                padding: 3vw;
+                width: 80vw;
+                align-self: center;
+                font-size: 1.5rem;
+            }
+        }
+
+        input,
+        select {
             padding: .8rem;
             margin-bottom: 1.8rem;
             font-size: 1.2rem;
@@ -138,9 +209,9 @@
 
         &__form {
             margin-top: 1rem;
-            width: 80%;
+            width: 80vw;
             padding: 1.5vw 0;
-            height: 70vh;
+            height: 70vw;
 
             &__submit-btn {
                 margin-top: 2rem;
@@ -151,7 +222,8 @@
             }
         }
 
-        input {
+        input,
+        select {
             padding: .7rem;
             margin-bottom: 2rem;
             font-size: 1.2rem;
@@ -166,6 +238,25 @@
         &__of-label {
             &::before {
                 display: none;
+            }
+        }
+
+        &__change-type-account {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80vw;
+            margin-top: 1rem;
+            padding: 1rem 0;
+
+            &__submit-btn {
+                margin-top: 2rem;
+                padding: 1.5vw;
+                width: 80vw;
+                align-self: center;
+                font-size: 1.5rem;
             }
         }
     }
@@ -188,16 +279,19 @@
             flex-direction: column;
             width: 20rem;
             padding: 1rem 0;
+            height: auto;
 
             &__submit-btn {
                 margin-top: 2rem;
                 padding: .3rem;
                 width: 20rem;
                 align-self: center;
+                font-size: 1.5rem;
             }
         }
 
-        input {
+        input,
+        select {
             padding: .5rem;
             margin-bottom: 0.5rem;
         }
@@ -210,6 +304,25 @@
         &__of-label {
             &::before {
                 display: none;
+            }
+        }
+
+        &__change-type-account {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20rem;
+            margin-top: 1rem;
+            padding: 1rem 0;
+
+            &__submit-btn {
+                margin-top: 2rem;
+                padding: .3rem;
+                width: 20rem;
+                align-self: center;
+                font-size: 1.5rem;
             }
         }
     }

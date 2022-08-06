@@ -4,24 +4,24 @@ import type { ChangeEvent, FormEvent } from 'react';
 import style from './Account.module.scss'
 import block from 'bem-css-modules'
 
-import { useGetUserDataQuery, useUpdateUserInfoMutation, useUserLoginMutation } from '../../Redux/Services/UserApi';
+import { useChangeUserAccountTypeMutation, useGetUserDataQuery, useUpdateUserInfoMutation, useUserLoginMutation } from '../../Redux/Services/UserApi';
 
 import { userAcountType } from '../../Types/Types';
 
 const b = block(style);
 
 const Account = () => {
+
     // eslint-disable-next-line
     const [loginApi, { data: dataLogin, isLoading }] = useUserLoginMutation({
         fixedCacheKey: "login"
     });
 
-    const [updateUserInfo, { data: dataUpdate, isSuccess, isError, error }] = useUpdateUserInfoMutation();
+    const [updateUserInfo, { data: dataUpdate, isLoading: isLoad, isError }] = useUpdateUserInfoMutation();
 
-    const { data: userData, isError: isUserDataError, error: userDataError } = useGetUserDataQuery(!isLoading && dataLogin?.rows[0]?.user_id)
+    const [changeUserAccountType, { data: dataAccountType, isLoading: isLoadAccountType, isError: isErr, }] = useChangeUserAccountTypeMutation();
 
-    isError && console.warn(error)
-    isUserDataError && console.warn(userDataError)
+    const { data: userData } = useGetUserDataQuery(!isLoading && dataLogin?.rows[0]?.user_id)
 
     const betterDate = (date: string) => date?.slice(0, 10)
 
@@ -30,6 +30,10 @@ const Account = () => {
     const [date, setDate] = useState<string>(betterDate(userData?.data[0]?.date_of_birth));
     const [typeOfAccount, setTypeOfAccount] = useState<number>(userData?.data[0]?.type_of_account);
     const [timeing, setTiming] = useState<boolean>(false);
+    const [timeingErr, setTimingErr] = useState<boolean>(false);
+    const [changedType, setChangedType] = useState<number>(0);
+    const [userEmail, setUserEmail] = useState<string>('');
+    const [changeUserAccountTypeError, setChangeUserAccountTypeError] = useState<string>('');
 
     const TodayDate = new Date();
 
@@ -48,18 +52,44 @@ const Account = () => {
         setDate(e.target.value.trim())
     }
 
-    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    const handleChangeUserPersonalData = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const infoUpdates = { userId: dataLogin?.rows[0]?.user_id, name, surname, dateOfBirth: date };
 
-        try {
-            updateUserInfo(infoUpdates)
-        } catch (error) {
-            console.warn(error)
-        }
+        updateUserInfo(infoUpdates)
+            .unwrap()
+            .then(() => {
+                setTiming(true)
+                setTimeout(() => { setTiming(false) }, 3000)
+            })
+            .catch((res) => {
+                setChangeUserAccountTypeError(res.data.message)
+                setTimingErr(true)
+                setTimeout(() => { setTimingErr(false); setChangeUserAccountTypeError('') }, 3000)
+            })
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
 
-        setTiming(true)
-        setTimeout(() => { setTiming(false) }, 3000)
+    const userTypeOption = () => {
+        return Object.entries(userAcountType).map((el) => <option key={el[0]} value={el[0]}>{el[1]}</option>)
+    }
+
+    const handleCheangedType = () => {
+        if (isNaN(Number(changedType))) return null
+        changeUserAccountType({ typeAccount: Number(changedType), email: userEmail })
+            .unwrap()
+            .then(
+                () => {
+                    setTiming(true)
+                    setTimeout(() => { setTiming(false) }, 3000)
+                }
+            )
+            .catch((res) => {
+                setChangeUserAccountTypeError(res.data.message)
+                setTimingErr(true)
+                setTimeout(() => { setTimingErr(false); setChangeUserAccountTypeError('') }, 3000)
+            })
+        window.scrollTo({ top: 0, behavior: 'smooth' })
     }
 
     useMemo(() => {
@@ -75,9 +105,10 @@ const Account = () => {
 
             <h2 className={b('title')}> Hello {name} </h2>
 
-            {isSuccess && timeing && <h4 className={b('message-info')}>{dataUpdate?.message}</h4>}
+            {(!isLoad || !isLoadAccountType) && timeing && <h4 className={b('info', { message: true })}>{(!isLoad && dataUpdate?.message) || (!isLoadAccountType && dataAccountType?.message)}</h4>}
+            {(isErr || isError) && timeingErr && <h4 className={b('info', { warning: true })}>{changeUserAccountTypeError}</h4>}
 
-            <form className={b('form')} onSubmit={handleSubmit} method="submit">
+            <form className={b('form')} onSubmit={handleChangeUserPersonalData} method="submit">
 
                 <label >Name:</label>
                 <input type="text" required placeholder="Name" onChange={handleName} value={name ?? 'John'} />
@@ -94,7 +125,19 @@ const Account = () => {
                 <button className={b('form__submit-btn')} type="submit">Save</button>
 
             </form>
-        </section>
+
+            {userAcountType[typeOfAccount] === 'Admin' && < div className={b('change-type-account')}>
+                <h2 className={b('change-type-account__title')}>Change typ of user account</h2>
+                <label className={b('of-label')}>User email</label>
+                <input type="text" value={userEmail} onChange={(e) => { setUserEmail(e.target.value) }} />
+                <label className={b('of-label')}>User type</label>
+                <select value={changedType} onChange={(e) => { setChangedType(Number(e.target.value)) }}>
+                    {userTypeOption()}
+                </select>
+                <button className={b('change-type-account__submit-btn')} onClick={handleCheangedType}>Save</button>
+            </div>}
+
+        </section >
     )
 }
 

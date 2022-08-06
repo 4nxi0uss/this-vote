@@ -9,16 +9,18 @@ import { optionValueJson, PollProp, VoteType } from '../../../../Types/Types';
 import EditPoll from '../EditPoll/EditPoll';
 
 import { useDeletePollMutation, useUpdatePollValueMutation } from '../../../../Redux/Services/PollApi';
-import { useUserLoginMutation } from '../../../../Redux/Services/UserApi';
+import { useGetUserDataQuery, useUserLoginMutation } from '../../../../Redux/Services/UserApi';
 
 const b = block(style);
 
-const Poll = ({ id, name, question, options, number, btn = true }: PollProp) => {
+const Poll = ({ id, name, question, options, number, poolCreator }: PollProp) => {
 
     // eslint-disable-next-line
     const [loginApi, { data: dataLogin, isLoading: isLoging }] = useUserLoginMutation({
         fixedCacheKey: "login"
     });
+
+    const { data } = useGetUserDataQuery(dataLogin?.rows[0]?.user_id)
 
     const [updatePollOptionValueApi] = useUpdatePollValueMutation();
     const [deletePoolApi] = useDeletePollMutation();
@@ -35,8 +37,8 @@ const Poll = ({ id, name, question, options, number, btn = true }: PollProp) => 
     const optionJsonParseValuses = Object.values(optionJsonParse);
 
     const handlePollDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
-
-        const delData = { userId: String(!isLoging && dataLogin?.rows[0].user_id), id: id };
+        if (!((data?.data[0]?.type_of_account >= 2) || (poolCreator === dataLogin?.rows[0]?.user_id))) { return }
+        const delData = { userId: poolCreator, id: id };
         deletePoolApi(delData);
     }
 
@@ -108,8 +110,8 @@ const Poll = ({ id, name, question, options, number, btn = true }: PollProp) => 
     return (
         <section className={b()}>
             <div className={b('option')}>
-                {btn && <button onClick={handlePollDelete} className={b('option__btn-option', { delete: true })}>Delete</button>}
-                {btn && <button onClick={handleEdit} className={b('option__btn-option', { edit: true })}>Edit</button>}
+                {((data?.data[0]?.type_of_account >= 2) || (poolCreator === dataLogin?.rows[0]?.user_id)) && <button onClick={handlePollDelete} className={b('option__btn-option', { delete: true })}>Delete</button>}
+                {((data?.data[0]?.type_of_account >= 1) || (poolCreator === dataLogin?.rows[0]?.user_id)) && <button onClick={handleEdit} className={b('option__btn-option', { edit: true })}>Edit</button>}
             </div>
             < EditPoll key={id + 18} isOpen={isOpenEdit} edit={handleEdit} pro={{ id, name, question, number, options }} />
             <h2>{name}</h2>

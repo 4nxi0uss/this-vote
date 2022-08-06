@@ -53,7 +53,7 @@ const PollsList = () => {
     let optionObject: ObjectPushType = {};
     optionsList.forEach((option, index) => optionObject[`option${index}`] = { id: index, ...option })
 
-    const PollDisplay = () => !isGetting && dataGetPollsApi?.data?.map((el: any) => <Poll key={el.number} id={el.id} name={el.name} number={el.number} question={el.question} options={el.options} />)
+    const PollDisplay = () => !isGetting && dataGetPollsApi?.data?.map((el: any) => <Poll key={el.number} id={el.id} name={el.name} number={el.number} question={el.question} options={el.options} poolCreator={el.user_id} />)
 
     useEffect(() => {
         const chekingPage = Number(searchParams.get('page')) > 0 ? Number(searchParams.get('page')) : 1;

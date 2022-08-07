@@ -10,7 +10,7 @@ const mutex = new Mutex()
 
 const { REACT_APP_HOST, REACT_APP_PORT } = process.env
 
-const baseQuery = fetchBaseQuery({ baseUrl: `http://${REACT_APP_HOST}:${REACT_APP_PORT}/users/api` })
+const baseQuery = fetchBaseQuery({ baseUrl: `http://${REACT_APP_HOST}:${REACT_APP_PORT}/api/users` })
 const baseQueryWithReauthUser: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
     // wait until the mutex is available without locking it
 

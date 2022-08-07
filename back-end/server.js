@@ -18,8 +18,8 @@ app.use(cors({
   credentials: true
 }));
 
-app.use('/users/api', userRoutes);
-app.use('/polls/api', pollsRouter);
+app.use('/api/users', userRoutes);
+app.use('/api/polls', pollsRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://${hostname}:${port}`)

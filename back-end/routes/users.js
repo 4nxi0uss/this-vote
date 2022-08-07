@@ -5,11 +5,11 @@ const { getUserData, patchUserInfo, postRegisterUser, postLoginUser, postRefresh
 const { authMiddleware } = require('../Middleware/Middleware');
 
 const userRouter = express.Router();
-userRouter.get('/getUserData/:id', authMiddleware, getUserData);
-userRouter.patch('/infoUpdate', authMiddleware, patchUserInfo);
+userRouter.get('/get-user-data/:id', authMiddleware, getUserData);
+userRouter.patch('/info-update', authMiddleware, patchUserInfo);
 userRouter.patch('/change-account-type', authMiddleware, patchUserTypeAccount);
 userRouter.post('/register', postRegisterUser);
-userRouter.post('/refreshToken', postRefreshToken);
+userRouter.post('/refresh-token', postRefreshToken);
 userRouter.post('/login', postLoginUser);
 userRouter.post('/logout', authMiddleware, postLogoutUser);
 userRouter.use((req, res) => res.status(404).end());

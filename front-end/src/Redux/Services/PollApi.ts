@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Mutex } from 'async-mutex'
 
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query'
-import { paginationType, paginationTypeForUser } from '../ReduxTypes/reduxTypes'
+import { GetPolls, GetPollsInfo, PaginationType, PaginationTypeForUser, PollsData } from '../ReduxTypes/reduxTypes'
 
 let localUserId = ''
 
@@ -20,8 +20,11 @@ const baseQueryWithReauthPoll: BaseQueryFn<string | FetchArgs, unknown, FetchBas
     const previousApi = api
     const previousExtraOptions = extraOptions
 
+    if (result?.error?.status === 404) {
+        window.location.assign('/not-found')
+    }
+
     if (result?.error?.status === 401) {
-        // if (result.error && result.error.status === 401) {
         // checking whether the mutex is locked
         if (!mutex.isLocked()) {
             const release = await mutex.acquire()
@@ -31,7 +34,7 @@ const baseQueryWithReauthPoll: BaseQueryFn<string | FetchArgs, unknown, FetchBas
                 if (Boolean(localUserId)) {
                     refreshResult = await baseQuery(
                         args = {
-                            url: 'http://localhost:3022/users/refreshToken',
+                            url: 'http://localhost:3022/users/refresh-token',
                             method: 'POST',
                             credentials: 'include',
                             body: { userId: localUserId }
@@ -45,9 +48,6 @@ const baseQueryWithReauthPoll: BaseQueryFn<string | FetchArgs, unknown, FetchBas
                     // retry the initial query
                     result = await baseQuery(previousArgs, previousApi, previousExtraOptions)
                 }
-                //  else {
-                //     console.warn('re auth error polls', refreshResult.error)
-                // }
             } catch (err) {
                 console.warn(err)
             } finally {
@@ -60,7 +60,6 @@ const baseQueryWithReauthPoll: BaseQueryFn<string | FetchArgs, unknown, FetchBas
             result = await baseQuery(args, api, extraOptions)
         }
     }
-    // console.log(88, result)
     return result
 }
 
@@ -70,34 +69,31 @@ export const pollApi = createApi({
     baseQuery: baseQueryWithReauthPoll,
     tagTypes: ['Poll'],
     endpoints: (builder) => ({
-        getAllPolls: builder.query<any, paginationType>({
+        getAllPolls: builder.query<GetPolls, PaginationType>({
             query: ({ page }) => {
                 return {
-                    url: `getAllPolls?page=${page}&limit=${5}`,
+                    url: `get-all-polls?page=${page}&limit=${5}`,
                     method: "GET"
                 }
             },
         }),
-        getPolls: builder.query<any, paginationTypeForUser>({
+        getPolls: builder.query<GetPolls, PaginationTypeForUser>({
             query: ({ userId, page }) => {
                 localUserId = `${userId}`;
                 return {
-                    url: `getPolls/${userId}?page=${page}&limit=${5}`,
+                    url: `get-polls/${userId}?page=${page}&limit=${5}`,
                     method: "GET",
                     credentials: "include",
                 }
             },
             providesTags: ["Poll"],
         }),
-        addPoll: builder.mutation<any, any>({
-            query: ({ name, question, number, option, userId, token }) => (
+        addPoll: builder.mutation<any, PollsData>({
+            query: ({ name, question, number, option, userId }) => (
                 {
-                    url: "postPolls",
+                    url: "post-polls",
                     method: "POST",
                     credentials: "include",
-                    headers: {
-                        "Authorization": `Bearer ${token}`
-                    },
                     body: {
                         name,
                         question,
@@ -108,10 +104,10 @@ export const pollApi = createApi({
                 }),
             invalidatesTags: ["Poll"],
         }),
-        updatePollValue: builder.mutation<any, any>({
+        updatePollValue: builder.mutation<{ message: string }, { id: number, optionId: number }>({
             query: ({ id, optionId }) => (
                 {
-                    url: "putPoll",
+                    url: "put-poll",
                     method: "PUT",
                     credentials: "include",
                     body: {
@@ -121,10 +117,10 @@ export const pollApi = createApi({
                 }),
             invalidatesTags: ["Poll"],
         }),
-        updatePollInfo: builder.mutation<any, any>({
+        updatePollInfo: builder.mutation<GetPollsInfo, { name: string, question: string, number: number, option: object, id: number }>({
             query: ({ name, question, number, option, id }) => (
                 {
-                    url: "pollUpdate",
+                    url: "poll-update",
                     method: "PATCH",
                     credentials: "include",
                     body: {
@@ -137,10 +133,10 @@ export const pollApi = createApi({
                 }),
             invalidatesTags: ["Poll"],
         }),
-        deletePoll: builder.mutation<any, any>({
+        deletePoll: builder.mutation<{ message: string }, { userId: string, id: number }>({
             query: (delData) => (
                 {
-                    url: "deletePoll",
+                    url: "delete-poll",
                     method: "DELETE",
                     credentials: "include",
                     body: delData,

@@ -7,12 +7,12 @@ import block from 'bem-css-modules';
 
 import Modal from '../../../Modal/Modal';
 
-import { editArg, ObjectPushType } from "../../../../Types/Types";
+import { EditArg, ObjectPushType } from "../../../../Types/Types";
 import { useUpdatePollInfoMutation } from "../../../../Redux/Services/PollApi";
 
 const b = block(style);
 
-const EditPoll = ({ isOpen, edit, pro }: editArg) => {
+const EditPoll = ({ isOpen, edit, pro }: EditArg) => {
 
     const [optionText, setOptionText] = useState<string>('');
     const [nameText, setNameText] = useState<string>(pro?.name);

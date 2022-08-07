@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 // Define the initial state using that type
-const initialState: any = {
+const initialState: { initialPage: number } = {
     initialPage: 1
 }
 

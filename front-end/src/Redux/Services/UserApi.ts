@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Mutex } from 'async-mutex'
 
-import type { infoLoginType, infoUpdate, registerDataType, registerInfo } from '../ReduxTypes/reduxTypes'
+import type { Login, InfoUpdateUserData, RegisterDataType, RegisterInfo, UserLogin, UserData } from '../ReduxTypes/reduxTypes'
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query'
 
 let localUserId = ''
@@ -20,6 +20,10 @@ const baseQueryWithReauthUser: BaseQueryFn<string | FetchArgs, unknown, FetchBas
     const previousApi = api
     const previousExtraOptions = extraOptions
 
+    if (result?.error?.status === 404) {
+        window.location.assign('/not-found')
+    }
+
     if (result?.error?.status === 401) {
 
         if (!mutex.isLocked()) {
@@ -29,9 +33,8 @@ const baseQueryWithReauthUser: BaseQueryFn<string | FetchArgs, unknown, FetchBas
                 let refreshResult
                 if (Boolean(localUserId)) {
                     refreshResult = await baseQuery(
-                        // const refreshResult = await baseQuery(
                         args = {
-                            url: '/refreshToken',
+                            url: '/refresh-token',
                             method: 'POST',
                             credentials: 'include',
                             body: { userId: localUserId }
@@ -45,24 +48,19 @@ const baseQueryWithReauthUser: BaseQueryFn<string | FetchArgs, unknown, FetchBas
                     // retry the initial query
                     result = await baseQuery(previousArgs, previousApi, previousExtraOptions)
                 }
-                // else {
-                //     console.warn('re auth api else user', refreshResult?.error)
-                // }
+
             } catch (err) {
                 console.warn(err)
             } finally {
                 // release must be called once the mutex should be released again.
-                console.log('ok')
                 await release()
             }
         } else {
             // wait until the mutex is available without locking it
             await mutex.waitForUnlock()
-            console.log(6, args, api, extraOptions)
             result = await baseQuery(args, api, extraOptions)
         }
     }
-    // console.log(8, result)
     return result
 }
 
@@ -73,12 +71,12 @@ export const userApi = createApi({
     tagTypes: ['User'],
     endpoints: (builder) => ({
         //userData
-        getUserData: builder.query<any, number>(
+        getUserData: builder.query<UserData, string>(
             {
                 query: (userId) => {
                     localUserId = `${userId}`;
                     return {
-                        url: `getUserData/${userId}`,
+                        url: `get-user-data/${userId}`,
                         method: "GET",
                         credentials: "include",
                     }
@@ -86,10 +84,10 @@ export const userApi = createApi({
                 providesTags: ["User"],
             }),
         //infoUpdate
-        updateUserInfo: builder.mutation<any, infoUpdate>(
+        updateUserInfo: builder.mutation<{ message: string }, InfoUpdateUserData>(
             {
                 query: (infoUpdate) => ({
-                    url: "infoUpdate",
+                    url: "info-update",
                     method: 'PATCH',
                     credentials: "include",
                     body: infoUpdate,
@@ -97,7 +95,7 @@ export const userApi = createApi({
                 invalidatesTags: ["User"]
             }),
         //infoLogin
-        userLogin: builder.mutation<any, infoLoginType>(
+        userLogin: builder.mutation<UserLogin, Login>(
             {
                 query: (loginData) => ({
                     url: "login",
@@ -106,7 +104,7 @@ export const userApi = createApi({
                     body: loginData,
                 }),
             }),
-        userLogout: builder.mutation<any, string>(
+        userLogout: builder.mutation<{ message: string }, string>(
             {
                 query: (userId) => ({
                     url: "logout",
@@ -116,7 +114,7 @@ export const userApi = createApi({
                 }),
             }),
         //registerInfo
-        userRegistery: builder.mutation<registerInfo, registerDataType>(
+        userRegistery: builder.mutation<RegisterInfo, RegisterDataType>(
             {
                 query: ({ email, password }) => (
                     {
@@ -131,10 +129,22 @@ export const userApi = createApi({
         userRefreshToken: builder.mutation<any, string>(
             {
                 query: (userId) => ({
-                    url: "refreshToken",
+                    url: "refresh-token",
                     method: 'POST',
                     credentials: 'include',
                     body: { userId },
+                }),
+            }),
+        changeUserAccountType: builder.mutation<{ message: string }, { typeAccount: number, email: string }>(
+            {
+                query: ({ typeAccount, email }) => ({
+                    url: `change-account-type`,
+                    method: "PATCH",
+                    credentials: "include",
+                    body: {
+                        typeAccount,
+                        email
+                    }
                 }),
             }),
     }),
@@ -142,4 +152,4 @@ export const userApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetUserDataQuery, useUpdateUserInfoMutation, useUserLoginMutation, useUserRegisteryMutation, useUserLogoutMutation, useUserRefreshTokenMutation } = userApi
+export const { useGetUserDataQuery, useUpdateUserInfoMutation, useUserLoginMutation, useUserRegisteryMutation, useUserLogoutMutation, useUserRefreshTokenMutation, useChangeUserAccountTypeMutation } = userApi

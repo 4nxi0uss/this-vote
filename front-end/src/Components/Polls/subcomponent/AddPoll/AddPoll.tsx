@@ -7,7 +7,7 @@ import block from 'bem-css-modules';
 import Modal from '../../../Modal/Modal';
 
 import { ObjectPushType, optionListType } from '../../../../Types/Types';
-import { pollsData } from '../../../../Redux/ReduxTypes/reduxTypes';
+import { PollsData } from '../../../../Redux/ReduxTypes/reduxTypes';
 
 import { useAddPollMutation } from '../../../../Redux/Services/PollApi';
 import { useUserLoginMutation } from '../../../../Redux/Services/UserApi';
@@ -29,8 +29,7 @@ const AddPoll = (show: boolean, modalFun: any, modalRandom: any, random: number)
     const [optionColor, setOptionColor] = useState<string>("#000000");
 
     // eslint-disable-next-line
-    const [addPollApi, { data: postPollData }] = useAddPollMutation();
-
+    const [addPollApi] = useAddPollMutation();
     const handleNameText = (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
         setNameText(e.target.value);
@@ -62,13 +61,12 @@ const AddPoll = (show: boolean, modalFun: any, modalRandom: any, random: number)
     let optionObject: ObjectPushType = {};
     optionsList?.forEach((option, index) => optionObject[`option${index}`] = { id: index, ...option });
 
-    const pollsObject: pollsData = {
+    const pollsObject: PollsData = {
         name: nameText,
         question: questionText,
         number: random,
         option: optionObject,
-        userId: !isLoging && dataLogin?.rows[0].user_id,
-        token: !isLoging && dataLogin?.token
+        userId: !isLoging && String(dataLogin?.rows[0].user_id),
     }
 
     const handleClearInput = (event: MouseEvent<HTMLButtonElement>) => {
@@ -79,7 +77,7 @@ const AddPoll = (show: boolean, modalFun: any, modalRandom: any, random: number)
         optionsList = [];
     };
 
-    const handleSendPoll = (event: MouseEvent<HTMLButtonElement>) => {
+    const handleAddPoll = (event: MouseEvent<HTMLButtonElement>) => {
         event.preventDefault();
         if (Boolean(questionText) && Boolean(nameText) && Boolean(optionsList.length >= 2)) {
             modalRandom();
@@ -110,7 +108,7 @@ const AddPoll = (show: boolean, modalFun: any, modalRandom: any, random: number)
                     </form>
                     <div>
                         <button className={b('btn')} onClick={() => { modalFun() }}>Close</button>
-                        <button className={b('btn')} onClick={handleSendPoll}>Submmit</button>
+                        <button className={b('btn')} onClick={handleAddPoll}>Submmit</button>
                     </div>
                 </div>
             </Modal>

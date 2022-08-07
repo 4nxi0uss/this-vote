@@ -4,137 +4,94 @@ export const FAILED_STATUS = "FAILED";
 export const IDLE_STATUS = "IDLE";
 
 
-export interface infoLoginType {
+export interface Login {
     email: string;
     password: string;
 }
 
-export interface userLoginStatus {
-    statusLogin: string;
-    statusUpdateInfo: string;
-    statusUserData: string;
-}
+export interface UserData {
+    message: string;
+    data: [
+        {
+            name: string;
+            surname: string;
+            date_of_birth: string;
+            id: number;
+            type_of_account: number;
+            user_id: string;
+        }
+    ];
+};
 
-export interface userLoginInfo {
-    infoLogin: {
-        message: string;
-        login: boolean;
-        rows: any;
-    };
-    infoUpdate: {
-        message: string;
-        rows: any;
-        error: any;
-    };
-    userData: {
-        message: string;
-        data: [
-            {
-                name: string;
-                surname: string;
-                active: number;
-                date_of_birth: string;
-                id: number;
-                polls: string;
-                type_of_account: number;
-                user_id: string;
-            }
-        ];
-        error: any;
-    };
-}
-
-export interface infoUpdate {
+export interface InfoUpdateUserData {
     userId: string;
     name: string;
     surname: string;
     dateOfBirth: string;
 }
 
-export interface pollsData {
+export interface PollsData {
     name: string;
     question: string;
     number: number;
     option: object;
-    userId: string;
-    token: string;
+    userId: string | boolean;
 }
 
-export interface postPollsInfo {
-    statusPolls: string;
-    infoPolls: {
-        message: string;
-        rows: string;
-        error: string;
-    },
-}
-
-export interface registerInfo {
+export interface RegisterInfo {
     registerStatus: string
     registerInfo: {
         message: string,
         row: string,
-        error: string,
     }
 }
 
-export interface getPollsInfo {
-    statusGetPolls: string
-    infoGetPolls: {
-        message: string,
-        data: [{
-            id: number,
-            userId: string,
-            name: string,
-            question: string,
-            number: number,
-            options: string
-        }]
-    }
+export interface GetPollsInfo {
+    message: string,
+    data: [{
+        id: number,
+        userId: string,
+        name: string,
+        question: string,
+        number: number,
+        options: string
+    }]
 }
 
-export interface putPollsInfo {
-    statusPutPoll: string,
-    infoPutPoll: {
-        message: string,
-        error: string
-    },
-}
-
-export interface putOptionType {
-    id: number,
-    options?: string,
-    optionId: number
-}
-
-export interface registerDataType {
+export interface RegisterDataType {
     email: string,
     password: string
 }
 
-export interface deletingDataType {
+export interface PaginationType {
+    page: number,
+}
+
+export interface PaginationTypeForUser {
     userId: string,
-    id: number
-}
-
-
-export interface deletingInfo {
-    deletingStatus: string
-    deletingInfo: {
-        message: string,
-        error: string,
-    }
-}
-
-export interface editSlice {
-    isOpenEdit: boolean
-}
-
-export interface paginationType {
     page: number,
 }
 
-export interface paginationTypeForUser {
-    userId: number,
+export interface UserLogin {
+    login: boolean,
+    message: string,
+    rows: [{
+        id: number,
+        user_id: string
+    }]
+}
+
+export interface GetPolls {
+    limit: number,
+    message: string,
+    numberOfPages: number,
     page: number,
+    data: [{
+        id: number,
+        name: string,
+        number: number,
+        options: string,
+        question: string,
+        user_id: string
+    }]
 }

@@ -29,7 +29,7 @@ const Header = () => {
     const [logout] = useUserLogoutMutation()
 
     const handleLogout = () => {
-        handleLogoutConfig(logout, dataLogin?.rows[0].user_id)
+        handleLogoutConfig(logout, String(dataLogin?.rows[0].user_id))
     }
 
     const handleMobileMenu = () => {

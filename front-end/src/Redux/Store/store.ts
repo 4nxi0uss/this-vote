@@ -17,8 +17,8 @@ export const store = configureStore({
       userApi.middleware
     )
   )
-
 });
+
 setupListeners(store.dispatch);
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>

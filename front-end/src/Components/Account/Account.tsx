@@ -7,28 +7,28 @@ import block from 'bem-css-modules'
 import { useChangeUserAccountTypeMutation, useGetUserDataQuery, useUpdateUserInfoMutation, useUserLoginMutation } from '../../Redux/Services/UserApi';
 
 import { userAcountType } from '../../Types/Types';
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 
 const b = block(style);
 
 const Account = () => {
 
     // eslint-disable-next-line
-    const [loginApi, { data: dataLogin, isLoading }] = useUserLoginMutation({
+    const [loginApi, { data: dataLogin, isSuccess }] = useUserLoginMutation({
         fixedCacheKey: "login"
     });
 
     const [updateUserInfo, { data: dataUpdate, isLoading: isLoad, isError }] = useUpdateUserInfoMutation();
-
     const [changeUserAccountType, { data: dataAccountType, isLoading: isLoadAccountType, isError: isErr, }] = useChangeUserAccountTypeMutation();
 
-    const { data: userData } = useGetUserDataQuery(!isLoading && dataLogin?.rows[0]?.user_id)
+    const { data: userData } = useGetUserDataQuery(isSuccess ? String(dataLogin?.rows[0]?.user_id) : skipToken)
 
     const betterDate = (date: string) => date?.slice(0, 10)
 
-    const [name, setName] = useState<string>(userData?.data[0]?.name);
-    const [surname, setSurname] = useState<string>(userData?.data[0]?.surname);
-    const [date, setDate] = useState<string>(betterDate(userData?.data[0]?.date_of_birth));
-    const [typeOfAccount, setTypeOfAccount] = useState<number>(userData?.data[0]?.type_of_account);
+    const [name, setName] = useState<string>(String(userData?.data[0]?.name));
+    const [surname, setSurname] = useState<string>(String(userData?.data[0]?.surname));
+    const [date, setDate] = useState(betterDate(String(userData?.data[0].date_of_birth)));
+    const [typeOfAccount, setTypeOfAccount] = useState(userData?.data[0]?.type_of_account);
     const [timeing, setTiming] = useState<boolean>(false);
     const [timeingErr, setTimingErr] = useState<boolean>(false);
     const [changedType, setChangedType] = useState<number>(0);
@@ -54,7 +54,7 @@ const Account = () => {
 
     const handleChangeUserPersonalData = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const infoUpdates = { userId: dataLogin?.rows[0]?.user_id, name, surname, dateOfBirth: date };
+        const infoUpdates = { userId: String(dataLogin?.rows[0]?.user_id), name, surname, dateOfBirth: date };
 
         updateUserInfo(infoUpdates)
             .unwrap()
@@ -93,9 +93,9 @@ const Account = () => {
     }
 
     useMemo(() => {
-        setName(userData?.data[0]?.name)
-        setSurname(userData?.data[0]?.surname)
-        setDate(betterDate(userData?.data[0]?.date_of_birth))
+        setName(String(userData?.data[0]?.name))
+        setSurname(String(userData?.data[0]?.surname))
+        setDate(betterDate(String(userData?.data[0]?.date_of_birth)))
         setTypeOfAccount(userData?.data[0]?.type_of_account)
         // eslint-disable-next-line
     }, [userData])
@@ -126,7 +126,7 @@ const Account = () => {
 
             </form>
 
-            {userAcountType[typeOfAccount] === 'Admin' && < div className={b('change-type-account')}>
+            {userAcountType[Number(typeOfAccount)] === 'Admin' && < div className={b('change-type-account')}>
                 <h2 className={b('change-type-account__title')}>Change typ of user account</h2>
                 <label className={b('of-label')}>User email</label>
                 <input type="text" value={userEmail} onChange={(e) => { setUserEmail(e.target.value) }} />

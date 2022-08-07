@@ -4,7 +4,7 @@ import type { MouseEvent } from 'react';
 import style from './Poll.module.scss';
 import block from 'bem-css-modules';
 
-import { optionValueJson, PollProp, VoteType } from '../../../../Types/Types';
+import { OptionValueJson, PollProp, VoteType } from '../../../../Types/Types';
 
 import EditPoll from '../EditPoll/EditPoll';
 
@@ -16,11 +16,11 @@ const b = block(style);
 const Poll = ({ id, name, question, options, number, poolCreator }: PollProp) => {
 
     // eslint-disable-next-line
-    const [loginApi, { data: dataLogin, isLoading: isLoging }] = useUserLoginMutation({
+    const [loginApi, { data: dataLogin }] = useUserLoginMutation({
         fixedCacheKey: "login"
     });
 
-    const { data } = useGetUserDataQuery(dataLogin?.rows[0]?.user_id)
+    const { data } = useGetUserDataQuery(String(dataLogin?.rows[0]?.user_id))
 
     const [updatePollOptionValueApi] = useUpdatePollValueMutation();
     const [deletePoolApi] = useDeletePollMutation();
@@ -37,15 +37,15 @@ const Poll = ({ id, name, question, options, number, poolCreator }: PollProp) =>
     const optionJsonParseValuses = Object.values(optionJsonParse);
 
     const handlePollDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
-        if (!((data?.data[0]?.type_of_account >= 2) || (poolCreator === dataLogin?.rows[0]?.user_id))) { return }
-        const delData = { userId: poolCreator, id: id };
+        if (!((Number(data?.data[0]?.type_of_account) >= 2) || (poolCreator === dataLogin?.rows[0]?.user_id))) { return }
+        const delData = { userId: String(poolCreator), id: id };
         deletePoolApi(delData);
     }
 
     const handleBtnFunction = (event: MouseEvent<HTMLButtonElement>, vote?: { id: number }) => {
         event.preventDefault();
 
-        const putOption = { id: Number(id), optionId: vote?.id };
+        const putOption = { id: Number(id), optionId: Number(vote?.id) };
 
         updatePollOptionValueApi(putOption);
     };
@@ -102,7 +102,7 @@ const Poll = ({ id, name, question, options, number, poolCreator }: PollProp) =>
 
         optionJsonParseValuses.forEach((c) => { count += c.vote });
 
-        return optionJsonParseValuses.map((valueOfJsonData: optionValueJson) => {
+        return optionJsonParseValuses.map((valueOfJsonData: OptionValueJson) => {
             return !Boolean(typeof (valueOfJsonData.name) === String(undefined)) && <button className={b('btn-vote')} key={valueOfJsonData.id} onClick={(event: MouseEvent<HTMLButtonElement>) => handleBtnFunction(event, valueOfJsonData)}>{valueOfJsonData.name}   {votePercent(count, valueOfJsonData.vote)}%{'  '}<span className={b('color-dot')} style={{ background: valueOfJsonData.color }}></span> </button>
         });
     };
@@ -110,8 +110,8 @@ const Poll = ({ id, name, question, options, number, poolCreator }: PollProp) =>
     return (
         <section className={b()}>
             <div className={b('option')}>
-                {((data?.data[0]?.type_of_account >= 2) || (poolCreator === dataLogin?.rows[0]?.user_id)) && <button onClick={handlePollDelete} className={b('option__btn-option', { delete: true })}>Delete</button>}
-                {((data?.data[0]?.type_of_account >= 1) || (poolCreator === dataLogin?.rows[0]?.user_id)) && <button onClick={handleEdit} className={b('option__btn-option', { edit: true })}>Edit</button>}
+                {((Number(data?.data[0]?.type_of_account) >= 2) || (poolCreator === dataLogin?.rows[0]?.user_id)) && <button onClick={handlePollDelete} className={b('option__btn-option', { delete: true })}>Delete</button>}
+                {((Number(data?.data[0]?.type_of_account) >= 1) || (poolCreator === dataLogin?.rows[0]?.user_id)) && <button onClick={handleEdit} className={b('option__btn-option', { edit: true })}>Edit</button>}
             </div>
             < EditPoll key={id + 18} isOpen={isOpenEdit} edit={handleEdit} pro={{ id, name, question, number, options }} />
             <h2>{name}</h2>

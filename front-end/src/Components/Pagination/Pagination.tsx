@@ -10,7 +10,7 @@ import { decrementPage, incrementByAmountPage, incrementPage } from '../../Redux
 
 const b = block(style);
 
-const Pagination = (numberOfPages: any, pass?: boolean, page?: number,) => {
+const Pagination = (numberOfPages: number, pass?: boolean, page?: number,) => {
 
     const dispach = useAppDispatch()
 

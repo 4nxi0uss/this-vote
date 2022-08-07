@@ -1,13 +1,4 @@
 import { configureStore } from '@reduxjs/toolkit'
-import usersLoginSlice from '../Slice/usersLoginSlice'
-import postPollsSlice from '../Slice/postPollsSlice';
-import registerSlice from '../Slice/registerSlice';
-import usersGetPolls from '../Slice/getPollSlice';
-import usersPutPoll from '../Slice/voteSlice';
-import deletePoll from '../Slice/deletingPollSlice';
-import editPollSlice from '../Slice/editPollSlice';
-import GetUserDataSlice from '../Slice/GetUserDataSlice';
-import usersUpdateSlice from '../Slice/userUpdateSlice';
 import PaginationSlice from '../Slice/PaginationSlice';
 import { setupListeners } from '@reduxjs/toolkit/dist/query';
 import { pollApi } from '../Services/PollApi';
@@ -15,15 +6,6 @@ import { userApi } from '../Services/UserApi';
 
 export const store = configureStore({
   reducer: {
-    usersLogin: usersLoginSlice,
-    userData: GetUserDataSlice,
-    userUpdate: usersUpdateSlice,
-    registerUser: registerSlice,
-    addPolls: postPollsSlice,
-    getPolls: usersGetPolls,
-    putPoll: usersPutPoll,
-    deletePoll: deletePoll,
-    editPoll: editPollSlice,
     pagination: PaginationSlice,
     [pollApi.reducerPath]: pollApi.reducer,
     [userApi.reducerPath]: userApi.reducer,

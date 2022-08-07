@@ -10,6 +10,7 @@ import Login from '../Login/Login';
 import Account from '../Account/Account';
 
 import PollsList from '../Polls/PollsList';
+import NotFound from '../NotFound/NotFount';
 
 const b = block(style)
 
@@ -19,7 +20,7 @@ const MainContent = () => {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if (!Boolean(localStorage.getItem('user')) && location.pathname !== '/' && location.pathname !== '/login') {
+        if (!Boolean(localStorage.getItem('user')) && location.pathname !== '/' && location.pathname !== '/login' && location.pathname !== '/not-found') {
             navigate('/')
         }
         // eslint-disable-next-line
@@ -32,6 +33,7 @@ const MainContent = () => {
                 <Route path='/Login' element={<Login />} />
                 <Route path='/Account' element={<Account />} />
                 <Route path='/Polls' element={<PollsList />} />
+                <Route path='*' element={<NotFound />} />
             </Routes>
         </main>
     )

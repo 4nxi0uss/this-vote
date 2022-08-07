@@ -8,11 +8,11 @@ import { useGetAllPollsQuery } from '../../../../Redux/Services/PollApi';
 import Poll from '../../../Polls/subcomponent/Poll/Poll';
 import Loader from '../../../Loader/Loader';
 
-import { PollProp } from '../../../../Types/Types';
 import { useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../../Redux/Hooks/hooks';
 import { incrementByAmountPage } from '../../../../Redux/Slice/PaginationSlice';
 import Pagination from '../../../Pagination/Pagination';
+import { PollType } from '../../../../Types/Types';
 
 const b = block(style)
 
@@ -23,11 +23,11 @@ const Introduction = () => {
 
     let [searchParams] = useSearchParams();
 
-    const { data, error, isLoading, isError, isSuccess } = useGetAllPollsQuery({ page }, {
+    const { data, error, isError, isSuccess } = useGetAllPollsQuery({ page }, {
         pollingInterval: 5000,
     });
 
-    const PollDisplay = () => !isLoading && data.data.map((el: PollProp) => <Poll key={el.number} id={el.id} name={el.name} number={el.number} question={el.question} options={el.options} btn={false} />)
+    const PollDisplay = () => isSuccess && data?.data.map((el: PollType) => <Poll key={el.number} id={el.id} name={el.name} number={el.number} question={el.question} options={el.options} poolCreator={el.user_id} />)
 
     isError && console.warn(error)
 
@@ -43,8 +43,9 @@ const Introduction = () => {
             {isSuccess
                 ? PollDisplay()
                 : <Loader />}
-            {Pagination(data?.numberOfPages, isSuccess, page)}
+            {Pagination(Number(data?.numberOfPages), isSuccess, page)}
         </section>
     )
 }
+
 export default Introduction

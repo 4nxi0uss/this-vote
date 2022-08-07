@@ -5,21 +5,8 @@ export const userAcountType: UsersStatusType = {
   2: "Admin"
 }
 
-export interface dataTypes {
-  fields: [...{
-    name: string
-  }[]],
-  rows: [{
-    Id: number,
-    bus_number: number,
-    departure_time: string,
-    destination: string
-  }]
-}
-
 export interface ModalProp {
   children: React.ReactChild,
-
   isOpen: boolean,
   handleOnClose?: () => void,
   shouldBeCloseOnOutsideClick?: boolean,
@@ -37,7 +24,7 @@ export interface PollProp {
   question: string,
   options: string,
   number: number,
-  btn?: boolean
+  poolCreator?: string
 }
 
 export interface ObjectPushType {
@@ -53,7 +40,7 @@ export interface VoteType {
   color?: string
 }
 
-export interface editProp {
+export interface EditProp {
   id: number,
   name: string,
   question: string,
@@ -61,15 +48,24 @@ export interface editProp {
   options: string,
 }
 
-export interface editArg {
+export interface EditArg {
   isOpen: boolean,
   edit: any,
-  pro: editProp
+  pro: EditProp
 }
 
-export interface optionValueJson {
+export interface OptionValueJson {
   name: string,
   id: number,
   vote: number,
   color: string
+}
+
+export interface PollType {
+  number: number,
+  id: number,
+  name: string,
+  question: string,
+  options: string,
+  user_id: string
 }

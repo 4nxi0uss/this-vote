@@ -14,7 +14,7 @@ const hostname = 'thisvote.bieda.it';
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: hostname,
+  origin: 'https://thisvote.bieda.it',
   credentials: true
 }));
 

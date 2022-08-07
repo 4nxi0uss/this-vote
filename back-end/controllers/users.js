@@ -185,7 +185,7 @@ exports.postRefreshToken = (req, res) => {
             } catch (error) {
                 console.log('refresh token: ', refreshToken)
                 console.log('refresh row: ', rows[0])
-                console.log('refresh row token: ', rows[0]?.refresh_token)
+                console.log('refresh row token: ', rows[0].refresh_token)
                 console.log('refresh error: ', error)
                 postRefreshToken()
             }
@@ -262,7 +262,7 @@ exports.patchUserTypeAccount = (req, res) => {
         db.query("SELECT user_id  FROM `login` WHERE email = ? ", [email], (err, rows) => {
             if (err) throw err;
 
-            if (!Boolean(rows[0]?.user_id)) {
+            if (!Boolean(rows[0].user_id)) {
                 return res.status(401).json({
                     message: 'Wrong user email.'
                 })

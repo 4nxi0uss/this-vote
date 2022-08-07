@@ -1,21 +1,24 @@
 import { useEffect, useState } from 'react';
 import type { MouseEvent } from "react";
 
+import { useSearchParams } from 'react-router-dom';
+
 import style from './PollsList.module.scss';
 import block from 'bem-css-modules';
 
 import Poll from './subcomponent/Poll/Poll';
 import Loader from '../Loader/Loader';
 import AddPoll from './subcomponent/AddPoll/AddPoll';
+import Pagination from '../Pagination/Pagination';
 
-import { ObjectPushType, optionListType } from '../../Types/Types';
+import { ObjectPushType, optionListType, PollType } from '../../Types/Types';
 
 import { useGetPollsQuery } from '../../Redux/Services/PollApi';
 import { useUserLoginMutation } from '../../Redux/Services/UserApi';
-import Pagination from '../Pagination/Pagination';
 import { useAppDispatch, useAppSelector } from '../../Redux/Hooks/hooks';
 import { incrementByAmountPage } from '../../Redux/Slice/PaginationSlice';
-import { useSearchParams } from 'react-router-dom';
+
+import { skipToken } from '@reduxjs/toolkit/dist/query';
 
 const b = block(style);
 
@@ -29,11 +32,11 @@ const PollsList = () => {
     let [searchParams] = useSearchParams();
 
     // eslint-disable-next-line
-    const [loginApi, { data: dataLogin, isLoading: isLoging }] = useUserLoginMutation({
+    const [loginApi, { data: dataLogin, isSuccess: isSuccessLogin }] = useUserLoginMutation({
         fixedCacheKey: "login"
     });
 
-    const { data: dataGetPollsApi, isLoading: isGetting, isSuccess } = useGetPollsQuery({ userId: dataLogin?.rows[0]?.user_id, page }, {
+    const { data: dataGetPollsApi, isLoading: isGetting, isSuccess } = useGetPollsQuery(isSuccessLogin ? { userId: String(dataLogin?.rows[0]?.user_id), page } : skipToken, {
         pollingInterval: 5000
     });
 
@@ -53,7 +56,7 @@ const PollsList = () => {
     let optionObject: ObjectPushType = {};
     optionsList.forEach((option, index) => optionObject[`option${index}`] = { id: index, ...option })
 
-    const PollDisplay = () => !isGetting && dataGetPollsApi?.data?.map((el: any) => <Poll key={el.number} id={el.id} name={el.name} number={el.number} question={el.question} options={el.options} poolCreator={el.user_id} />)
+    const PollDisplay = () => !isGetting && dataGetPollsApi?.data?.map((el: PollType) => <Poll key={el.number} id={el.id} name={el.name} number={el.number} question={el.question} options={el.options} poolCreator={el.user_id} />)
 
     useEffect(() => {
         const chekingPage = Number(searchParams.get('page')) > 0 ? Number(searchParams.get('page')) : 1;
@@ -68,7 +71,7 @@ const PollsList = () => {
             {AddPoll(isShownAdd, handleModal, handleRandomNumber, randomNumber)}
 
             {!isGetting ? PollDisplay() : <Loader />}
-            {Pagination(dataGetPollsApi?.numberOfPages, isSuccess, page)}
+            {Pagination(Number(dataGetPollsApi?.numberOfPages), isSuccess, page)}
         </section>
     )
 }

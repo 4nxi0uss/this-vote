@@ -10,7 +10,7 @@ const mutex = new Mutex()
 
 const { REACT_APP_HOST, REACT_APP_PORT } = process.env
 
-const baseQuery = fetchBaseQuery({ baseUrl: `http://${REACT_APP_HOST}:${REACT_APP_PORT}/users/` })
+const baseQuery = fetchBaseQuery({ baseUrl: `http://${REACT_APP_HOST}:${REACT_APP_PORT}/users/api` })
 const baseQueryWithReauthUser: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
     // wait until the mutex is available without locking it
 
@@ -78,7 +78,7 @@ export const userApi = createApi({
                 query: (userId) => {
                     localUserId = `${userId}`;
                     return {
-                        url: `get-user-data/${userId}`,
+                        url: `/get-user-data/${userId}`,
                         method: "GET",
                         credentials: "include",
                     }
@@ -89,7 +89,7 @@ export const userApi = createApi({
         updateUserInfo: builder.mutation<{ message: string }, InfoUpdateUserData>(
             {
                 query: (infoUpdate) => ({
-                    url: "info-update",
+                    url: "/info-update",
                     method: 'PATCH',
                     credentials: "include",
                     body: infoUpdate,
@@ -100,7 +100,7 @@ export const userApi = createApi({
         userLogin: builder.mutation<UserLogin, Login>(
             {
                 query: (loginData) => ({
-                    url: "login",
+                    url: "/login",
                     method: 'POST',
                     credentials: 'include',
                     body: loginData,
@@ -109,7 +109,7 @@ export const userApi = createApi({
         userLogout: builder.mutation<{ message: string }, string>(
             {
                 query: (userId) => ({
-                    url: "logout",
+                    url: "/logout",
                     method: 'POST',
                     credentials: 'include',
                     body: { userId },
@@ -120,7 +120,7 @@ export const userApi = createApi({
             {
                 query: ({ email, password }) => (
                     {
-                        url: "register",
+                        url: "/register",
                         method: 'POST',
                         body: {
                             usersEmail: email,
@@ -131,7 +131,7 @@ export const userApi = createApi({
         userRefreshToken: builder.mutation<any, string>(
             {
                 query: (userId) => ({
-                    url: "refresh-token",
+                    url: "/refresh-token",
                     method: 'POST',
                     credentials: 'include',
                     body: { userId },
@@ -140,7 +140,7 @@ export const userApi = createApi({
         changeUserAccountType: builder.mutation<{ message: string }, { typeAccount: number, email: string }>(
             {
                 query: ({ typeAccount, email }) => ({
-                    url: `change-account-type`,
+                    url: `/change-account-type`,
                     method: "PATCH",
                     credentials: "include",
                     body: {

@@ -56,7 +56,7 @@ exports.getAllPolls = (req, res) => {
 
                 const numberOfPages = Math.ceil(countRows[0]['COUNT(*)'] / limit)
 
-                if (page > numberOfPages) return res.status(204).json({
+                if (page > numberOfPages) return res.status(404).json({
                     message: "No content",
                     page,
                     limit,
@@ -104,7 +104,7 @@ exports.getPolls = (req, res) => {
 
                 const numberOfPages = Math.ceil(countRows[0]['COUNT(*)'] / limit)
 
-                if (page > numberOfPages) return res.status(204).json({
+                if (page > numberOfPages) return res.status(404).json({
                     message: "No content",
                     page,
                     limit,

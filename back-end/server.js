@@ -7,7 +7,7 @@ const pollsRouter = require('./routes/polls');
 
 const app = express()
 
-const port = 80
+const port = 3022
 const hostname = 'thisvote.bieda.it';
 
 

@@ -154,7 +154,7 @@ exports.postRefreshToken = (req, res) => {
 
             try {
 
-                if (rows[0]?.refresh_token === refreshToken) {
+                if (rows[0].refresh_token === refreshToken) {
 
                     try {
                         jwt.verify(refreshToken, APP_REFRESH_TOKEN, (err, data) => {

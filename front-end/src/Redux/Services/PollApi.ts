@@ -8,8 +8,11 @@ let localUserId = ''
 
 const mutex = new Mutex()
 
+const host = 'thisvote.bieda.it'
+const port = 80
+
 const baseQueryWithReauthPoll: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
-    const baseQuery = fetchBaseQuery({ baseUrl: 'http://localhost:3022/polls/' })
+    const baseQuery = fetchBaseQuery({ baseUrl: `http://${host}:${port}/polls/` })
     // wait until the mutex is available without locking it
 
     await mutex.waitForUnlock()
@@ -34,7 +37,7 @@ const baseQueryWithReauthPoll: BaseQueryFn<string | FetchArgs, unknown, FetchBas
                 if (Boolean(localUserId)) {
                     refreshResult = await baseQuery(
                         args = {
-                            url: 'http://localhost:3022/users/refresh-token',
+                            url: `http://${host}:${port}/users/refresh-token`,
                             method: 'POST',
                             credentials: 'include',
                             body: { userId: localUserId }

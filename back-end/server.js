@@ -7,14 +7,14 @@ const pollsRouter = require('./routes/polls');
 
 const app = express()
 
-const port = 3022
-const hostname = 'localhost';
+const port = 80
+const hostname = 'thisvote.bieda.it';
 
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: true,
+  origin: hostname,
   credentials: true
 }));
 

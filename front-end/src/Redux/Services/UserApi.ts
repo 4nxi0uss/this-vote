@@ -8,10 +8,9 @@ let localUserId = ''
 
 const mutex = new Mutex()
 
-const host = 'thisvote.bieda.it'
-const port = 80
+const { REACT_APP_HOST, REACT_APP_PORT } = process.env
 
-const baseQuery = fetchBaseQuery({ baseUrl: `http://${host}:${port}/users/` })
+const baseQuery = fetchBaseQuery({ baseUrl: `http://${REACT_APP_HOST}:${REACT_APP_PORT}/users/` })
 const baseQueryWithReauthUser: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
     // wait until the mutex is available without locking it
 

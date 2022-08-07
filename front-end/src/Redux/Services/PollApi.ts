@@ -4,15 +4,14 @@ import { Mutex } from 'async-mutex'
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { GetPolls, GetPollsInfo, PaginationType, PaginationTypeForUser, PollsData } from '../ReduxTypes/reduxTypes'
 
+const { REACT_APP_HOST, REACT_APP_PORT } = process.env
+
 let localUserId = ''
 
 const mutex = new Mutex()
 
-const host = 'thisvote.bieda.it'
-const port = 80
-
 const baseQueryWithReauthPoll: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
-    const baseQuery = fetchBaseQuery({ baseUrl: `http://${host}:${port}/polls/` })
+    const baseQuery = fetchBaseQuery({ baseUrl: `http://${REACT_APP_HOST}:${REACT_APP_PORT}/polls/` })
     // wait until the mutex is available without locking it
 
     await mutex.waitForUnlock()
@@ -37,7 +36,7 @@ const baseQueryWithReauthPoll: BaseQueryFn<string | FetchArgs, unknown, FetchBas
                 if (Boolean(localUserId)) {
                     refreshResult = await baseQuery(
                         args = {
-                            url: `http://${host}:${port}/users/refresh-token`,
+                            url: `http://${REACT_APP_HOST}:${REACT_APP_PORT}/users/refresh-token`,
                             method: 'POST',
                             credentials: 'include',
                             body: { userId: localUserId }

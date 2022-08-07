@@ -71,6 +71,18 @@
             height: 1vw;
             width: 1vw;
         }
+
+        &__x-btn {
+            background-color: transparent;
+            color: red;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            padding: .15rem;
+
+            &:hover {
+                background-color: rgb(255, 164, 164);
+            }
+        }
     }
 }
 

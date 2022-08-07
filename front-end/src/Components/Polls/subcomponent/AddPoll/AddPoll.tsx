@@ -58,6 +58,11 @@ const AddPoll = (show: boolean, modalFun: any, modalRandom: any, random: number)
         };
     };
 
+    const handleDelOption = (event: MouseEvent<HTMLButtonElement>, index: number) => {
+        event.preventDefault();
+        optionsList = optionsList.filter((f, ind) => ind !== index)
+    };
+
     let optionObject: ObjectPushType = {};
     optionsList?.forEach((option, index) => optionObject[`option${index}`] = { id: index, ...option });
 
@@ -87,7 +92,7 @@ const AddPoll = (show: boolean, modalFun: any, modalRandom: any, random: number)
         modalFun()
     }
 
-    const optionShow = () => optionsList.map((option: { name: string, color: string }, index: number) => <p className={b('option')} key={index}>{index + 1}.  {option?.name} <span className={b('option__color')} style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span></p>)
+    const optionShow = () => optionsList.map((option: { name: string, color: string }, index: number) => <p className={b('option')} key={index}>{index + 1}.  {option?.name} <span className={b('option__color')} style={({ borderColor: `${option.color}`, backgroundColor: `${option.color}` })}></span> <button className={b('option__x-btn')} onClick={(e) => { handleDelOption(e, index) }}>X</button></p>)
 
     return (
         <>

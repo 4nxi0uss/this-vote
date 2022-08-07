@@ -12,8 +12,8 @@ const b = block(style)
 const Login = () => {
 
     const [toggleRegistry, setToggleRegistry] = useState<boolean>(false);
-    const [email, setEmail] = useState<string>("qwe@qwe.pl");
-    const [password, setPassword] = useState<string>("1qaz@WSX");
+    const [email, setEmail] = useState<string>("");
+    const [password, setPassword] = useState<string>("");
     const [secondPassword, setSecondPassword] = useState<string>("");
     const [errorRegister, setErrorRegister] = useState<string>("");
     const [errorLogin, setErrorLogin] = useState<string>("");

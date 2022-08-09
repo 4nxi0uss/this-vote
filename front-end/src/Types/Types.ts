@@ -1,8 +1,8 @@
 
 export const userAcountType: UsersStatusType = {
-  0: "User",
-  1: "Editor",
-  2: "Admin"
+  User: "User",
+  Editor: "Editor",
+  Admin: "Admin"
 }
 
 export interface ModalProp {
@@ -32,7 +32,7 @@ export interface ObjectPushType {
 }
 
 export interface UsersStatusType {
-  [key: number]: any;
+  [key: string]: string;
 }
 
 export interface VoteType {

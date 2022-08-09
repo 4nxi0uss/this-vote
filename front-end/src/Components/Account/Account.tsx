@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import type { ChangeEvent, FormEvent } from 'react';
+import type { FormEvent } from 'react';
 
 import style from './Account.module.scss'
 import block from 'bem-css-modules'
@@ -25,47 +25,33 @@ const Account = () => {
 
     const betterDate = (date: string) => date?.slice(0, 10)
 
-    const [name, setName] = useState<string>(String(userData?.data[0]?.name));
-    const [surname, setSurname] = useState<string>(String(userData?.data[0]?.surname));
-    const [date, setDate] = useState(betterDate(String(userData?.data[0].date_of_birth)));
-    const [typeOfAccount, setTypeOfAccount] = useState(userData?.data[0]?.type_of_account);
-    const [timeing, setTiming] = useState<boolean>(false);
-    const [timeingErr, setTimingErr] = useState<boolean>(false);
-    const [changedType, setChangedType] = useState<number>(0);
-    const [userEmail, setUserEmail] = useState<string>('');
     const [changeUserAccountTypeError, setChangeUserAccountTypeError] = useState<string>('');
+
+    const [formObj, setformObj] = useState<{ name: string, surname: string, date: string, typeOfAccount: string }>({ name: '', surname: '', date: '', typeOfAccount: '' });
+    const [timeObj, setTimeObj] = useState<{ info: boolean, error: boolean }>({ info: false, error: false })
+    const [changedTypeObj, setChangedTypeObj] = useState<{ email: string, type: string }>({ email: '', type: 'User' })
 
     const TodayDate = new Date();
 
-    const handleName = (e: ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault()
-        setName(e.target.value)
-    }
-
-    const handleSurname = (e: ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault()
-        setSurname(e.target.value)
-    }
-
-    const handleDate = (e: ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault()
-        setDate(e.target.value.trim())
-    }
-
     const handleChangeUserPersonalData = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const infoUpdates = { userId: String(dataLogin?.rows[0]?.user_id), name, surname, dateOfBirth: date };
+        const infoUpdates = { userId: String(dataLogin?.rows[0]?.user_id), name: formObj.name, surname: formObj.surname, dateOfBirth: formObj.date };
 
         updateUserInfo(infoUpdates)
             .unwrap()
             .then(() => {
-                setTiming(true)
-                setTimeout(() => { setTiming(false) }, 3000)
+                setTimeObj(state => ({ ...state, info: true }))
+                setTimeout(() => {
+                    setTimeObj(state => ({ ...state, info: false }))
+                }, 3000)
             })
             .catch((res) => {
                 setChangeUserAccountTypeError(res.data.message)
-                setTimingErr(true)
-                setTimeout(() => { setTimingErr(false); setChangeUserAccountTypeError('') }, 3000)
+                setTimeObj(state => ({ ...state, error: true }))
+                setTimeout(() => {
+                    setTimeObj(state => ({ ...state, error: false }))
+                        ; setChangeUserAccountTypeError('')
+                }, 3000)
             })
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }
@@ -75,63 +61,74 @@ const Account = () => {
     }
 
     const handleCheangedType = () => {
-        if (isNaN(Number(changedType))) return null
-        changeUserAccountType({ typeAccount: Number(changedType), email: userEmail })
+
+        if (isNaN(Number(changedTypeObj.type))) return;
+
+        changeUserAccountType({ typeAccount: Number(changedTypeObj.type), email: changedTypeObj.email })
             .unwrap()
             .then(
                 () => {
-                    setTiming(true)
-                    setTimeout(() => { setTiming(false) }, 3000)
+                    setTimeObj(state => ({ ...state, info: true }))
+                    setTimeout(() => {
+                        setTimeObj(state => ({ ...state, info: false }))
+                    }, 3000)
                 }
             )
             .catch((res) => {
                 setChangeUserAccountTypeError(res.data.message)
-                setTimingErr(true)
-                setTimeout(() => { setTimingErr(false); setChangeUserAccountTypeError('') }, 3000)
+                setTimeObj(state => ({ ...state, error: true }))
+                setTimeout(() => {
+                    setTimeObj(state => ({ ...state, error: false })); setChangeUserAccountTypeError('')
+                }, 3000)
             })
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }
 
+    const handleChangeFormS = (e: any) => {
+        setformObj(state => ({
+            ...state, [e.target.name]: e.target.value,
+        }))
+    }
+
     useMemo(() => {
-        setName(String(userData?.data[0]?.name))
-        setSurname(String(userData?.data[0]?.surname))
-        setDate(betterDate(String(userData?.data[0]?.date_of_birth)))
-        setTypeOfAccount(userData?.data[0]?.type_of_account)
+        setformObj({ name: String(userData?.data[0]?.name), surname: String(userData?.data[0]?.surname), date: betterDate(String(userData?.data[0]?.date_of_birth)), typeOfAccount: String(userData?.data[0]?.type_of_account) })
         // eslint-disable-next-line
     }, [userData])
+
+    const todayDate = `${TodayDate.getFullYear()}-${TodayDate.getMonth() + 1}-${TodayDate.getDate()}`
 
     return (
         <section className={b()}>
 
-            <h2 className={b('title')}> Hello {name} </h2>
+            <h2 className={b('title')}> Hello {formObj.name} </h2>
 
-            {(!isLoad || !isLoadAccountType) && timeing && <h4 className={b('info', { message: true })}>{(!isLoad && dataUpdate?.message) || (!isLoadAccountType && dataAccountType?.message)}</h4>}
-            {(isErr || isError) && timeingErr && <h4 className={b('info', { warning: true })}>{changeUserAccountTypeError}</h4>}
+            {(!isLoad || !isLoadAccountType) && timeObj.info && <h4 className={b('info', { message: true })}>{(!isLoad && dataUpdate?.message) || (!isLoadAccountType && dataAccountType?.message)}</h4>}
+            {(isErr || isError) && timeObj.error && <h4 className={b('info', { warning: true })}>{changeUserAccountTypeError}</h4>}
 
-            <form className={b('form')} onSubmit={handleChangeUserPersonalData} method="submit">
+            <form className={b('form')} onChange={handleChangeFormS} onSubmit={handleChangeUserPersonalData} method="submit">
 
-                <label >Name:</label>
-                <input type="text" required placeholder="Name" onChange={handleName} value={name ?? 'John'} />
+                <label htmlFor='name' >Name:</label>
+                <input name='name' id='name' type="text" required placeholder="Name" value={formObj.name ?? 'John'} />
 
-                <label >Surname:</label>
-                <input type="text" required placeholder="Surname" onChange={handleSurname} value={surname ?? 'Doe'} />
+                <label htmlFor='surname'>Surname:</label>
+                <input name='surname' id='surname' type="text" required placeholder="Surname" value={formObj.surname ?? 'Doe'} />
 
-                <label >Date of birth:</label>
-                <input type="date" max={`${TodayDate.getFullYear()}-${TodayDate.getMonth() + 1}-${TodayDate.getDate()}`} onChange={handleDate} value={date ?? '1234-11-22'} />
+                <label htmlFor='date' >Date of birth:</label>
+                <input name='date' id='date' type="date" max={todayDate} value={formObj.date ?? '1234-11-22'} />
 
-                <label className={b('of-label')}>Type of account:</label>
-                <input type="text" readOnly disabled value={userAcountType[typeOfAccount ?? 0]} />
+                <label className={b('of-label')} htmlFor='type' >Type of account:</label>
+                <input name='' type="text" id='type' readOnly disabled value={userAcountType[formObj.typeOfAccount ?? 'User']} />
 
                 <button className={b('form__submit-btn')} type="submit">Save</button>
 
             </form>
 
-            {userAcountType[Number(typeOfAccount)] === 'Admin' && < div className={b('change-type-account')}>
+            {userAcountType[formObj.typeOfAccount] === 'Admin' && < div className={b('change-type-account')}>
                 <h2 className={b('change-type-account__title')}>Change typ of user account</h2>
-                <label className={b('of-label')}>User email</label>
-                <input type="text" value={userEmail} onChange={(e) => { setUserEmail(e.target.value) }} />
-                <label className={b('of-label')}>User type</label>
-                <select value={changedType} onChange={(e) => { setChangedType(Number(e.target.value)) }}>
+                <label className={b('of-label')} htmlFor='email'>User email</label>
+                <input type="text" value={changedTypeObj.email} id='email' onChange={(e) => { setChangedTypeObj(state => ({ ...state, email: e.target.value })) }} />
+                <label className={b('of-label')} htmlFor='userType'>User type</label>
+                <select value={changedTypeObj.type} id='userType' onChange={(e) => { setChangedTypeObj(state => ({ ...state, type: String(e.target.value) })) }}>
                     {userTypeOption()}
                 </select>
                 <button className={b('change-type-account__submit-btn')} onClick={handleCheangedType}>Save</button>

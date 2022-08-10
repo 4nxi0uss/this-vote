@@ -84,10 +84,26 @@ const Account = () => {
         window.scrollTo({ top: 0, behavior: 'smooth' })
     }
 
-    const handleChangeFormS = (e: any) => {
+    const handleChangeForm = (e: any) => {
         setformObj(state => ({
             ...state, [e.target.name]: e.target.value,
         }))
+    }
+
+    const messageCondition = () => {
+        if ((!isLoad || !isLoadAccountType) && timeObj.info) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    const errorCondition = () => {
+        if ((isErr || isError) && timeObj.error) {
+            return true
+        } else {
+            return false
+        }
     }
 
     useMemo(() => {
@@ -95,17 +111,16 @@ const Account = () => {
         // eslint-disable-next-line
     }, [userData])
 
-    const todayDate = `${TodayDate.getFullYear()}-${TodayDate.getMonth() + 1}-${TodayDate.getDate()}`
-
     return (
         <section className={b()}>
 
             <h2 className={b('title')}> Hello {formObj.name} </h2>
 
-            {(!isLoad || !isLoadAccountType) && timeObj.info && <h4 className={b('info', { message: true })}>{(!isLoad && dataUpdate?.message) || (!isLoadAccountType && dataAccountType?.message)}</h4>}
-            {(isErr || isError) && timeObj.error && <h4 className={b('info', { warning: true })}>{changeUserAccountTypeError}</h4>}
+            {messageCondition() && <h4 className={b('info', { message: true })}>{(!isLoad && dataUpdate?.message) || (!isLoadAccountType && dataAccountType?.message)}</h4>}
 
-            <form className={b('form')} onChange={handleChangeFormS} onSubmit={handleChangeUserPersonalData} method="submit">
+            {errorCondition() && <h4 className={b('info', { warning: true })}>{changeUserAccountTypeError}</h4>}
+
+            <form className={b('form')} onChange={handleChangeForm} onSubmit={handleChangeUserPersonalData} method="submit">
 
                 <label htmlFor='name' >Name:</label>
                 <input name='name' id='name' type="text" required placeholder="Name" value={formObj.name ?? 'John'} />
@@ -114,7 +129,7 @@ const Account = () => {
                 <input name='surname' id='surname' type="text" required placeholder="Surname" value={formObj.surname ?? 'Doe'} />
 
                 <label htmlFor='date' >Date of birth:</label>
-                <input name='date' id='date' type="date" max={todayDate} value={formObj.date ?? '1234-11-22'} />
+                <input name='date' id='date' type="date" max={TodayDate.toLocaleDateString('fr-ca')} value={formObj.date ?? '1234-11-22'} />
 
                 <label className={b('of-label')} htmlFor='type' >Type of account:</label>
                 <input name='' type="text" id='type' readOnly disabled value={userAcountType[formObj.typeOfAccount ?? 'User']} />

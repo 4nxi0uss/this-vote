@@ -27,7 +27,7 @@ const Account = () => {
 
     const [changeUserAccountTypeError, setChangeUserAccountTypeError] = useState<string>('');
 
-    const [formObj, setformObj] = useState<{ name: string, surname: string, date: string, typeOfAccount: string }>({ name: '', surname: '', date: '', typeOfAccount: '' });
+    const [formObj, setFormObj] = useState<{ name: string, surname: string, date: string, typeOfAccount: string }>({ name: '', surname: '', date: '', typeOfAccount: '' });
     const [timeObj, setTimeObj] = useState<{ info: boolean, error: boolean }>({ info: false, error: false })
     const [changedTypeObj, setChangedTypeObj] = useState<{ email: string, type: string }>({ email: '', type: 'User' })
 
@@ -85,7 +85,7 @@ const Account = () => {
     }
 
     const handleChangeForm = (e: any) => {
-        setformObj(state => ({
+        setFormObj(state => ({
             ...state, [e.target.name]: e.target.value,
         }))
     }
@@ -107,7 +107,7 @@ const Account = () => {
     }
 
     useMemo(() => {
-        setformObj({ name: String(userData?.data[0]?.name), surname: String(userData?.data[0]?.surname), date: betterDate(String(userData?.data[0]?.date_of_birth)), typeOfAccount: String(userData?.data[0]?.type_of_account) })
+        setFormObj({ name: String(userData?.data[0]?.name), surname: String(userData?.data[0]?.surname), date: betterDate(String(userData?.data[0]?.date_of_birth)), typeOfAccount: String(userData?.data[0]?.type_of_account) })
         // eslint-disable-next-line
     }, [userData])
 
@@ -120,16 +120,16 @@ const Account = () => {
 
             {errorCondition() && <h4 className={b('info', { warning: true })}>{changeUserAccountTypeError}</h4>}
 
-            <form className={b('form')} onChange={handleChangeForm} onSubmit={handleChangeUserPersonalData} method="submit">
+            <form className={b('form')} onSubmit={handleChangeUserPersonalData} method="submit">
 
                 <label htmlFor='name' >Name:</label>
-                <input name='name' id='name' type="text" required placeholder="Name" value={formObj.name ?? 'John'} />
+                <input name='name' id='name' type="text" required placeholder="Name" onChange={handleChangeForm} value={formObj.name ?? 'John'} />
 
                 <label htmlFor='surname'>Surname:</label>
-                <input name='surname' id='surname' type="text" required placeholder="Surname" value={formObj.surname ?? 'Doe'} />
+                <input name='surname' id='surname' type="text" required placeholder="Surname" onChange={handleChangeForm} value={formObj.surname ?? 'Doe'} />
 
                 <label htmlFor='date' >Date of birth:</label>
-                <input name='date' id='date' type="date" max={TodayDate.toLocaleDateString('fr-ca')} value={formObj.date ?? '1234-11-22'} />
+                <input name='date' id='date' type="date" max={TodayDate.toLocaleDateString('fr-ca')} onChange={handleChangeForm} value={formObj.date ?? '1234-11-22'} />
 
                 <label className={b('of-label')} htmlFor='type' >Type of account:</label>
                 <input name='' type="text" id='type' readOnly disabled value={userAcountType[formObj.typeOfAccount ?? 'User']} />
@@ -140,12 +140,15 @@ const Account = () => {
 
             {userAcountType[formObj.typeOfAccount] === 'Admin' && < div className={b('change-type-account')}>
                 <h2 className={b('change-type-account__title')}>Change typ of user account</h2>
+
                 <label className={b('of-label')} htmlFor='email'>User email</label>
                 <input type="text" value={changedTypeObj.email} id='email' onChange={(e) => { setChangedTypeObj(state => ({ ...state, email: e.target.value })) }} />
+
                 <label className={b('of-label')} htmlFor='userType'>User type</label>
-                <select value={changedTypeObj.type} id='userType' onChange={(e) => { setChangedTypeObj(state => ({ ...state, type: String(e.target.value) })) }}>
+                <select value={changedTypeObj.type} id='userType' onChange={(e) => { setChangedTypeObj(state => ({ ...state, type: e.target.value })) }}>
                     {userTypeOption()}
                 </select>
+
                 <button className={b('change-type-account__submit-btn')} onClick={handleCheangedType}>Save</button>
             </div>}
 

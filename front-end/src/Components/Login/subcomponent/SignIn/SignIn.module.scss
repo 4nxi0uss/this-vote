@@ -1,0 +1,269 @@
+@use '../../../_lib' as lib;
+
+.signIn-section {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &__title {
+        margin: 10px 0px;
+        font-size: 2vw;
+    }
+
+    &__info {
+        color: red;
+        margin: .6rem;
+        padding: .2rem;
+        border: 1px solid red;
+        animation: warnig-bg 1s ease-in;
+    }
+
+    @keyframes warnig-bg {
+        0% {
+            background-color: white;
+            color: red;
+        }
+
+        50% {
+            background-color: rgb(255, 112, 112);
+            color: white;
+        }
+    }
+
+    &__form {
+        display: flex;
+        flex-direction: column;
+        transition: 300ms;
+
+        &__input {
+            margin-bottom: 0.5vw;
+            padding: 0.2vw;
+            width: 15rem;
+            font-size: 1vw;
+        }
+
+        &__signIn-btn {
+            font-size: 1vw;
+            padding: 0.2vw;
+            background-color: lib.$main-font-clr;
+            border: 1px solid transparent;
+            transition: 300ms;
+
+            &:hover {
+                color: lib.$main-font-clr;
+                background-color: white;
+                border: 1px solid lib.$main-font-clr;
+            }
+
+            &:active {
+                background-color: lib.$main-font-active-clr;
+            }
+        }
+
+        &__password-info {
+            margin: .5rem 0;
+
+            &__list {
+                list-style: disc;
+
+                &__list-element {
+                    margin-left: 1.5rem;
+                }
+            }
+
+            &__title {
+                margin-bottom: .7rem;
+            }
+        }
+    }
+
+    &__paragraph {
+        font-size: 0.8vw;
+        margin-top: 1vw;
+
+        &_btn {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            color: rgba(0, 0, 255, 0.603);
+            transition: 300ms;
+
+            &:hover {
+                background-color: transparent;
+                border: none;
+                cursor: pointer;
+                color: rgba(0, 0, 255, 0.603);
+                text-decoration: underline;
+                font-size: 0.85vw;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .signIn-section {
+
+        &__title {
+            margin: 1rem 0;
+            font-size: 2rem;
+        }
+
+        &__form {
+            &__input {
+                margin-bottom: 1rem;
+                padding: 0.5rem;
+                width: 18rem;
+                font-size: 1.5rem;
+            }
+
+            &__signIn-btn {
+                font-size: 1.5rem;
+                margin-top: 1rem;
+                padding: .4rem;
+
+            }
+
+            &__password-info {
+                margin: 1rem 0;
+
+                &__list {
+                    list-style: disc;
+
+                    &__list-element {
+                        margin-left: 1.5rem;
+                        font-size: 1.3rem;
+                    }
+                }
+
+                &__title {
+                    font-size: 1.3rem;
+                    margin-bottom: .7rem;
+                }
+            }
+
+        }
+
+        &__paragraph {
+            font-size: 1.2rem;
+            margin-top: .7rem;
+            text-align: center;
+
+            &_btn {
+                &:hover {
+                    font-size: 1.2rem;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 321px) {
+    .signIn-section {
+
+        &__title {
+            margin: 1rem 0;
+            font-size: 2rem;
+        }
+
+        &__form {
+            &__input {
+                margin-bottom: 1rem;
+                padding: 0.5rem;
+                width: 18rem;
+                font-size: 1.5rem;
+            }
+
+            &__signIn-btn {
+                font-size: 1.5rem;
+                margin-top: 1rem;
+                padding: .4rem;
+            }
+
+            &__password-info {
+                margin: .8rem 0;
+
+                &__list {
+                    list-style: disc;
+
+                    &__list-element {
+                        margin-left: 1.5rem;
+                        font-size: 1.3rem;
+                    }
+                }
+
+                &__title {
+                    margin-bottom: .7rem;
+                    font-size: 1.3rem;
+                }
+            }
+        }
+
+        &__paragraph {
+            font-size: 1.2rem;
+            margin-top: .7rem;
+            text-align: center;
+
+            &_btn {
+                &:hover {
+                    font-size: 1.2rem;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 769px) {
+    .signIn-section {
+
+        &__title {
+            margin: 1rem 0;
+            font-size: 2rem;
+        }
+
+        &__form {
+            &__input {
+                margin-bottom: 1rem;
+                padding: 0.5rem;
+                width: 18rem;
+                font-size: 1.5rem;
+            }
+
+            &__signIn-btn {
+                font-size: 1.5rem;
+                margin-top: 1rem;
+                padding: .3rem;
+            }
+
+            &__password-info {
+                margin: .8rem 0;
+
+                &__list {
+                    list-style: disc;
+
+                    &__list-element {
+                        margin-left: 1.5rem;
+                        font-size: 1.3rem;
+                    }
+                }
+
+                &__title {
+                    margin-bottom: .7rem;
+                    font-size: 1.3rem;
+                }
+            }
+        }
+
+        &__paragraph {
+            font-size: 1rem;
+            margin-top: .7rem;
+            text-align: center;
+
+            &_btn {
+                &:hover {
+                    font-size: 1.2rem;
+                }
+            }
+        }
+    }
+}

@@ -44,10 +44,10 @@ const Header = () => {
                     <Link to='/' className={b('nav-mobile__menu__link')}>
                         Home
                     </Link>
-                    {!isLoading && dataLogin?.login && <Link to='/Account' className={b('nav-mobile__menu__link')}>
+                    {!isLoading && dataLogin?.login && <Link to='/account' className={b('nav-mobile__menu__link')}>
                         Account
                     </Link>}
-                    {!isLoading && dataLogin?.login && <Link to='/Polls' className={b('nav-mobile__menu__link')}>
+                    {!isLoading && dataLogin?.login && <Link to='/polls' className={b('nav-mobile__menu__link')}>
                         Polls
                     </Link>}
                     {!isSuccess && !dataLogin?.login ? <Link to='/login' className={b('nav-mobile__menu__link')}>
@@ -60,10 +60,10 @@ const Header = () => {
                 <Link to='/' className={b('nav__link', { mark: location.pathname === '/' })}>
                     Home
                 </Link>
-                {!isLoading && dataLogin?.login && <Link to='/Account' className={b('nav__link', { mark: location.pathname === '/Account' })}>
+                {!isLoading && dataLogin?.login && <Link to='/account' className={b('nav__link', { mark: location.pathname === '/account' })}>
                     Account
                 </Link>}
-                {!isLoading && dataLogin?.login && <Link to='/Polls' className={b('nav__link', { mark: location.pathname === '/Polls' })}>
+                {!isLoading && dataLogin?.login && <Link to='/polls' className={b('nav__link', { mark: location.pathname === '/polls' })}>
                     Polls
                 </Link>}
                 {!isSuccess && !dataLogin?.login ? <Link to='/login' className={b('nav__link', { mark: location.pathname === '/login' })}>

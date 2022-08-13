@@ -20,7 +20,7 @@ const Login = () => {
         <section className={b()}>
 
             {!toggleRegistry ? <SignIn /> : <SignUp />}
-            <p className={b('paragraph')}>{toggleRegistry ? "If you have account, please " : "If you don't have account, please"} <button className={b('paragraph', { btn: true })} onClick={handleToggleRegistry}> {!toggleRegistry ? "register now." : "log into it here."} </button></p>
+            <p className={b('paragraph')}>{toggleRegistry ? "If you have account, please " : "If you don't have account, please"} <button className={b('paragraph', { btn: true })} onClick={handleToggleRegistry}> {!toggleRegistry ? "sign up now." : "sign into it here."} </button></p>
         </section>
     )
 }

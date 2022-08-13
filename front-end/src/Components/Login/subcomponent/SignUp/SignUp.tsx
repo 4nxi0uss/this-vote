@@ -4,16 +4,16 @@ import type { FormEvent } from 'react';
 import style from './SignUp.module.scss'
 import block from 'bem-css-modules'
 
-import { useUserRegisteryMutation } from '../../../../Redux/Services/UserApi';
+import { useUserSignUpMutation } from '../../../../Redux/Services/UserApi';
 
 const b = block(style)
 
 const SignUp = () => {
 
     const [formObj, setFormObj] = useState({ email: "", password: "", secondPassword: "" })
-    const [infoSingUpObj, setinfoSingUpObj] = useState<{ timeSingUp: boolean, errorSingUp: string }>({ timeSingUp: false, errorSingUp: '' })
+    const [infoSingUpObj, setinfoSingUpObj] = useState<{ timeMessageSingUp: boolean, timeErrorSingUp: boolean, errorSingUp: string }>({ timeMessageSingUp: false, timeErrorSingUp: false, errorSingUp: '' })
 
-    const [registerApi, { isError: isErr }] = useUserRegisteryMutation();
+    const [signUpApi, { data, isError: isErr, isSuccess }] = useUserSignUpMutation();
 
     const validatedEmail = (toVerified: string) => {
         const atCheck = toVerified.includes("@");
@@ -23,7 +23,7 @@ const SignUp = () => {
 
     const validatePassword = (toVerified: string) => {
         const regularExpression = /^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{4,16}$/;
-        return (Boolean(toVerified.match(regularExpression)))
+        return (regularExpression.test(toVerified))
     }
 
     const handleChangeForm = (e: any) => {
@@ -34,17 +34,22 @@ const SignUp = () => {
 
     const handleRegistry = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const registerData = {
+        const signUpData = {
             email: formObj.email,
             password: formObj.password
         }
 
         if (validatedEmail(formObj.email) && validatePassword(formObj.password) && (formObj.password === formObj.secondPassword)) {
-            registerApi(registerData)
+            signUpApi(signUpData)
                 .unwrap()
+                .then(() => {
+                    setinfoSingUpObj(state => ({ ...state, timeMessageSingUp: true }))
+                    setTimeout(() => { setinfoSingUpObj(state => ({ ...state, timeMessageSingUp: false })) }, 5000)
+                })
                 .catch((res) => {
-                    setinfoSingUpObj(state => ({ ...state, errorSingUp: res.data.message, timeSingUp: true }))
-                    setTimeout(() => { setinfoSingUpObj(state => ({ ...state, timeSingUp: false })) }, 5000)
+                    console.log(res)
+                    setinfoSingUpObj(state => ({ ...state, errorSingUp: res.data.message, timeErrorSingUp: true }))
+                    setTimeout(() => { setinfoSingUpObj(state => ({ ...state, timeErrorSingUp: false })) }, 5000)
                 })
             setFormObj(state => ({ ...state, email: '', password: '', secondPassword: '' }))
         } else {
@@ -53,7 +58,14 @@ const SignUp = () => {
     }
 
     const signUpConditionError = () => {
-        if (isErr && infoSingUpObj.timeSingUp) {
+        if (isErr && infoSingUpObj.timeErrorSingUp) {
+            return true
+        } else {
+            return false
+        }
+    }
+    const signUpConditionMessage = () => {
+        if (isSuccess && infoSingUpObj.timeMessageSingUp) {
             return true
         } else {
             return false
@@ -64,7 +76,9 @@ const SignUp = () => {
         <section className={b()}>
             <h2 className={b('title')}>Sing up</h2>
 
-            {signUpConditionError() && <h4 className={b('info')}>{infoSingUpObj.errorSingUp}</h4>}
+            {signUpConditionMessage() && <h4 className={b('info', { message: true })}>{data?.message}</h4>}
+
+            {signUpConditionError() && <h4 className={b('info', { warning: true })}>{infoSingUpObj.errorSingUp}</h4>}
 
             <form onSubmit={handleRegistry} name='signUp' className={b('form')}>
                 <input required name='email' type="email" autoComplete='email' placeholder='e-mail' onChange={handleChangeForm} value={formObj.email} className={b('form__input')} />

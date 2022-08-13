@@ -1,6 +1,4 @@
-import { useEffect } from 'react';
-
-import { Route, Routes, useLocation, useNavigate } from 'react-router';
+import { Route, Routes } from 'react-router';
 
 import style from './MainContent.module.scss';
 import block from 'bem-css-modules'
@@ -11,28 +9,21 @@ import Account from '../Account/Account';
 
 import PollsList from '../Polls/PollsList';
 import NotFound from '../NotFound/NotFount';
+import PrivateRoutes from './subcoponent/PrivateRoute/PrivateRoute';
 
 const b = block(style)
 
 const MainContent = () => {
 
-    const location = useLocation()
-    const navigate = useNavigate()
-
-    useEffect(() => {
-        if (!Boolean(localStorage.getItem('user')) && location.pathname !== '/' && location.pathname !== '/login' && location.pathname !== '/not-found') {
-            navigate('/')
-        }
-        // eslint-disable-next-line
-    }, [])
-
     return (
         <main className={b()}>
             <Routes>
                 <Route path='/' element={<Introduction />} />
-                <Route path='/Login' element={<Login />} />
-                <Route path='/Account' element={<Account />} />
-                <Route path='/Polls' element={<PollsList />} />
+                <Route path='/login' element={<Login />} />
+                <Route element={<PrivateRoutes />}>
+                    <Route path='/account' element={<Account />} />
+                    <Route path='/polls' element={<PollsList />} />
+                </Route>
                 <Route path='*' element={<NotFound />} />
             </Routes>
         </main>

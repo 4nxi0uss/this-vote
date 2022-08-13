@@ -3,7 +3,6 @@ export const SUCCESS_STATUS = "SUCCESS";
 export const FAILED_STATUS = "FAILED";
 export const IDLE_STATUS = "IDLE";
 
-
 export interface Login {
     email: string;
     password: string;
@@ -17,7 +16,7 @@ export interface UserData {
             surname: string;
             date_of_birth: string;
             id: number;
-            type_of_account: number;
+            type_of_account: string;
             user_id: string;
         }
     ];
@@ -38,12 +37,8 @@ export interface PollsData {
     userId: string | boolean;
 }
 
-export interface RegisterInfo {
-    registerStatus: string
-    registerInfo: {
-        message: string,
-        row: string,
-    }
+export interface SignUpInfo {
+    message: string
 }
 
 export interface GetPollsInfo {
@@ -58,7 +53,7 @@ export interface GetPollsInfo {
     }]
 }
 
-export interface RegisterDataType {
+export interface SignUpDataType {
     email: string,
     password: string
 }

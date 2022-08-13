@@ -33,8 +33,9 @@ const Account = () => {
 
     const TodayDate = new Date();
 
-    const handleChangeUserPersonalData = (e: FormEvent<HTMLFormElement>) => {
+    const handleSendChangeUserPersonalData = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+
         const infoUpdates = { userId: String(dataLogin?.rows[0]?.user_id), name: formObj.name, surname: formObj.surname, dateOfBirth: formObj.date };
 
         updateUserInfo(infoUpdates)
@@ -60,7 +61,7 @@ const Account = () => {
         return Object.entries(userAcountType).map((el) => <option key={el[0]} value={el[0]}>{el[1]}</option>)
     }
 
-    const handleCheangedType = () => {
+    const handleSendChangedType = () => {
 
         if (isNaN(Number(changedTypeObj.type))) return;
 
@@ -91,11 +92,7 @@ const Account = () => {
     }
 
     const messageCondition = () => {
-        if ((!isLoad || !isLoadAccountType) && timeObj.info) {
-            return true
-        } else {
-            return false
-        }
+        if ((!isLoad || !isLoadAccountType) && timeObj.info) { return true } else { return false }
     }
 
     const errorCondition = () => {
@@ -107,7 +104,7 @@ const Account = () => {
     }
 
     useMemo(() => {
-        setFormObj({ name: String(userData?.data[0]?.name), surname: String(userData?.data[0]?.surname), date: betterDate(String(userData?.data[0]?.date_of_birth)), typeOfAccount: String(userData?.data[0]?.type_of_account) })
+        Boolean(userData?.data[0]?.name) && setFormObj({ name: userData?.data[0]?.name ?? '', surname: userData?.data[0]?.surname ?? '', date: betterDate(userData?.data[0]?.date_of_birth ?? ''), typeOfAccount: userData?.data[0].type_of_account ?? '' })
         // eslint-disable-next-line
     }, [userData])
 
@@ -120,7 +117,7 @@ const Account = () => {
 
             {errorCondition() && <h4 className={b('info', { warning: true })}>{changeUserAccountTypeError}</h4>}
 
-            <form className={b('form')} onSubmit={handleChangeUserPersonalData} method="submit">
+            <form className={b('form')} onSubmit={handleSendChangeUserPersonalData} method="submit">
 
                 <label htmlFor='name' >Name:</label>
                 <input name='name' id='name' type="text" required placeholder="Name" onChange={handleChangeForm} value={formObj.name ?? 'John'} />
@@ -149,7 +146,7 @@ const Account = () => {
                     {userTypeOption()}
                 </select>
 
-                <button className={b('change-type-account__submit-btn')} onClick={handleCheangedType}>Save</button>
+                <button className={b('change-type-account__submit-btn')} onClick={handleSendChangedType}>Save</button>
             </div>}
 
         </section >

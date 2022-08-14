@@ -21,7 +21,7 @@ const Account = () => {
     const [updateUserInfo, { data: dataUpdate, isLoading: isLoad, isError }] = useUpdateUserInfoMutation();
     const [changeUserAccountType, { data: dataAccountType, isLoading: isLoadAccountType, isError: isErr, }] = useChangeUserAccountTypeMutation();
 
-    const { data: userData } = useGetUserDataQuery(isSuccess ? String(dataLogin?.rows[0]?.user_id) : skipToken)
+    const { data: userData } = useGetUserDataQuery(isSuccess && Boolean(dataLogin?.rows[0]?.user_id) ? String(dataLogin?.rows[0]?.user_id) : skipToken)
 
     const betterDate = (date: string) => date?.slice(0, 10)
 

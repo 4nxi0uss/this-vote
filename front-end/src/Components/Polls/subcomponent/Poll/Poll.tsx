@@ -11,16 +11,18 @@ import EditPoll from '../EditPoll/EditPoll';
 import { useDeletePollMutation, useUpdatePollValueMutation } from '../../../../Redux/Services/PollApi';
 import { useGetUserDataQuery, useUserLoginMutation } from '../../../../Redux/Services/UserApi';
 
+import { skipToken } from '@reduxjs/toolkit/dist/query';
+
 const b = block(style);
 
 const Poll = ({ id, name, question, options, number, poolCreator }: PollProp) => {
 
     // eslint-disable-next-line
-    const [loginApi, { data: dataLogin }] = useUserLoginMutation({
+    const [loginApi, { data: dataLogin, isSuccess }] = useUserLoginMutation({
         fixedCacheKey: "login"
     });
 
-    const { data } = useGetUserDataQuery(String(dataLogin?.rows[0]?.user_id))
+    const { data } = useGetUserDataQuery(isSuccess && Boolean(dataLogin?.rows[0]?.user_id) ? String(dataLogin?.rows[0]?.user_id) : skipToken)
 
     const [updatePollOptionValueApi] = useUpdatePollValueMutation();
     const [deletePoolApi] = useDeletePollMutation();

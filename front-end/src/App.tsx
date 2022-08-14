@@ -8,20 +8,26 @@ import MainContent from './Components/MainContent/MainContent';
 
 import { useUserLoginMutation } from './Redux/Services/UserApi';
 
-function App() {
 
-  const [loginApi, { data: dataLogin }] = useUserLoginMutation({
+const App = () => {
+
+  const [loginApi] = useUserLoginMutation({
     fixedCacheKey: "login"
   });
 
   useEffect(() => {
     try {
 
-      const storage = localStorage.getItem('user')
-      const dataToLogin = JSON.parse(`${storage}`)
+      const userData = localStorage.getItem('user')
 
-      if (!dataLogin?.login && Boolean(dataToLogin)) {
-        loginApi(dataToLogin)
+      if (userData === null) {
+        return
+      }
+
+      const dataForLogin = JSON.parse(String(userData))
+
+      if (Boolean(dataForLogin)) {
+        loginApi(dataForLogin).unwrap().catch(() => { alert('something went wrong, try again'); localStorage.clear() })
       }
 
     } catch (error) {

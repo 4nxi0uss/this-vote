@@ -13,7 +13,7 @@ const SignUp = () => {
     const [formObj, setFormObj] = useState({ email: "", password: "", secondPassword: "" })
     const [infoSingUpObj, setinfoSingUpObj] = useState<{ timeMessageSingUp: boolean, timeErrorSingUp: boolean, errorSingUp: string }>({ timeMessageSingUp: false, timeErrorSingUp: false, errorSingUp: '' })
 
-    const [signUpApi, { data, isError: isErr, isSuccess }] = useUserSignUpMutation();
+    const [signUpApi, { data, isSuccess }] = useUserSignUpMutation();
 
     const validatedEmail = (toVerified: string) => {
         const atCheck = toVerified.includes("@");
@@ -48,17 +48,25 @@ const SignUp = () => {
                 })
                 .catch((res) => {
                     console.log(res)
-                    setinfoSingUpObj(state => ({ ...state, errorSingUp: res.data.message, timeErrorSingUp: true }))
-                    setTimeout(() => { setinfoSingUpObj(state => ({ ...state, timeErrorSingUp: false })) }, 5000)
+                    if (!res?.data?.message) {
+                        setinfoSingUpObj(state => ({ ...state, errorSingUp: 'Something go wrong, try again.', timeErrorSingUp: true }))
+                        setTimeout(() => { setinfoSingUpObj(state => ({ ...state, timeErrorSingUp: false })) }, 5000)
+                    } else {
+                        setinfoSingUpObj(state => ({ ...state, errorSingUp: res.data.message, timeErrorSingUp: true }))
+                        setTimeout(() => { setinfoSingUpObj(state => ({ ...state, timeErrorSingUp: false })) }, 5000)
+                    }
                 })
             setFormObj(state => ({ ...state, email: '', password: '', secondPassword: '' }))
         } else {
-            console.log('nie zarejestrowano')
+            setinfoSingUpObj(state => ({ ...state, errorSingUp: 'Something go wrong, try again.', timeErrorSingUp: true }))
+            setTimeout(() => { setinfoSingUpObj(state => ({ ...state, timeErrorSingUp: false })) }, 5000)
+            console.log(2, 'nie zarejestrowano')
+
         }
     }
 
     const signUpConditionError = () => {
-        if (isErr && infoSingUpObj.timeErrorSingUp) {
+        if (infoSingUpObj.timeErrorSingUp) {
             return true
         } else {
             return false
@@ -82,6 +90,7 @@ const SignUp = () => {
 
             <form onSubmit={handleRegistry} name='signUp' className={b('form')}>
                 <input required name='email' type="email" autoComplete='email' placeholder='e-mail' onChange={handleChangeForm} value={formObj.email} className={b('form__input')} />
+
                 <div className={b('form__password-info')}>
                     <p className={b('form__password-info__title')}>Password should have</p>
                     <ul className={b('form__password-info__list')}>
@@ -94,7 +103,7 @@ const SignUp = () => {
 
                 <input required name='password' type="password" placeholder='password' autoComplete='current-password' onChange={handleChangeForm} value={formObj.password} className={b('form__input')} />
 
-                <input type='password' name='secondPassword' autoComplete='new-password' placeholder='repeat password' onChange={handleChangeForm} value={formObj.secondPassword} className={b('form__input')} />
+                <input required type='password' name='secondPassword' autoComplete='new-password' placeholder='repeat password' onChange={handleChangeForm} value={formObj.secondPassword} className={b('form__input')} />
 
                 <button className={b('form__signUp-btn')} type='submit'>Sign up</button>
             </form>

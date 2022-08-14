@@ -18,15 +18,13 @@
         &_message {
             color: green;
             border: 1px solid green;
-            background-color: rgb(78, 209, 78);
             animation: message-bg 1s ease-in;
         }
 
         &_warning {
             color: red;
-            animation: warnig-bg 1s ease-in;
             border: 1px solid red;
-            background-color: rgb(209, 78, 78);
+            animation: warnig-bg 1s ease-in;
         }
     }
 

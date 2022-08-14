@@ -35,8 +35,13 @@ const SignIn = () => {
         loginApi(userLoginData)
             .unwrap()
             .catch((res) => {
-                setinfoSignIn(state => ({ ...state, errorSignIn: res.data.message, timeSignIn: true }))
-                setTimeout(() => { setinfoSignIn(state => ({ ...state, timeSignIn: true })) }, 5000)
+                if (!res?.data?.message) {
+                    setinfoSignIn(state => ({ ...state, errorSignIn: 'Something go wrong, try again.', timeSignIn: true }))
+                    setTimeout(() => { setinfoSignIn(state => ({ ...state, timeSignIn: false })) }, 5000)
+                } else {
+                    setinfoSignIn(state => ({ ...state, errorSignIn: res?.data?.message, timeSignIn: true }))
+                    setTimeout(() => { setinfoSignIn(state => ({ ...state, timeSignIn: false })) }, 5000)
+                }
             })
         console.log('zalogowany')
     }

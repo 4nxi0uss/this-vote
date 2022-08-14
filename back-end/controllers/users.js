@@ -20,7 +20,7 @@ const checkPass = (rows, password) => {
 }
 
 // register user in database
-exports.postRegisterUser = (req, res) => {
+exports.postSignUpUser = (req, res) => {
 
     try {
         const { usersEmail: email, pass } = req.body;
@@ -42,14 +42,14 @@ exports.postRegisterUser = (req, res) => {
                     bcrypt.hash(pass, APP_SALT_ROUNDS, (err, hash) => {
                         if (err) throw err
 
-                        db.query('INSERT INTO `login` (`user_id`,`email`, `password`) VALUES ( ? , ? , ? )', [userId, email, hash], (erro, rows) => {
+                        db.query('INSERT INTO `login` (`user_id`,`email`, `password`, `refresh_token`) VALUES ( ? , ? , ? , "")', [userId, email, hash], (erro, rows) => {
                             if (erro) throw erro
 
-                            db.query("INSERT INTO `users_data` (`id`, `user_id`, `name`, `surname`, `date_of_birth`, `type_of_account`, `active`) VALUES (NULL, ? , 'John', 'Doe', '1960-01-01', '0', '0');", [userId], (error, row) => {
+                            db.query("INSERT INTO `users_data` (`id`, `user_id`, `name`, `surname`, `date_of_birth`, `type_of_account`) VALUES (NULL, ? , 'John', 'Doe', '1960-01-01', 'User')", [userId], (error, row) => {
                                 if (error) throw error
 
                                 res.status(201).json({
-                                    message: "Successfully registered new user.",
+                                    message: "Successfully signed up new user.",
                                 })
                             })
                         })
@@ -57,7 +57,7 @@ exports.postRegisterUser = (req, res) => {
                 } catch (err) {
                     res.status(401).json({
                         error: err,
-                        message: "Error with registering."
+                        message: "Error with signing up."
                     })
                 }
             }
@@ -154,7 +154,7 @@ exports.postRefreshToken = (req, res) => {
 
             try {
 
-                if (rows[0].refresh_token === refreshToken) {
+                if (rows[0]?.refresh_token === refreshToken) {
 
                     try {
                         jwt.verify(refreshToken, APP_REFRESH_TOKEN, (err, data) => {
@@ -183,11 +183,7 @@ exports.postRefreshToken = (req, res) => {
                 }
 
             } catch (error) {
-                console.log('refresh token: ', refreshToken)
-                console.log('refresh row: ', rows[0])
-                console.log('refresh row token: ', rows[0].refresh_token)
                 console.log('refresh error: ', error)
-                postRefreshToken()
             }
         })
 

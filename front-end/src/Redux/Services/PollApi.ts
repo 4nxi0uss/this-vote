@@ -4,14 +4,14 @@ import { Mutex } from 'async-mutex'
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query'
 import { GetPolls, GetPollsInfo, PaginationType, PaginationTypeForUser, PollsData } from '../ReduxTypes/reduxTypes'
 
-const { REACT_APP_HOST, REACT_APP_PORT } = process.env
+const { REACT_APP_HOST, REACT_APP_PORT, REACT_APP_HTT } = process.env
 
 let localUserId = ''
 
 const mutex = new Mutex()
 
 const baseQueryWithReauthPoll: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
-    const baseQuery = fetchBaseQuery({ baseUrl: `https://${REACT_APP_HOST}:${REACT_APP_PORT}/api/polls` })
+    const baseQuery = fetchBaseQuery({ baseUrl: `${REACT_APP_HTT}://${REACT_APP_HOST}:${REACT_APP_PORT}/api/polls` })
     // wait until the mutex is available without locking it
 
     await mutex.waitForUnlock()
@@ -36,7 +36,7 @@ const baseQueryWithReauthPoll: BaseQueryFn<string | FetchArgs, unknown, FetchBas
                 if (Boolean(localUserId)) {
                     refreshResult = await baseQuery(
                         args = {
-                            url: `https://${REACT_APP_HOST}:${REACT_APP_PORT}/api/users/refresh-token`,
+                            url: `${REACT_APP_HTT}://${REACT_APP_HOST}:${REACT_APP_PORT}/api/users/refresh-token`,
                             method: 'POST',
                             credentials: 'include',
                             body: { userId: localUserId }

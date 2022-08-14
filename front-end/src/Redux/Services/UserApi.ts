@@ -1,16 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { Mutex } from 'async-mutex'
 
-import type { Login, InfoUpdateUserData, RegisterDataType, RegisterInfo, UserLogin, UserData } from '../ReduxTypes/reduxTypes'
+import type { Login, InfoUpdateUserData, SignUpDataType, SignUpInfo, UserLogin, UserData } from '../ReduxTypes/reduxTypes'
 import type { BaseQueryFn, FetchArgs, FetchBaseQueryError } from '@reduxjs/toolkit/query'
 
 let localUserId = ''
 
 const mutex = new Mutex()
 
-const { REACT_APP_HOST, REACT_APP_PORT } = process.env
+const { REACT_APP_HOST, REACT_APP_PORT, REACT_APP_HTT } = process.env
 
-const baseQuery = fetchBaseQuery({ baseUrl: `https://${REACT_APP_HOST}:${REACT_APP_PORT}/api/users` })
+const baseQuery = fetchBaseQuery({ baseUrl: `${REACT_APP_HTT}://${REACT_APP_HOST}:${REACT_APP_PORT}/api/users` })
 const baseQueryWithReauthUser: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> = async (args, api, extraOptions) => {
     // wait until the mutex is available without locking it
 
@@ -115,12 +115,12 @@ export const userApi = createApi({
                     body: { userId },
                 }),
             }),
-        //registerInfo
-        userRegistery: builder.mutation<RegisterInfo, RegisterDataType>(
+        //sign up Info
+        userSignUp: builder.mutation<SignUpInfo, SignUpDataType>(
             {
                 query: ({ email, password }) => (
                     {
-                        url: "/register",
+                        url: "/sign-up",
                         method: 'POST',
                         body: {
                             usersEmail: email,
@@ -154,4 +154,4 @@ export const userApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetUserDataQuery, useUpdateUserInfoMutation, useUserLoginMutation, useUserRegisteryMutation, useUserLogoutMutation, useUserRefreshTokenMutation, useChangeUserAccountTypeMutation } = userApi
+export const { useGetUserDataQuery, useUpdateUserInfoMutation, useUserLoginMutation, useUserSignUpMutation, useUserLogoutMutation, useUserRefreshTokenMutation, useChangeUserAccountTypeMutation } = userApi

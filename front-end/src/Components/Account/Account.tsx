@@ -87,7 +87,7 @@ const Account = () => {
 
     const handleChangeForm = (e: any) => {
         setFormObj(state => ({
-            ...state, [e.target.name]: e.target.value,
+            ...state, [e.target.name]: e.target.value.trim(),
         }))
     }
 
@@ -139,7 +139,7 @@ const Account = () => {
                 <h2 className={b('change-type-account__title')}>Change typ of user account</h2>
 
                 <label className={b('of-label')} htmlFor='email'>User email</label>
-                <input type="text" value={changedTypeObj.email} id='email' onChange={(e) => { setChangedTypeObj(state => ({ ...state, email: e.target.value })) }} />
+                <input type="text" value={changedTypeObj.email} id='email' onChange={(e) => { setChangedTypeObj(state => ({ ...state, email: e.target.value.trim() })) }} />
 
                 <label className={b('of-label')} htmlFor='userType'>User type</label>
                 <select value={changedTypeObj.type} id='userType' onChange={(e) => { setChangedTypeObj(state => ({ ...state, type: e.target.value })) }}>

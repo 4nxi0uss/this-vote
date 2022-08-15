@@ -20,7 +20,7 @@ const SignIn = () => {
 
     const handleChangeForm = (e: any) => {
         setFormObj(state => ({
-            ...state, [e.target.name]: e.target.value,
+            ...state, [e.target.name]: e.target.value.trim(),
         }))
     }
 

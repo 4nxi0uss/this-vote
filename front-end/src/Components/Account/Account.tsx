@@ -117,7 +117,7 @@ const Account = () => {
 
             {errorCondition() && <h4 className={b('info', { warning: true })}>{changeUserAccountTypeError}</h4>}
 
-            <form className={b('form')} onSubmit={handleSendChangeUserPersonalData} method="submit">
+            <form role='form' className={b('form')} onSubmit={handleSendChangeUserPersonalData} method="submit">
 
                 <label htmlFor='name' >Name:</label>
                 <input name='name' id='name' type="text" required placeholder="Name" onChange={handleChangeForm} value={formObj.name ?? 'John'} />

@@ -81,5 +81,11 @@ describe('Header click btn', () => {
         fireEvent.click(loginBtn)
         expect(window.location.pathname).toBe('/login')
     })
+    it('click login btnn', async () => {
+        render(<MockHeader />)
 
+        const loginBtn = screen.getByRole('link', { name: 'Login/Registry' })
+        fireEvent.click(loginBtn)
+        expect(window.location.pathname).toBe('/login')
+    })
 });

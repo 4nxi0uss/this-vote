@@ -21,9 +21,16 @@ const SignUp = () => {
         return (atCheck && dotCheck)
     }
 
-    const validatePassword = (toVerified: string) => {
-        const regularExpression = /^(?=.*[0-9])[a-zA-Z0-9!@#$%^&*]{4,16}$/;
-        return (regularExpression.test(toVerified))
+    const validatePassword = (password: string) => {
+
+        const minLength = 8;
+        const hasUppercase = /[A-Z]/.test(password);
+        const hasLowercase = /[a-z]/.test(password);
+        const hasDigit = /\d/.test(password);
+
+        const isValidPassword = password.length >= minLength && hasUppercase && hasLowercase && hasDigit;
+
+        return isValidPassword;
     }
 
     const handleChangeForm = (e: any) => {
@@ -81,7 +88,7 @@ const SignUp = () => {
     }
 
     return (
-        <section className={b()}>
+        <div className={b()}>
             <h2 className={b('title')}>Sing up</h2>
 
             {signUpConditionMessage() && <h4 className={b('info', { message: true })}>{data?.message}</h4>}
@@ -96,8 +103,8 @@ const SignUp = () => {
                     <ul className={b('form__password-info__list')}>
                         <li className={b('form__password-info__list__list-element')}>at least one digit</li>
                         <li className={b('form__password-info__list__list-element')}>at least one capital letter</li>
-                        <li className={b('form__password-info__list__list-element')}>one special sign</li>
-                        <li className={b('form__password-info__list__list-element')}>small letters</li>
+                        <li className={b('form__password-info__list__list-element')}>at least one lowercase letter</li>
+                        <li className={b('form__password-info__list__list-element')}>min password length 8</li>
                     </ul>
                 </div>
 
@@ -108,7 +115,7 @@ const SignUp = () => {
                 <button className={b('form__signUp-btn')} type='submit'>Sign up</button>
             </form>
 
-        </section>
+        </div>
     )
 }
 

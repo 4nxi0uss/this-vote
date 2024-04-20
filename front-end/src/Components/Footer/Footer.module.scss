@@ -1,0 +1,51 @@
+@use '../_lib' as lib;
+
+.Footer {
+    width: 100vw;
+    height: lib.$footer-hight-default;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    position: relative;
+    background-color: lib.$second-clr;
+    z-index: 5;
+
+    &__Menu {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        &-Nav {
+            display: block;
+        }
+
+        &-Title {
+            display: block;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        &-Nav-Link {
+            display: inline;
+            margin-right: 1vw;
+            cursor: pointer;
+            transition: 0.3s;
+            color: black;
+            text-decoration: none;
+
+            &_mark {
+                color: lib.$main-font-active-clr;
+            }
+
+            &:hover {
+                color: white;
+            }
+        }
+    }
+
+    &__Creator {
+        display: block;
+        color: rgb(65, 65, 65);
+    }
+}

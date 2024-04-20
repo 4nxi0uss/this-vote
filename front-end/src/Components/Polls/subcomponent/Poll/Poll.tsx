@@ -110,7 +110,7 @@ const Poll = ({ id, name, question, options, number, poolCreator }: PollProp) =>
     };
 
     return (
-        <section className={b()}>
+        <div className={b()}>
             <div className={b('option')}>
                 {((Number(data?.data[0]?.type_of_account) >= 2) || (poolCreator === dataLogin?.rows[0]?.user_id)) && <button onClick={handlePollDelete} className={b('option__btn-option', { delete: true })}>Delete</button>}
                 {((Number(data?.data[0]?.type_of_account) >= 1) || (poolCreator === dataLogin?.rows[0]?.user_id)) && <button onClick={handleEdit} className={b('option__btn-option', { edit: true })}>Edit</button>}
@@ -122,7 +122,7 @@ const Poll = ({ id, name, question, options, number, poolCreator }: PollProp) =>
             <div className={b('btns')}>
                 {buttonsForVote()}
             </div>
-        </section>
+        </div>
     )
 }
 

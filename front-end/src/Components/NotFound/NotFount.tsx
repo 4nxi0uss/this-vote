@@ -5,10 +5,10 @@ const b = block(style)
 
 const NotFound = () => {
     return (
-        <section className={b()}>
+        <div className={b()}>
             <h1  >404 not found</h1>
             <p>chose diferent page </p>
-        </section>
+        </div>
     )
 }
 

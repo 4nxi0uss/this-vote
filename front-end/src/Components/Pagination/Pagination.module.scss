@@ -3,14 +3,15 @@
 .pagination {
     display: flex;
     flex-direction: row;
-    gap: .6rem;
+    gap: 0.6rem;
     margin: 1rem 0 2rem 0;
 
     &__btn {
-        padding: .4rem 1rem;
+        padding: 0.4rem 1rem;
         background-color: transparent;
         border: 2px solid lib.$second-clr;
         border-radius: 10px;
+        cursor: pointer;
 
         &:hover {
             background-color: lib.$second-btn-clr;
@@ -18,10 +19,11 @@
     }
 
     &__chose-page {
-        padding: .3rem;
+        padding: 0.3rem;
         background-color: transparent;
         border: 2px solid lib.$second-clr;
         border-radius: 5px;
+        cursor: pointer;
 
         &_active {
             background-color: lib.$second-btn-active-clr;

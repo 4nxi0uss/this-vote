@@ -21,5 +21,5 @@ app.use('/api/users', userRoutes);
 app.use('/api/polls', pollsRouter);
 
 app.listen(port, () => {
-  console.log(`Example app listening at https://${hostname}:${port}`)
+  console.log(`Example app listening at http://${hostname}:${port}`)
 })

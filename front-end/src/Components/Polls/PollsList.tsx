@@ -66,13 +66,13 @@ const PollsList = () => {
     }, [])
 
     return (
-        <section className={b()}>
+        <div className={b()}>
             {!isGetting && <button className={b('add')} onClick={handleModal}>Add poll +</button>}
             {AddPoll(isShownAdd, handleModal, handleRandomNumber, randomNumber)}
 
             {!isGetting ? PollDisplay() : <Loader />}
             {Pagination(Number(dataGetPollsApi?.numberOfPages), isSuccess, page)}
-        </section>
+        </div>
     )
 }
 

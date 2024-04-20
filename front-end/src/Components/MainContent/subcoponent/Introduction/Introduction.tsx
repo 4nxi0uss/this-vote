@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
-import style from './Introduction.module.scss'
-import block from 'bem-css-modules'
+import style from './Introduction.module.scss';
+import block from 'bem-css-modules';
 
 import { useGetAllPollsQuery } from '../../../../Redux/Services/PollApi';
 
@@ -14,38 +14,64 @@ import { incrementByAmountPage } from '../../../../Redux/Slice/PaginationSlice';
 import Pagination from '../../../Pagination/Pagination';
 import { PollType } from '../../../../Types/Types';
 
-const b = block(style)
+const b = block(style);
 
 const Introduction = () => {
-
-    const page = useAppSelector((state) => state.pagination.initialPage)
-    const dispach = useAppDispatch()
+    const page = useAppSelector((state) => state.pagination.initialPage);
+    const dispach = useAppDispatch();
 
     let [searchParams] = useSearchParams();
 
-    const { data, error, isError, isSuccess } = useGetAllPollsQuery({ page }, {
-        pollingInterval: 5000,
-    });
+    const { data, error, isError, isSuccess } = useGetAllPollsQuery(
+        { page },
+        {
+            pollingInterval: 5000,
+        }
+    );
 
-    const PollDisplay = () => isSuccess && data?.data.map((el: PollType) => <Poll key={el.number} id={el.id} name={el.name} number={el.number} question={el.question} options={el.options} poolCreator={el.user_id} />)
+    const PollDisplay = () =>
+        isSuccess &&
+        data?.data.map((el: PollType) => (
+            <Poll
+                key={el.number}
+                id={el.id}
+                name={el.name}
+                number={el.number}
+                question={el.question}
+                options={el.options}
+                poolCreator={el.user_id}
+            />
+        ));
 
-    isError && console.warn(error)
+    isError && console.warn(error);
 
     useEffect(() => {
-        const chekingPage = Number(searchParams.get('page')) > 0 ? Number(searchParams.get('page')) : 1;
+        const chekingPage =
+            Number(searchParams.get('page')) > 0
+                ? Number(searchParams.get('page'))
+                : 1;
 
-        dispach(incrementByAmountPage(chekingPage))
+        dispach(incrementByAmountPage(chekingPage));
         // eslint-disable-next-line
-    }, [])
+    }, []);
 
     return (
-        <section className={b()}>
-            {isSuccess
-                ? PollDisplay()
-                : <Loader />}
+        <div className={b()}>
+            {page === 1 && (
+                <div className={b('Description')}>
+                    <h2 className={b('Description__Title')}>Introduction</h2>
+                    <p className={b('Description__Text')}>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Libero, repellat. Lorem ipsum dolor sit amet consectetur
+                        adipisicing elit. Libero, repellat. Lorem ipsum dolor
+                        sit amet consectetur adipisicing elit. Libero, repellat.
+                    </p>
+                </div>
+            )}
+            {isSuccess ? PollDisplay() : <Loader />}
             {Pagination(Number(data?.numberOfPages), isSuccess, page)}
-        </section>
-    )
-}
+        </div>
+    );
+};
 
-export default Introduction
+export default Introduction;

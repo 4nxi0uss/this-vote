@@ -109,7 +109,7 @@ const Account = () => {
     }, [userData])
 
     return (
-        <section className={b()}>
+        <div className={b()}>
 
             <h2 className={b('title')}> Hello {formObj.name} </h2>
 
@@ -117,7 +117,7 @@ const Account = () => {
 
             {errorCondition() && <h4 className={b('info', { warning: true })}>{changeUserAccountTypeError}</h4>}
 
-            <form role='form' className={b('form')} onSubmit={handleSendChangeUserPersonalData} method="submit">
+            <form className={b('form')} onSubmit={handleSendChangeUserPersonalData} >
 
                 <label htmlFor='name' >Name:</label>
                 <input name='name' id='name' type="text" required placeholder="Name" onChange={handleChangeForm} value={formObj.name ?? 'John'} />
@@ -129,7 +129,7 @@ const Account = () => {
                 <input name='date' id='date' type="date" max={TodayDate.toLocaleDateString('fr-ca')} onChange={handleChangeForm} value={formObj.date ?? '1234-11-22'} />
 
                 <label className={b('of-label')} htmlFor='type' >Type of account:</label>
-                <input name='' type="text" id='type' readOnly disabled value={userAcountType[formObj.typeOfAccount ?? 'User']} />
+                <input name='type' type="text" id='type' readOnly disabled value={userAcountType[formObj.typeOfAccount ?? 'User']} />
 
                 <button className={b('form__submit-btn')} type="submit">Save</button>
 
@@ -149,7 +149,7 @@ const Account = () => {
                 <button className={b('change-type-account__submit-btn')} onClick={handleSendChangedType}>Save</button>
             </div>}
 
-        </section >
+        </div >
     )
 }
 

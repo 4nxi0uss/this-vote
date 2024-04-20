@@ -5,45 +5,48 @@ import './App.scss';
 
 import Header from './Components/Header/Header';
 import MainContent from './Components/MainContent/MainContent';
+import Footer from './Components/Footer/Footer';
 
 import { useUserLoginMutation } from './Redux/Services/UserApi';
 
-
 const App = () => {
+    const [loginApi] = useUserLoginMutation({
+        fixedCacheKey: 'login',
+    });
 
-  const [loginApi] = useUserLoginMutation({
-    fixedCacheKey: "login"
-  });
+    useEffect(() => {
+        try {
+            const userData = localStorage.getItem('user');
 
-  useEffect(() => {
-    try {
+            if (userData === null) {
+                return;
+            }
 
-      const userData = localStorage.getItem('user')
+            const dataForLogin = JSON.parse(String(userData));
 
-      if (userData === null) {
-        return
-      }
+            if (Boolean(dataForLogin)) {
+                loginApi(dataForLogin)
+                    .unwrap()
+                    .catch(() => {
+                        alert('something went wrong, try again');
+                        localStorage.clear();
+                    });
+            }
+        } catch (error) {
+            console.warn(error);
+        }
+        // eslint-disable-next-line
+    }, []);
 
-      const dataForLogin = JSON.parse(String(userData))
-
-      if (Boolean(dataForLogin)) {
-        loginApi(dataForLogin).unwrap().catch(() => { alert('something went wrong, try again'); localStorage.clear() })
-      }
-
-    } catch (error) {
-      console.warn(error)
-    }
-    // eslint-disable-next-line
-  }, [])
-
-  return (
-    <div className="App">
-      <Router>
-        <Header />
-        <MainContent />
-      </Router>
-    </div>
-  );
-}
+    return (
+        <div className="App">
+            <Router>
+                <Header />
+                <MainContent />
+                <Footer />
+            </Router>
+        </div>
+    );
+};
 
 export default App;

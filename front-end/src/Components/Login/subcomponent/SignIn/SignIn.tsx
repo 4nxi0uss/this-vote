@@ -60,7 +60,7 @@ const SignIn = () => {
     }, [isSuccess])
 
     return (
-        <section className={b()}>
+        <div className={b()}>
             <h2 className={b('title')}>Sing in</h2>
 
             {LoginConditionError() && <h4 className={b('info')}>{infoSignIn.errorSignIn}</h4>}
@@ -74,7 +74,7 @@ const SignIn = () => {
             </form>
 
             {(!isLoading && dataLogin?.login) && <Navigate to="/account" />}
-        </section>
+        </div>
     )
 }
 
